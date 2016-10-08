@@ -11,6 +11,7 @@ public class Main {
 		Gestor g = new Gestor();
 		//Comentario Javi para comprobar sincronizacion
 		//Comentario de Iván
+		//comentario Dani
 	}
 	
 
