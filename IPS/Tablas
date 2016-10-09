@@ -1,0 +1,19 @@
+CREATE TABLE "EVENTOS"
+{
+	EV_ID int NOT NULL AUTO_INCREMENT,
+	EV_NOMBRE varchar,
+	EV_TIPO varchar,
+	EV_DISTANCIA varchar,
+	EV_PRECIO decimal,
+	EV_FECHA_COMIENZO date,
+	EV_FECHA_FIN_INSC date,
+	PRIMARY KEY (ID)	
+};
+CREATE TABLE "ATLETA"
+{
+	AT_DNI varchar PRIMARy KEY NOT NULL,
+	AT_NOMbRE varchar,
+	AT_SEXO varchar,
+	AT_EDAD int,
+	
+}

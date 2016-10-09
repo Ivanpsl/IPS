@@ -2,19 +2,20 @@ package logica;
 
 import java.util.ArrayList;
 
+import persistencia.ConexionBD;
+
 public class Gestor {
 	
 	
 	ArrayList<Evento> eventos;
+	private ConexionBD bd = new ConexionBD();
 	public Gestor(){
 		this.eventos  = new ArrayList<Evento>();
 		cargarEventosDisponibles();
 	}
 	
 	private void cargarEventosDisponibles(){
-		//comando SQL para obtener todos los eventos
-		//Crear objetos evento por cada uno de los obtenidos
-		//cargar en el arraylist eventos
+		bd.cargarEventos(eventos);
 	}
 	
 	public void mostrarEventosDisponibles(){
