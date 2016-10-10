@@ -9,23 +9,28 @@ public class Evento {
 	private ArrayList<Inscrito> participantes;
 
 	// Datos del evento
+	int id;
 	String nombre;
 	String tipo;
-	int precio;
+	double precio;
+	double distancia;
 	Date fechaCompeticion;
 	Date fechaFinInscripcion;
 	//De momento se considera una unica fecha de cada tipo. 
 	
-	public Evento(String name, String type, int price, Date dateComp, Date dateEndIns) {
+	public Evento(int id, String name, String type, double price, double distancia, java.util.Date fecha_comienzo, java.util.Date fecha_fin_insc) {
 		this.atletas = new ArrayList<Atleta>();
 		this.participantes = new ArrayList<Inscrito>();
-
+		this.id=id;
 		this.nombre = name;
-		this.fechaCompeticion = dateComp;
-		this.fechaFinInscripcion = dateEndIns; 
+		this.fechaCompeticion = (Date) fecha_comienzo;
+		this.fechaFinInscripcion = (Date) fecha_fin_insc; 
 		this.precio = price;
 		this.tipo = type;
+		this.distancia= distancia;
 	}
+
+	
 
 	public ArrayList<Atleta> getAtletas() {
 		return this.atletas;
@@ -36,7 +41,10 @@ public class Evento {
 	}
 
 	public String toString() {
-		return "Informacion del evento";
+		StringBuilder sB= new StringBuilder();
+		sB.append("ID:" + id + " - ");
+		sB.append("Nombre:"+ nombre);
+		return sB.toString();
 	}
 
 	public void añadirAtleta(Atleta a) {
@@ -59,7 +67,7 @@ public class Evento {
 		return tipo;
 	}
 
-	public int getPrecio() {
+	public double getPrecio() {
 		return precio;
 	}
 
