@@ -14,7 +14,6 @@ public class Inscripcion {
 	public final int PAGADO = 2;
 	private int estado;
 	private Date fechaInscripcion;
-	private java.util.Date fechaInscripcionSQL;
 	private Date fechaLimite;
 	private final int MAXDIAS = 2;
 	private static String dateFormat = "yyyy/MM/dd";
@@ -34,9 +33,9 @@ public class Inscripcion {
 	{
 		this.atleta = null;
 		this.dorsal = dorsal;
-		this.fechaInscripcionSQL = fecha_ins;
 		this.estado = PREINSCRITO;
-		//this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
+		fechaInscripcion= ConversorFechas.convertFechaJavaSQL(fecha_ins);
+		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=segundos;
 	}
 	
