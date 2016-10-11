@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 import utiles.ConversorFechas;
 
-public class Inscripcion {
+public class Inscripcion implements Comparable<Inscripcion> {
 
 	private int dorsal;
 	private Atleta atleta;
@@ -70,6 +70,25 @@ public class Inscripcion {
 	}
 	public void setTiempoSegundos(int tiempo){
 		tiempo_segundos=tiempo;
+	}
+	
+	
+	@Override
+	public int compareTo(Inscripcion i) {
+		if (fechaInscripcion.compareTo(i.fechaInscripcion) < 0) {
+            return -1;
+        }
+		else if (fechaInscripcion.compareTo(i.fechaInscripcion) > 0) {
+            return 1;
+        }
+		else
+		{
+			if (estado < i.estado)
+				return -1;
+			if (estado > i.estado)
+				return 1;
+			return 0;
+		}
 	}
 	
 

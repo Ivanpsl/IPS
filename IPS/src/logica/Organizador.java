@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class Organizador {
 	
@@ -27,10 +28,9 @@ public class Organizador {
 	
 	/**
 	 * Pasar el número de cuenta al usuario para que pueda pagar, viene en un txt antes de los que han pagado.
-	 * Una vez comunicado, el atleta pasará a la tabla de inscritos.
 	 * @throws IOException
 	 */
-	public void mostrarNumeroCuenta(Atleta atleta) throws IOException
+	public void mostrarNumeroCuenta() throws IOException
 	{
 		System.out.println("A continuación se mostrará donde realizar la transferencia:");
 		BufferedReader file = new BufferedReader(new FileReader("banco.txt"));
@@ -39,18 +39,17 @@ public class Organizador {
 		
 		System.out.println("Número de cuenta: " + line);
 		
-		//Mientras no tengan dorsal se les pondrá el 0
-		//Inscrito nuevoInscrito = new Inscrito (atleta, 0, false);
-		//evento.getInscritosEvento().add(nuevoInscrito);
-		
 		file.close();
 	}
 	
 	/**
-	 * Asignación de dorsales a partir del 10 y por fecha de inscripción (supuestamente ya tienen que venir ordenados en el array).
+	 * Asignación de dorsales a partir del 10 y por fecha de inscripción.
+	 * Antes de ello se ordenan los inscritos por fecha de inscripción y estado del pago.
 	 */
 	public void asignarDorsales()
 	{
+		Collections.sort(evento.getInscritosEvento());
+		
 		ArrayList<Inscripcion> inscritos = evento.getInscritosEvento();
 		int cont = 11;
 		

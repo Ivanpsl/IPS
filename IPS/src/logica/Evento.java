@@ -2,6 +2,8 @@ package logica;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Evento {
 
@@ -19,6 +21,7 @@ public class Evento {
 	//De momento se considera una unica fecha de cada tipo. 
 	
 	public Evento(int id, String name, String type, double price, double distancia, java.util.Date fecha_comienzo, java.util.Date fecha_fin_insc) {
+		
 		//this.atletas = new ArrayList<Atleta>();
 		this.participantes = new ArrayList<Inscripcion>();
 		this.id=id;
@@ -29,7 +32,6 @@ public class Evento {
 		this.tipo = type;
 		this.distancia= distancia;
 	}
-
 	
 	
 	public void añadirInscrito(Inscripcion inscripcion){

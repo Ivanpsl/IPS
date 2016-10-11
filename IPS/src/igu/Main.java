@@ -16,11 +16,8 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		//g = new Gestor();
 		
-		// Comentario Javi para comprobar sincronizacion
-		// Comentario de Iván
-		// comentario Dani
-		// otro comentario mas
-		// Comentario Dario
+		
+		
 //		Date fechaprueba = new Date(116, 2, 24);
 //		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
 	}
