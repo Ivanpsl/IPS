@@ -9,12 +9,13 @@ public class Atleta {
 	int edad;
 	public final int MASCULINO = 0;
 	public final int FEMENINO = 1; 
-
-	public Atleta(String dni, String nombre, String categoria, int edad){
+	
+	public Atleta(String dni, String nombre, String categoria, int edad, int sexo){
 		this.DNI = dni;
 		this.nombre = nombre;
 		this.categoria = categoria;
 		this.edad=edad;
+		this.sexo=sexo;
 	}
 	private void setDNI(String dNI) {
 		DNI = dNI;

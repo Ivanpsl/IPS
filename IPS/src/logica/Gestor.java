@@ -9,13 +9,14 @@ public class Gestor {
 	
 	
 	ArrayList<Evento> eventos;
+	ArrayList<Atleta> atletas;
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
-	ArrayList<Atleta> atletas;
+	
 	
 	public Gestor(){
 		this.eventos  = new ArrayList<Evento>();
-		
+		this.atletas= new ArrayList<Atleta>();
 		//--Se usa gF a la hora de cargar eventos desde los ficheros de datos
 		//--Se usa bd cuando queramos cargar los eventos desde la base de datos (Aun no funciona)
 		gF.cargarEventos(eventos);
@@ -24,10 +25,16 @@ public class Gestor {
 		//cargarEventosDisponibles();
 	}
 	
-	private void cargarEventosDisponibles(){
-		bd.cargarEventos(eventos);
+	private void cargarDatos(){
+		bd.cargarDatos(this);
+	}
+	public ArrayList<Evento> getEventos(){
+		return eventos;
 	}
 	
+	public ArrayList<Atleta> getAtletas(){
+		return atletas;
+	}
 	public void mostrarEventosDisponibles(){
 		for(Evento evento : eventos){
 			System.out.println(evento.toString());

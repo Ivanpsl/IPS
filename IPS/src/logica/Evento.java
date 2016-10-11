@@ -31,10 +31,11 @@ public class Evento {
 	}
 
 	
-
-//	public ArrayList<Atleta> getAtletas() {
-//		return this.atletas;
-//	}
+	
+	public void añadirInscrito(Inscripcion inscripcion){
+		participantes.add(inscripcion);
+	}
+	
 
 	public ArrayList<Inscripcion> getInscritosEvento() {
 		return this.participantes;
