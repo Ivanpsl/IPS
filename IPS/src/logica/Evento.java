@@ -2,8 +2,6 @@ package logica;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 
 public class Evento {
 
@@ -22,7 +20,6 @@ public class Evento {
 	
 	public Evento(int id, String name, String type, double price, double distancia, java.util.Date fecha_comienzo, java.util.Date fecha_fin_insc) {
 		
-		//this.atletas = new ArrayList<Atleta>();
 		this.participantes = new ArrayList<Inscripcion>();
 		this.id=id;
 		this.nombre = name;
@@ -45,33 +42,38 @@ public class Evento {
 
 	public String toString() {
 		StringBuilder sB= new StringBuilder();
-		sB.append("ID:" + id + " - ");
-		sB.append("Nombre:"+ nombre);
+		sB.append("ID:" + getId() + " Nombre: " + getNombre() + " Tipo: " + getTipo() + "Precio: " + getPrecio() + " Distancia(km): " + getDistancia() + "\n");
+		sB.append("F.Competición: " + getFechaCompeticion() + " F.Inscripción: " + getFechaFinInscripcion());
 		return sB.toString();
 	}
 
 	public String getNombre() {
-		return nombre;
+		return this.nombre;
 	}
 
 	public String getTipo() {
-		return tipo;
+		return this.tipo;
 	}
 
 	public double getPrecio() {
-		return precio;
+		return this.precio;
 	}
 
 	public Date getFechaCompeticion() {
-		return fechaCompeticion;
+		return this.fechaCompeticion;
 	}
 
 	public Date getFechaFinInscripcion() {
-		return fechaFinInscripcion;
+		return this.fechaFinInscripcion;
 	}
 	
 	public int getId(){
-		return id;
+		return this.id;
+	}
+	
+	public double getDistancia()
+	{
+		return this.distancia;
 	}
 	
 	
