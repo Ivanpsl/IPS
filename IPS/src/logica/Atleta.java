@@ -1,22 +1,20 @@
 package logica;
 
-import java.sql.Date;
-
-import oracle.net.aso.s;
 
 public class Atleta {
 	String DNI;
 	String nombre;
 	String categoria;
 	int sexo;
-	public final int MASCULION = 0;
-	public final int FEMENINO = 0; 
-	Date fechaInscripcion;
-	public Atleta(String dni, String nombre, String categoria, Date fecha){
+	int edad;
+	public final int MASCULINO = 0;
+	public final int FEMENINO = 1; 
+
+	public Atleta(String dni, String nombre, String categoria, int edad){
 		this.DNI = dni;
 		this.nombre = nombre;
 		this.categoria = categoria;
-		this.fechaInscripcion = fecha;
+		this.edad=edad;
 	}
 	private void setDNI(String dNI) {
 		DNI = dNI;
@@ -27,9 +25,7 @@ public class Atleta {
 	private void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
-	private void setFechaInscripcion(Date fechaInscripcion) {
-		this.fechaInscripcion = fechaInscripcion;
-	}
+	
 	public String getDNI() {
 		return DNI;
 	}
@@ -39,13 +35,11 @@ public class Atleta {
 	public String getCategoria() {
 		return categoria;
 	}
-	public Date getFechaInscripcion() {
-		return fechaInscripcion;
-	}
+	
 	
 	public String toString(){
 		StringBuilder sB= new StringBuilder();
-		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Categoría: "+getCategoria()+" Fecha inscripcion: "+getFechaInscripcion().toString());
+		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Categoría: "+getCategoria());
 		return sB.toString();
 	}
 }

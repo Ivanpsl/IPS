@@ -1,6 +1,6 @@
 CREATE TABLE "EVENTOS"
-{
-	EV_ID int NOT NULL AUTO_INCREMENT,
+(
+	EV_ID int NOT NULL,
 	EV_NOMBRE varchar,
 	EV_TIPO varchar,
 	EV_DISTANCIA decimal,
@@ -8,12 +8,19 @@ CREATE TABLE "EVENTOS"
 	EV_FECHA_COMIENZO date,
 	EV_FECHA_FIN_INSC date,
 	PRIMARY KEY (ID)	
-};
+);
 CREATE TABLE "ATLETA"
-{
+(
 	AT_DNI varchar PRIMARy KEY NOT NULL,
-	AT_NOMbRE varchar,
-	AT_SEXO varchar,
+	AT_NOMBRE varchar,
+	AT_CATEGORIA varchar,
+	AT_SEXO int,
 	AT_EDAD int,
 	
-}
+);
+CREATE TABLE "INSCRIPCION"(
+	INS_ATL_DNI varchar NOT NULL,
+	INS_EV_ID varchar NOT NULL,
+	INS_ESTADO int,
+	INS_FECHA_INS date,
+);
