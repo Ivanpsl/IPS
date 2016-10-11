@@ -3,8 +3,10 @@ package igu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
 
 import logica.Gestor;
+import logica.Inscrito;
 import oracle.net.aso.g;
 
 public class Main {
@@ -12,13 +14,16 @@ public class Main {
 	static boolean ejecucion = true;
 
 	public static void main(String[] args) throws IOException {
-		g = new Gestor();
+		//g = new Gestor();
 		
 		// Comentario Javi para comprobar sincronizacion
 		// Comentario de Iván
 		// comentario Dani
 		// otro comentario mas
 		// Comentario Dario
+		Date fechaprueba = new Date(2016,3,24);
+		Inscrito.sumarRestarDiasFecha(fechaprueba, 2);
+		System.out.println(fechaprueba.toString());
 	}
 	private static void mostrarComandosDisponibles() {
 		while (ejecucion) {
@@ -26,6 +31,7 @@ public class Main {
 			System.out.println();
 			System.out.println("mostrarEventos -> muestra los eventos disponibles para un atleta.");
 			System.out.println("mostrarAtletas - idEvento(int) -> Muestra los atletas para el evento que se le pasa como id.");
+			System.out.println("añadirInscripcionEvento - idEvento(int) - DNI - ");
 			System.out.println("Fin -> termina con la ejecucion del programa.");
 			
 			String lectura = consoleRead();

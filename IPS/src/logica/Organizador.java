@@ -40,8 +40,8 @@ public class Organizador {
 		System.out.println("Número de cuenta: " + line);
 		
 		//Mientras no tengan dorsal se les pondrá el 0
-		Inscrito nuevoInscrito = new Inscrito (atleta, 0, false);
-		evento.getInscritosEvento().add(nuevoInscrito);
+		//Inscrito nuevoInscrito = new Inscrito (atleta, 0, false);
+		//evento.getInscritosEvento().add(nuevoInscrito);
 		
 		file.close();
 	}

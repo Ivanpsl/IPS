@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Evento {
 
-	private ArrayList<Atleta> atletas;
+
 	private ArrayList<Inscrito> participantes;
 
 	// Datos del evento
@@ -82,5 +82,6 @@ public class Evento {
 	public int getId(){
 		return id;
 	}
+	
 	
 }

@@ -11,6 +11,7 @@ public class Gestor {
 	ArrayList<Evento> eventos;
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
+	ArrayList<Atleta> atletas;
 	
 	public Gestor(){
 		this.eventos  = new ArrayList<Evento>();
@@ -52,4 +53,6 @@ public class Gestor {
 			}
 		}
 	}
+	
+	
 }
