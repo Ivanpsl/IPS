@@ -26,4 +26,17 @@ public class ConversorFechas {
 		Date fechabuena = new Date(fecha.getTime());
 		return fechabuena;
 	}
+	/**
+	 * Obitene la diferencia en segundos entre dos fechas dadas en un tipo int.
+	 * @param fechaInicio
+	 * @param fechaFin
+	 * @return
+	 */
+	public static int obtenerDiferenciaFechaEnSegundos(Date fechaInicio, Date fechaFin){
+		int result = 0;
+		long inicio = fechaInicio.getTime();
+		long fin = fechaFin.getTime();
+		result = (int)((fin - inicio)/1000);
+		return result;
+	}
 }
