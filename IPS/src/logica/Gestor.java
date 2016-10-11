@@ -47,8 +47,8 @@ public class Gestor {
 		if(ev == null){
 			System.out.println("No se ha encontrado el evento");
 		}else{
-			ArrayList<Inscrito> inscritos = ev.getInscritosEvento();
-			for(Inscrito a: inscritos){
+			ArrayList<Inscripcion> inscritos = ev.getInscritosEvento();
+			for(Inscripcion a: inscritos){
 				System.out.println(a.toString());
 			}
 		}

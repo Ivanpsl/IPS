@@ -8,6 +8,9 @@ public class Atleta {
 	String DNI;
 	String nombre;
 	String categoria;
+	int sexo;
+	public final int MASCULION = 0;
+	public final int FEMENINO = 0; 
 	Date fechaInscripcion;
 	public Atleta(String dni, String nombre, String categoria, Date fecha){
 		this.DNI = dni;

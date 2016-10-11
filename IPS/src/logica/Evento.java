@@ -6,7 +6,7 @@ import java.util.ArrayList;
 public class Evento {
 
 
-	private ArrayList<Inscrito> participantes;
+	private ArrayList<Inscripcion> participantes;
 
 	// Datos del evento
 	int id;
@@ -20,7 +20,7 @@ public class Evento {
 	
 	public Evento(int id, String name, String type, double price, double distancia, java.util.Date fecha_comienzo, java.util.Date fecha_fin_insc) {
 		//this.atletas = new ArrayList<Atleta>();
-		this.participantes = new ArrayList<Inscrito>();
+		this.participantes = new ArrayList<Inscripcion>();
 		this.id=id;
 		this.nombre = name;
 		this.fechaCompeticion = (Date) fecha_comienzo;
@@ -36,7 +36,7 @@ public class Evento {
 //		return this.atletas;
 //	}
 
-	public ArrayList<Inscrito> getInscritosEvento() {
+	public ArrayList<Inscripcion> getInscritosEvento() {
 		return this.participantes;
 	}
 
@@ -47,7 +47,7 @@ public class Evento {
 		return sB.toString();
 	}
 
-	public void aladirInscrito(Inscrito i) {
+	public void aladirInscrito(Inscripcion i) {
 		if (i != null) {
 			this.participantes.add(i);
 		}

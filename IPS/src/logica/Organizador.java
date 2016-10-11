@@ -51,10 +51,10 @@ public class Organizador {
 	 */
 	public void asignarDorsales()
 	{
-		ArrayList<Inscrito> inscritos = evento.getInscritosEvento();
+		ArrayList<Inscripcion> inscritos = evento.getInscritosEvento();
 		int cont = 11;
 		
-		for (Inscrito i : inscritos){
+		for (Inscripcion i : inscritos){
 			i.setDorsal(cont);
 			cont++;
 		}

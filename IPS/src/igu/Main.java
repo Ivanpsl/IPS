@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.sql.Date;
 
 import logica.Gestor;
-import logica.Inscrito;
+import logica.Inscripcion;
 import oracle.net.aso.g;
 
 public class Main {
@@ -21,8 +21,8 @@ public class Main {
 		// comentario Dani
 		// otro comentario mas
 		// Comentario Dario
-		Date fechaprueba = new Date(116, 2, 24);
-		Inscrito.sumarRestarDiasFecha(fechaprueba, 2);
+//		Date fechaprueba = new Date(116, 2, 24);
+//		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
 	}
 	private static void mostrarComandosDisponibles() {
 		while (ejecucion) {
