@@ -50,12 +50,6 @@ public class Evento {
 		return sB.toString();
 	}
 
-	public void aladirInscrito(Inscripcion i) {
-		if (i != null) {
-			this.participantes.add(i);
-		}
-	}
-
 	public String getNombre() {
 		return nombre;
 	}

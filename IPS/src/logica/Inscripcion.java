@@ -7,16 +7,19 @@ import utiles.ConversorFechas;
 
 public class Inscripcion implements Comparable<Inscripcion> {
 
-	private int dorsal;
-	private Atleta atleta;
+	
 	public final int PREINSCRITO = 0;
 	public final int PENDIENTEPAGO = 1;
 	public final int PAGADO = 2;
-	private int estado;
-	private Date fechaInscripcion;
-	private Date fechaLimite;
 	private final int MAXDIAS = 2;
 	private static String dateFormat = "yyyy/MM/dd";
+	
+	private int dorsal;
+	private Atleta atleta;
+	private int estado;
+	
+	private Date fechaInscripcion;
+	private Date fechaLimite;
 	private int tiempo_segundos;
 	
 	
@@ -76,6 +79,14 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		return this.fechaInscripcion;
 	}
 	
+	public String toString()
+	{
+		StringBuilder sB= new StringBuilder();
+		sB.append("Datos atleta: " + getAtleta().toString() + "\n");
+		sB.append("Estado: " + getEstado() + " Dorsal: " + getDorsal() + " F.Inscripción: " + getFechaInscripcion());
+		return sB.toString();
+	}
+	
 	
 	@Override
 	public int compareTo(Inscripcion i) {
@@ -94,7 +105,4 @@ public class Inscripcion implements Comparable<Inscripcion> {
 			return 0;
 		}
 	}
-	
-
-	
 }

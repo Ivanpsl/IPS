@@ -38,12 +38,13 @@ public class Organizador {
 		String line = file.readLine();
 		
 		System.out.println("Número de cuenta: " + line);
+		System.out.println("Cuota: " + evento.getPrecio());
 		
 		file.close();
 	}
 	
 	/**
-	 * Asignación de dorsales a partir del 10 y por fecha de inscripción.
+	 * Asignación de dorsales a partir del 10.
 	 * Antes de ello se ordenan los inscritos por fecha de inscripción y estado del pago.
 	 */
 	public void asignarDorsales()

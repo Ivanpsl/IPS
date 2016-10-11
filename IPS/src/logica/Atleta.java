@@ -23,24 +23,30 @@ public class Atleta {
 	private void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	private void setSexo(int sexo)
+	{
+		this.sexo = sexo;
+	}
 	private void setCategoria(String categoria) {
 		this.categoria = categoria;
 	}
 	
 	public String getDNI() {
-		return DNI;
+		return this.DNI;
 	}
 	public String getNombre() {
-		return nombre;
+		return this.nombre;
 	}
 	public String getCategoria() {
-		return categoria;
+		return this.categoria;
 	}
-	
+	public int getSexo() {
+		return this.sexo;
+	}
 	
 	public String toString(){
 		StringBuilder sB= new StringBuilder();
-		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Categoría: "+getCategoria());
+		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Sexo(0 masc, 1fem): " + getSexo() + " Categoría: "+getCategoria());
 		return sB.toString();
 	}
 }
