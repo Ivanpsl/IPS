@@ -10,6 +10,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	public static final int PREINSCRITO = 0;
 	public static final int PENDIENTEPAGO = 1;
 	public static final int PAGADO = 2;
+	
 	private final int MAXDIAS = 2;
 	private static String dateFormat = "yyyy/MM/dd";
 	

@@ -3,7 +3,6 @@ package logica;
 
 public class Atleta {
 	
-	
 	public static final int MASCULINO = 0;
 	public static final int FEMENINO = 1; 
 	
@@ -49,7 +48,7 @@ public class Atleta {
 	
 	public String toString(){
 		StringBuilder sB= new StringBuilder();
-		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Sexo(0 masc, 1fem): " + getSexo() + " Categoría: "+getCategoria());
+		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Sexo(0-masc, 1-fem): " + getSexo() + " Categoría: "+getCategoria());
 		return sB.toString();
 	}
 }

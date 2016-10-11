@@ -27,8 +27,6 @@ public class Main {
 	
 	}
 
-	
-	
 	private static void mostrarComandosDisponibles() {
 		while (ejecucion) {
 			System.out.println("Escribir los siguientes comandos para mostrar contenido:");
