@@ -79,4 +79,8 @@ public class Evento {
 		return fechaFinInscripcion;
 	}
 	
+	public int getId(){
+		return id;
+	}
+	
 }

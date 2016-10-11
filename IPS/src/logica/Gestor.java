@@ -20,7 +20,7 @@ public class Gestor {
 		gF.cargarEventos(eventos);
 		//bd.cargarEventos(eventos);
 		
-		cargarEventosDisponibles();
+		//cargarEventosDisponibles();
 	}
 	
 	private void cargarEventosDisponibles(){
@@ -34,5 +34,22 @@ public class Gestor {
 	}
 	public ArrayList<Evento> getEventosDisponibles(){
 		return this.eventos;
+	}
+	
+	public void mostrarAtletasDeEvento(int id){
+		Evento ev = null;
+		for(Evento e : eventos){
+			if(e.getId() == id){
+				ev = e;
+			}
+		}
+		if(ev == null){
+			System.out.println("No se ha encontrado el evento");
+		}else{
+			ArrayList<Atleta> atletas = ev.getAtletas();
+			for(Atleta a : atletas){
+				System.out.println(a.toString());
+			}
+		}
 	}
 }

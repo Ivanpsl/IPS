@@ -2,6 +2,8 @@ package logica;
 
 import java.sql.Date;
 
+import oracle.net.aso.s;
+
 public class Atleta {
 	String DNI;
 	String nombre;
@@ -36,5 +38,11 @@ public class Atleta {
 	}
 	public Date getFechaInscripcion() {
 		return fechaInscripcion;
+	}
+	
+	public String toString(){
+		StringBuilder sB= new StringBuilder();
+		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Categoría: "+getCategoria()+" Fecha inscripcion: "+getFechaInscripcion().toString());
+		return sB.toString();
 	}
 }
