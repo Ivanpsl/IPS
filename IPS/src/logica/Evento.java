@@ -19,7 +19,7 @@ public class Evento {
 	//De momento se considera una unica fecha de cada tipo. 
 	
 	public Evento(int id, String name, String type, double price, double distancia, java.util.Date fecha_comienzo, java.util.Date fecha_fin_insc) {
-		this.atletas = new ArrayList<Atleta>();
+		//this.atletas = new ArrayList<Atleta>();
 		this.participantes = new ArrayList<Inscrito>();
 		this.id=id;
 		this.nombre = name;
@@ -32,9 +32,9 @@ public class Evento {
 
 	
 
-	public ArrayList<Atleta> getAtletas() {
-		return this.atletas;
-	}
+//	public ArrayList<Atleta> getAtletas() {
+//		return this.atletas;
+//	}
 
 	public ArrayList<Inscrito> getInscritosEvento() {
 		return this.participantes;

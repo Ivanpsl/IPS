@@ -54,8 +54,12 @@ public class Inscrito {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha); 
 		calendar.add(Calendar.DAY_OF_YEAR, dias); 
-		String fechaFalsa = calendar.get
-		Date fechaBuena = convierteStringADate(fechaFalsa, dateFormat);
+		Date fechaBuena = convertFechaJavaSQL(calendar.getTime());
 		return fechaBuena;
+	}
+	
+	private static Date convertFechaJavaSQL(java.util.Date fecha){
+		Date fechabuena = new Date(fecha.getTime());
+		return fechabuena;
 	}
 }
