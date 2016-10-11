@@ -10,7 +10,7 @@ public class ConversorFechas {
 	 * @param dias Dias que se suman a la fecha
 	 * @return Devuelve la fecha de tipo sql
 	 */
-	public Date sumarRestarDiasFecha(Date fecha, int dias) {
+	public static Date sumarRestarDiasFecha(Date fecha, int dias) {
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha); 
 		calendar.add(Calendar.DAY_OF_YEAR, dias); 
@@ -22,7 +22,7 @@ public class ConversorFechas {
 	 * @param fecha Fecha a convertir
 	 * @return Retorna la fecha en sql.Date
 	 */
-	public Date convertFechaJavaSQL(java.util.Date fecha){
+	public static Date convertFechaJavaSQL(java.util.Date fecha){
 		Date fechabuena = new Date(fecha.getTime());
 		return fechabuena;
 	}
