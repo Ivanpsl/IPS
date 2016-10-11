@@ -1,6 +1,7 @@
 package logica;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -32,8 +33,8 @@ public class Organizador {
 	 */
 	public void mostrarNumeroCuenta() throws IOException
 	{
-		System.out.println("A continuación se mostrará donde realizar la transferencia:");
-		BufferedReader file = new BufferedReader(new FileReader("banco.txt"));
+		System.out.println("A continuación se mostrará donde realizar la transferencia: ");
+		BufferedReader file = new BufferedReader(new FileReader("ficheros/banco.txt"));
 		
 		String line = file.readLine();
 		
@@ -58,6 +59,39 @@ public class Organizador {
 			i.setDorsal(cont);
 			cont++;
 		}
+	}
+	
+	/**
+	 * Método que verifica los DNI del txt para saber que atletas han pagado.
+	 * @throws IOException 
+	 */
+	public void comprobarPagados()
+	{
+		try {
+			BufferedReader fichero = new BufferedReader(new FileReader("ficheros/banco.txt"));
+			String linea = fichero.readLine(); //La primera es el numero de cuenta
+			
+			ArrayList<Inscripcion> inscritos = evento.getInscritosEvento();
+			
+			while (fichero.ready()) {
+				linea = fichero.readLine();
+		    	String[] trozos = linea.split("\n");
+		    	for (Inscripcion i : inscritos)
+		    	{
+		    		if (i.getAtleta().getDNI().equals(trozos[0]))
+		    			i.setEstado(2);
+		    		else
+		    			i.setEstado(1);
+		    	}
+		    }
+		    fichero.close();
+		    }
+		    catch (FileNotFoundException fnfe) {
+		    	new FileNotFoundException("Fichero del banco no encontrado");
+		    }
+		    catch (IOException ioe) {
+		    	new RuntimeException("Error de entrada/salida.");
+		    }
 	}
 
 }

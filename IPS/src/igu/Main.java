@@ -1,6 +1,8 @@
 package igu;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Date;
@@ -22,7 +24,11 @@ public class Main {
 		
 //		Date fechaprueba = new Date(116, 2, 24);
 //		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
+	
 	}
+
+	
+	
 	private static void mostrarComandosDisponibles() {
 		while (ejecucion) {
 			System.out.println("Escribir los siguientes comandos para mostrar contenido:");

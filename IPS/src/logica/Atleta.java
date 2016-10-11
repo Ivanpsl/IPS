@@ -2,13 +2,16 @@ package logica;
 
 
 public class Atleta {
+	
+	
+	public static final int MASCULINO = 0;
+	public static final int FEMENINO = 1; 
+	
 	String DNI;
 	String nombre;
 	String categoria;
 	int sexo;
 	int edad;
-	public final int MASCULINO = 0;
-	public final int FEMENINO = 1; 
 	
 	public Atleta(String dni, String nombre, String categoria, int edad, int sexo){
 		this.DNI = dni;
