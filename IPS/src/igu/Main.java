@@ -21,9 +21,8 @@ public class Main {
 		// comentario Dani
 		// otro comentario mas
 		// Comentario Dario
-		Date fechaprueba = new Date(2016,3,24);
+		Date fechaprueba = new Date(116, 2, 24);
 		Inscrito.sumarRestarDiasFecha(fechaprueba, 2);
-		System.out.println(fechaprueba.toString());
 	}
 	private static void mostrarComandosDisponibles() {
 		while (ejecucion) {
@@ -46,7 +45,7 @@ public class Main {
 		case "mostrarEventos":
 			g.mostrarEventosDisponibles();
 		case "mostrarAtletas":
-			g.mostrarAtletasDeEvento(Integer.parseInt(cachos[1]));
+			g.mostrarInscritosDeEvento(Integer.parseInt(cachos[1]));
 		case "Fin":
 			ejecucion = false;
 		default:

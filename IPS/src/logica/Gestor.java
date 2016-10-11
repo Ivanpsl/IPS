@@ -37,7 +37,7 @@ public class Gestor {
 		return this.eventos;
 	}
 	
-	public void mostrarAtletasDeEvento(int id){
+	public void mostrarInscritosDeEvento(int id){
 		Evento ev = null;
 		for(Evento e : eventos){
 			if(e.getId() == id){
@@ -47,8 +47,8 @@ public class Gestor {
 		if(ev == null){
 			System.out.println("No se ha encontrado el evento");
 		}else{
-			ArrayList<Atleta> atletas = ev.getAtletas();
-			for(Atleta a : atletas){
+			ArrayList<Inscrito> inscritos = ev.getInscritosEvento();
+			for(Inscrito a: inscritos){
 				System.out.println(a.toString());
 			}
 		}

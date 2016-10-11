@@ -47,12 +47,6 @@ public class Evento {
 		return sB.toString();
 	}
 
-	public void añadirAtleta(Atleta a) {
-		if (a != null) {
-			this.atletas.add(a);
-		}
-	}
-
 	public void aladirInscrito(Inscrito i) {
 		if (i != null) {
 			this.participantes.add(i);

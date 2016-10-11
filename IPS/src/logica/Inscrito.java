@@ -51,10 +51,13 @@ public class Inscrito {
 	}
 
 	public static Date sumarRestarDiasFecha(Date fecha, int dias) {
+		System.out.println(fecha.toString());
 		Calendar calendar = Calendar.getInstance();
 		calendar.setTime(fecha); 
 		calendar.add(Calendar.DAY_OF_YEAR, dias); 
+		System.out.println(fecha.toString());
 		Date fechaBuena = convertFechaJavaSQL(calendar.getTime());
+		System.out.println(fechaBuena.toString());
 		return fechaBuena;
 	}
 	
