@@ -4,7 +4,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 
+import logica.Atleta;
 import logica.Gestor;
 import logica.Inscripcion;
 import oracle.net.aso.g;
@@ -15,8 +19,6 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		//g = new Gestor();
-		
-		
 		
 //		Date fechaprueba = new Date(116, 2, 24);
 //		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);

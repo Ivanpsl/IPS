@@ -72,6 +72,10 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		tiempo_segundos=tiempo;
 	}
 	
+	public Date getFechaInscripcion(){
+		return this.fechaInscripcion;
+	}
+	
 	
 	@Override
 	public int compareTo(Inscripcion i) {
