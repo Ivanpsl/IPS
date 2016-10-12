@@ -45,7 +45,9 @@ public class Atleta {
 	public int getSexo() {
 		return this.sexo;
 	}
-	
+	public int getEdad(){
+		return edad;
+	}
 	public String toString(){
 		StringBuilder sB= new StringBuilder();
 		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Sexo(0-masc, 1-fem): " + getSexo() + " Categoría: "+getCategoria());

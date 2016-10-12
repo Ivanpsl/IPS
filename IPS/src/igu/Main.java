@@ -20,8 +20,8 @@ public class Main {
 	static boolean ejecucion = true;
 
 	public static void main(String[] args) throws IOException {
-		//g = new Gestor();
-		
+		g = new Gestor();
+		System.out.println(g.getEventos().toString());
 //		Date fechaprueba = new Date(116, 2, 24);
 //		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
 	

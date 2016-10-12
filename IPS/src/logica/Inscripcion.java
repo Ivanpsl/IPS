@@ -98,11 +98,14 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	public int getIdEvento(){
 		return id_evento;
 	}
+	public int getResultado(){
+		return tiempo_segundos;
+	}
 	public String toString()
 	{
 		StringBuilder sB= new StringBuilder();
 		sB.append("Datos atleta: " + getAtleta().toString() + "\n");
-		sB.append("Estado: " + getEstado() + " Dorsal: " + getDorsal() + " F.Inscripción: " + getFechaInscripcion());
+		sB.append("\t\tEstado: " + getEstado() + " Dorsal: " + getDorsal() + " F.Inscripción: " + getFechaInscripcion());
 		return sB.toString();
 	}
 	

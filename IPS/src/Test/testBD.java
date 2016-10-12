@@ -4,8 +4,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import logica.Atleta;
 import logica.Evento;
 import logica.Gestor;
+import logica.Inscripcion;
 
 import org.junit.Test;
 
@@ -20,6 +22,19 @@ public class testBD {
 	@Test
 	public void testConecta() {
 		bd.conectar();
+	}
+	
+	@Test 
+	public void añadirAtletaABD() throws ParseException{
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String fs1 = "2016-06-12";
+		String fs2 = "2016-08-12";
+		Date fecha1 = sdf.parse(fs1);
+		Date fecha2 = sdf.parse(fs2);
+		bd.añadirEventoABD(new Evento(g.getEventos().size(), "Evento1", "Maraton", 2, 25, ConversorFechas.convertFechaJavaSQL(fecha1), ConversorFechas.convertFechaJavaSQL(fecha2)));
+		Atleta a= new Atleta("DNI", "Ivan","categoria",10,4);
+		Inscripcion ins = new Inscripcion(g.getEventos().size(),a , 1, ConversorFechas.convertFechaJavaSQL(fecha1));
+		bd.añadirInscrito(a, ins);
 	}
 	@Test
 	public void testCargarDatos(){
