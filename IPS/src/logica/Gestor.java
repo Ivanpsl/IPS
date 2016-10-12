@@ -42,6 +42,24 @@ public class Gestor {
 		return this.eventos;
 	}
 	
+	public ArrayList<Evento> obtenerEventosEInscripciones(String dni){
+		ArrayList<Evento> evInscrito= new ArrayList<Evento>();
+		for(Evento e: eventos){
+			for(Inscripcion a: e.getInscritosEvento()){
+				if(a.getAtleta().DNI.equals(dni)){ 
+					evInscrito.add(e);
+				}
+			}
+		}
+		return evInscrito;
+	}
+	public Inscripcion getInscripcion(String dni, Evento ev){
+		for(Inscripcion ins: ev.getInscritosEvento()){
+			if(dni.equals(ins.getAtleta().getDNI())) return ins;
+		}
+		return null;
+	}
+	
 	public void mostrarInscritosDeEvento(int id){
 		Evento ev = null;
 		for(Evento e : eventos){

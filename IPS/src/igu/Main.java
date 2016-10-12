@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Iterator;
 
 import logica.Atleta;
+import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;
 import oracle.net.aso.g;
@@ -30,9 +31,10 @@ public class Main {
 	private static void mostrarComandosDisponibles() {
 		while (ejecucion) {
 			System.out.println("Escribir los siguientes comandos para mostrar contenido:");
-			System.out.println();
+			System.out.println(); 
 			System.out.println("mostrarEventos -> muestra los eventos disponibles para un atleta.");
 			System.out.println("mostrarAtletas - idEvento(int) -> Muestra los atletas para el evento que se le pasa como id.");
+			System.out.println("mostrarInformacionDNI - DNI -> Muestra los eventos a los que se ha inscrito alguien con ese DNI");
 			System.out.println("añadirInscripcionEvento - idEvento(int) - DNI - ");
 			System.out.println("Fin -> termina con la ejecucion del programa.");
 			
@@ -49,12 +51,25 @@ public class Main {
 			g.mostrarEventosDisponibles();
 		case "mostrarAtletas":
 			g.mostrarInscritosDeEvento(Integer.parseInt(cachos[1]));
+		case "mostrarInformacionDNI":
+			mostrarInformacionDNI(cachos[1]);
 		case "Fin":
 			ejecucion = false;
 		case "añadirInscripcionEvento":
 			g.añadirInscripcionEvento();
 		default:
 			System.out.println("Comando no reconocido.");
+		}
+	}
+	private static void mostrarInformacionDNI(String dni){
+		ArrayList<Evento> evInscritos = g.obtenerEventosEInscripciones(dni);
+		System.out.println("Eventos inscritos: ");
+		for(Evento e: evInscritos){
+			Inscripcion inscripcion = g.getInscripcion(dni, e);
+			System.out.println(" *** Evento: " + e.getId() + " Nombre del evento: " + e.getNombre() );
+			
+			System.out.println("/n Datos de la inscripcion: ");
+			System.out.println("/n/t/t "+ inscripcion.toString());
 		}
 	}
 	private static String consoleRead(){
