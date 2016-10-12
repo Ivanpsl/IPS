@@ -17,7 +17,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	private int dorsal;
 	private Atleta atleta;
 	private int estado;
-	
+	private int id_evento;
 	private Date fechaInscripcion;
 	private Date fechaLimite;
 	private int tiempo_segundos;
@@ -28,7 +28,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	 * @param dorsal
 	 * @param fechaInscrip
 	 */
-	public Inscripcion (Atleta atleta, int dorsal, Date fechaInscrip) 
+	public Inscripcion (int id_evento,Atleta atleta, int dorsal, Date fechaInscrip) 
 	{
 		this.atleta = atleta;
 		this.dorsal = dorsal;
@@ -36,6 +36,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		this.estado = PREINSCRITO;
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=0;
+		this.id_evento= id_evento;
 	}
 	
 	
@@ -46,8 +47,9 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	 * @param estado
 	 * @param segundos
 	 */
-	public Inscripcion (int dorsal, java.util.Date fecha_ins, int estado, int segundos) 
+	public Inscripcion (int id_evento, int dorsal, java.util.Date fecha_ins, int estado, int segundos) 
 	{
+		this.id_evento=id_evento;
 		this.atleta = null;
 		this.dorsal = dorsal;
 		this.estado = estado;

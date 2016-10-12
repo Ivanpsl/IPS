@@ -19,7 +19,7 @@ public class Gestor {
 		this.atletas= new ArrayList<Atleta>();
 		//--Se usa gF a la hora de cargar eventos desde los ficheros de datos
 		//--Se usa bd cuando queramos cargar los eventos desde la base de datos (Aun no funciona)
-		gF.cargarEventos(eventos);
+		//gF.cargarEventos(eventos);
 		//bd.cargarEventos(eventos);
 		
 		//cargarEventosDisponibles();

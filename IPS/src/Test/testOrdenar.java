@@ -21,12 +21,12 @@ public class testOrdenar {
 		Atleta a4 = new Atleta("4", "a4", "menor", 16, 0);
 		Atleta a5 = new Atleta("5", "a5", "mayor", 24, 0);
 		
-		Inscripcion i1 = new Inscripcion(a1, 0, new Date(116, 2, 24));
-		Inscripcion i2 = new Inscripcion(a2, 0, new Date(116, 1, 16));
-		Inscripcion i3 = new Inscripcion(a3, 0, new Date(116, 2, 21));
-		Inscripcion i4 = new Inscripcion(a4, 0, new Date(116, 0, 3));
-		Inscripcion i5 = new Inscripcion(a5, 0, new Date(116, 0, 27));
-		Inscripcion i6 = new Inscripcion(a1, 0, new Date(116, 5, 1));
+		Inscripcion i1 = new Inscripcion(0,a1, 0, new Date(116, 2, 24));
+		Inscripcion i2 = new Inscripcion(0,a2, 0, new Date(116, 1, 16));
+		Inscripcion i3 = new Inscripcion(0,a3, 0, new Date(116, 2, 21));
+		Inscripcion i4 = new Inscripcion(0,a4, 0, new Date(116, 0, 3));
+		Inscripcion i5 = new Inscripcion(0,a5, 0, new Date(116, 0, 27));
+		Inscripcion i6 = new Inscripcion(0,a1, 0, new Date(116, 5, 1));
 		
 		ArrayList<Inscripcion> participantes = new ArrayList<Inscripcion>();
 		
