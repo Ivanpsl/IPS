@@ -55,6 +55,8 @@ public class Main {
 			mostrarInformacionDNI(cachos[1]);
 		case "Fin":
 			ejecucion = false;
+		case "añadirInscripcionEvento":
+			g.añadirInscripcionEvento();
 		default:
 			System.out.println("Comando no reconocido.");
 		}
