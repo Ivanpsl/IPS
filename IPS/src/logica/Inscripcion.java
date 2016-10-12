@@ -22,7 +22,12 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	private Date fechaLimite;
 	private int tiempo_segundos;
 	
-	
+	/**
+	 * Constructor de Inscripcion estandar desde la aplicacion 
+	 * @param atleta
+	 * @param dorsal
+	 * @param fechaInscrip
+	 */
 	public Inscripcion (Atleta atleta, int dorsal, Date fechaInscrip) 
 	{
 		this.atleta = atleta;
@@ -32,11 +37,20 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=0;
 	}
+	
+	
+	/***
+	 * Constructor de Inscripcion usado para crear inscritos desde la base de datos 
+	 * @param dorsal
+	 * @param fecha_ins
+	 * @param estado
+	 * @param segundos
+	 */
 	public Inscripcion (int dorsal, java.util.Date fecha_ins, int estado, int segundos) 
 	{
 		this.atleta = null;
 		this.dorsal = dorsal;
-		this.estado = PREINSCRITO;
+		this.estado = estado;
 		fechaInscripcion= ConversorFechas.convertFechaJavaSQL(fecha_ins);
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=segundos;

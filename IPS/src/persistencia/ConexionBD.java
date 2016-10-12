@@ -19,18 +19,20 @@ public class ConexionBD {
 	
 	public static String login="uo238031";
 	public static String password = "";
-	public static String url = "jdbc:oracle:thin:@156.35.94.99:1521:DESA";
-	//public static String url ="jdbc:hsqldb:hsql://localhost/labdb";
+	//public static String url = "jdbc:oracle:thin:@156.35.94.99:1521:DESA";
+	public static String url ="jdbc:hsqldb:hsql://localhost/labdb";
 	
-	private Connection conectar(){
+	public Connection conectar(){
 		try {
 			if (DriverManager.getDriver(url) == null){
 				if (url.contains("oracle"))
 					DriverManager.registerDriver(new oracle.jdbc.OracleDriver());
-			}else
-					DriverManager.registerDriver(new org.hsqldb.jdbc.JDBCDriver());
-		login="SA";
-		password= "";
+			}else {
+				DriverManager.registerDriver(new org.hsqldb.jdbc.JDBCDriver());
+				login="SA";
+				password= "";	
+			}
+	
 		return DriverManager.getConnection(url, login, password);
 		
 		} catch (SQLException e) {
