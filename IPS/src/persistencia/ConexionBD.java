@@ -38,7 +38,7 @@ public class ConexionBD {
 		return DriverManager.getConnection(url, login, password);
 		
 		} catch (SQLException e) {
-			System.out.println("No se ha podido conectar");
+			System.err.println("No se ha podido conectar con la base de datos");
 			e.printStackTrace();
 			return null;
 		}
@@ -116,7 +116,7 @@ public class ConexionBD {
 		System.out.println("Datos de inscripciones cargados");
 		con.close();
 		} catch (SQLException e) {
-			System.out.println("Error al cargar datos de la BD.");
+			System.err.println("Error al cargar datos de la BD.");
 			e.printStackTrace();
 		}
 	}

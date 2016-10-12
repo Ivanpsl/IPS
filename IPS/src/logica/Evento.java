@@ -42,8 +42,12 @@ public class Evento {
 
 	public String toString() {
 		StringBuilder sB= new StringBuilder();
-		sB.append("ID:" + getId() + " Nombre: " + getNombre() + " Tipo: " + getTipo() + "Precio: " + getPrecio() + " Distancia(km): " + getDistancia() + "\n");
-		sB.append("F.Competición: " + getFechaCompeticion() + " F.Inscripción: " + getFechaFinInscripcion());
+		sB.append("[ID:" + getId() + " Nombre: " + getNombre() + " ]\n Tipo: " + getTipo() + "Precio: " + getPrecio() + " Distancia(km): " + getDistancia() + "\n");
+		sB.append("\n F.Competición: " + getFechaCompeticion() + " F.Inscripción: " + getFechaFinInscripcion());
+		sB.append(" \n Participantes: \n" );
+		for(Inscripcion i : participantes){
+			sB.append("\n\t   -" +i.toString());
+		}
 		return sB.toString();
 	}
 

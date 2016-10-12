@@ -95,6 +95,9 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		return this.fechaInscripcion;
 	}
 	
+	public int getIdEvento(){
+		return id_evento;
+	}
 	public String toString()
 	{
 		StringBuilder sB= new StringBuilder();
