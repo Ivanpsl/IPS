@@ -16,6 +16,7 @@ public class Evento {
 	double distancia;
 	Date fechaCompeticion;
 	Date fechaFinInscripcion;
+	Clasificacion clasificacion;
 	//De momento se considera una unica fecha de cada tipo. 
 	
 	public Evento(int id, String name, String type, double price, double distancia, java.util.Date fecha_comienzo, java.util.Date fecha_fin_insc) {
@@ -78,6 +79,19 @@ public class Evento {
 	public double getDistancia()
 	{
 		return this.distancia;
+	}
+	
+	public void asignarTiemposDorsal(int dorsal, int tiempo){
+		for(Inscripcion p : participantes){
+			if(p.getDorsal()==dorsal) p.setTiempoSegundos(tiempo);
+			else System.err.println("Participante con dorsal " + dorsal +" y con un tiempo de " + tiempo + "seg. no ha sido encontrado" );
+		}
+	}
+	/***
+	 * Metodo generarCLasificacion que genera las clasificaciones de la carrera y sera llamado al final de la competicion
+	 */
+	public void generarClasificacion(){
+		clasificacion=new Clasificacion(participantes);
 	}
 	
 	

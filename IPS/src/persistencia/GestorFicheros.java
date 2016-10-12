@@ -46,4 +46,25 @@ public class GestorFicheros {
 		        new RuntimeException("Error de entrada/salida.");
 	    }
 	 }
+	public void obtenerResultadosEvento(Evento ev) {
+	    String nombreFichero = "ficheros/resultados/resulatado"+ ev.getId()+".dat";
+	    String linea=null;
+	    try {
+	      BufferedReader fichero = new BufferedReader(new FileReader(nombreFichero));
+	
+	      while (fichero.ready()) {
+	    	  
+	        linea = fichero.readLine();
+	        String[] trozos = linea.split("-");
+	        ev.asignarTiemposDorsal(Integer.parseInt(trozos[0]), Integer.parseInt(trozos[1]));
+	      }
+	      fichero.close();
+	    }
+	    catch (FileNotFoundException fnfe){
+	        System.out.println("El archivo no se ha encontrado.");
+	    }
+	    catch(IOException ioe){
+	        new RuntimeException("Error de entrada/salida.");
+    }
+ }
 }
