@@ -73,7 +73,10 @@ public class Main {
 	}
 	private static void mostrarAtletasDeUnEvento(){
 		System.out.println("\n Seleccione un id de los eventos existentes: \n");
-		imprimirEventos(g.getEventosDisponibles());
+		//imprimirEventos(g.getEventosDisponibles());
+		for(Evento e : g.getEventosDisponibles()){
+			System.out.println("ID: "+e.getId()+"; Nombre: "+e.getNombre());
+		}
 		System.out.print("\nID de evento seleccionado: ");
 		int idEvento = Integer.parseInt(consoleRead());
 		Evento evento = g.obtenerEventoPorId(idEvento);
