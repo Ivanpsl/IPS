@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Iterator;
 
@@ -22,9 +23,10 @@ public class Main {
 
 	public static void main(String[] args) throws IOException {
 		g = new Gestor();
-		System.out.println(g.getEventos().toString());
+//		System.out.println(g.getEventos().toString());
 //		Date fechaprueba = new Date(116, 2, 24);
 //		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
+		mostrarComandosDisponibles();
 	
 	}
 
@@ -38,8 +40,10 @@ public class Main {
 			System.out.println("añadirInscripcionEvento - idEvento(int) - DNI - ");
 			System.out.println("Fin -> termina con la ejecucion del programa.");
 			
+			System.out.print("\nEscriba: ");
 			String lectura = consoleRead();
 			comandoEscogido(lectura);
+			System.out.println("\n -------------------------------------------- \n");
 		}
 	}
 
@@ -49,14 +53,19 @@ public class Main {
 		switch (cachos[0]) {
 		case "mostrarEventos":
 			g.mostrarEventosDisponibles();
+			break;
 		case "mostrarAtletas":
 			g.mostrarInscritosDeEvento(Integer.parseInt(cachos[1]));
+			break;
 		case "mostrarInformacionDNI":
 			mostrarInformacionDNI(cachos[1]);
+			break;
 		case "Fin":
 			ejecucion = false;
+			break;
 		case "añadirInscripcionEvento":
 			g.añadirInscripcionEvento();
+			break;
 		default:
 			System.out.println("Comando no reconocido.");
 		}
@@ -75,7 +84,13 @@ public class Main {
 	private static String consoleRead(){
 		InputStreamReader isr = new InputStreamReader(System.in);
 		BufferedReader br = new BufferedReader (isr);
-		return br.toString();
+		String lectura = "";
+		try {
+			lectura = br.readLine();
+		} catch (IOException e) {
+			System.err.println("No se ha leído adecuadamente");
+		}
+		return lectura;
 	}
 
 }

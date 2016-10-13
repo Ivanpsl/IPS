@@ -3,7 +3,9 @@ package logica;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
@@ -34,9 +36,15 @@ public class Gestor {
 		return atletas;
 	}
 	public void mostrarEventosDisponibles(){
+		Date fechaActual = new Date(Calendar.getInstance().getTimeInMillis());
 		for(Evento evento : eventos){
-			System.out.println(evento.toString());
+			if(evento.getFechaFinInscripcion().getTime() >= fechaActual.getTime()){
+				imprimeEvento(evento);
+			}
 		}
+	}
+	private void imprimeEvento(Evento e){
+		System.out.println(e.toString());
 	}
 	public ArrayList<Evento> getEventosDisponibles(){
 		return this.eventos;
