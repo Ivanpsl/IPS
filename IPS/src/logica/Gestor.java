@@ -83,7 +83,7 @@ public class Gestor {
 			}
 		}
 	}
-	private boolean comprobarAtletaRegistrado(String dni){
+	public boolean comprobarAtletaRegistrado(String dni){
 		for (int i = 0; i < atletas.size(); i++) {
 			if(atletas.get(i).getDNI().equals(dni)){
 				return true;
@@ -94,7 +94,7 @@ public class Gestor {
 	}
 	
 
-	private Atleta buscarAtletaPorDNI(String dni){
+	public Atleta buscarAtletaPorDNI(String dni){
 		for (int i = 0; i < atletas.size(); i++) {
 			if(atletas.get(i).getDNI().equals(dni)){
 				return atletas.get(i);
@@ -103,43 +103,8 @@ public class Gestor {
 		return null;
 	}
 
-	public void añadirInscripcionEvento() {
-		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
-		String DNI="";
-		String nombre="";
-		String categoria="";
-		int sexo=-1;
-		int edad=-1;
-		System.out.println("Introduzca su DNI");
-		try {
-			DNI = in.readLine();
-			if(!DNI.equals("")&& !comprobarAtletaRegistrado(DNI)){
-				while(nombre.equals("") || nombre==null){
-				System.out.println("Introduzca su nombre");
-				nombre =in.readLine();
-				}
-				while(edad <0 || edad >120){
-					System.out.println("Introduzca su edad (0 - 120)");
-					edad =Integer.parseInt(in.readLine());
-				}
-				while(sexo !=0 || sexo !=1){
-					System.out.println("Introduzca su sexo ( 0 -> M , 1 -> F");
-					sexo =Integer.parseInt(in.readLine());
-				}
-				atletas.add(new Atleta(DNI, nombre, categoria, edad, sexo));
-			}else{
-				Atleta atl = buscarAtletaPorDNI(DNI);
-				String respuesta="";
-				System.out.println("Ya está registrado ¿Quiere continuar con sus datos?");
-				System.out.println("DNI: "+ DNI +"\n Nombre :"+atl.getNombre()+
-						"\n Sexo: "+ (atl.getSexo()==0 ? "Masculino":"Femenino")+
-						"\n edad: "+ atl.getEdad());
-				respuesta = in.readLine();
-			}
-		} catch (IOException e) {
-			System.err.println("Lectura no valida");
-			e.printStackTrace();
-		}
+	public void añadirInscripcionEvento(Atleta atl) {
+
 		
 		
 	}
@@ -159,6 +124,11 @@ public class Gestor {
 				return e;
 		}
 		return null;
+	}
+
+	public void addAtleta(Atleta atl) {
+		atletas.add(atl);
+		
 	}
 	
 }
