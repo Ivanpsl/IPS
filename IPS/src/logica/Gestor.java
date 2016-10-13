@@ -35,17 +35,17 @@ public class Gestor {
 	public ArrayList<Atleta> getAtletas(){
 		return atletas;
 	}
-	public void mostrarEventosDisponibles(){
+	public ArrayList<Evento> getEventosAbiertos(){
 		Date fechaActual = new Date(Calendar.getInstance().getTimeInMillis());
+		ArrayList<Evento> evDisp = new ArrayList<Evento>();
 		for(Evento evento : eventos){
 			if(evento.getFechaFinInscripcion().getTime() >= fechaActual.getTime()){
-				imprimeEvento(evento);
+				evDisp.add(evento);
 			}
 		}
+		return evDisp;
 	}
-	private void imprimeEvento(Evento e){
-		System.out.println(e.toString());
-	}
+
 	public ArrayList<Evento> getEventosDisponibles(){
 		return this.eventos;
 	}
@@ -153,5 +153,12 @@ public class Gestor {
 		ev.generarClasificacion();
 	}
 	
+	public Evento obtenerEventoPorId(int id){
+		for(Evento e : eventos){
+			if(e.id == id)
+				return e;
+		}
+		return null;
+	}
 	
 }

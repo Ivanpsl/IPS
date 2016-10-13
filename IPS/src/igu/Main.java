@@ -35,7 +35,7 @@ public class Main {
 			System.out.println("Escribir los siguientes comandos para mostrar contenido:");
 			System.out.println(); 
 			System.out.println("mostrarEventos -> muestra los eventos disponibles para un atleta.");
-			System.out.println("mostrarAtletas - idEvento(int) -> Muestra los atletas para el evento que se le pasa como id.");
+			System.out.println("mostrarAtletas -> Muestra los atletas inscritos a un evento a seleccionar.");
 			System.out.println("mostrarInformacionDNI - DNI -> Muestra los eventos a los que se ha inscrito alguien con ese DNI");
 			System.out.println("añadirInscripcionEvento - idEvento(int) - DNI - ");
 			System.out.println("Fin -> termina con la ejecucion del programa.");
@@ -52,10 +52,11 @@ public class Main {
 		String[] cachos = comand.split(" - ");
 		switch (cachos[0]) {
 		case "mostrarEventos":
-			g.mostrarEventosDisponibles();
+			imprimirEventos(g.getEventosAbiertos());
 			break;
 		case "mostrarAtletas":
-			g.mostrarInscritosDeEvento(Integer.parseInt(cachos[1]));
+			//g.mostrarInscritosDeEvento(Integer.parseInt(cachos[1]));
+			mostrarAtletasDeUnEvento();
 			break;
 		case "mostrarInformacionDNI":
 			mostrarInformacionDNI(cachos[1]);
@@ -69,6 +70,29 @@ public class Main {
 		default:
 			System.out.println("Comando no reconocido.");
 		}
+	}
+	private static void mostrarAtletasDeUnEvento(){
+		System.out.println("\n Seleccione un id de los eventos existentes: \n");
+		imprimirEventos(g.getEventosDisponibles());
+		System.out.print("\nID de evento seleccionado: ");
+		int idEvento = Integer.parseInt(consoleRead());
+		Evento evento = g.obtenerEventoPorId(idEvento);
+		System.out.println("");
+		for(Inscripcion ins : evento.getInscritosEvento()){
+			System.out.println(ins.toString());
+		}
+	}
+	private static void imprimirEventos(ArrayList<Evento> eventos){
+		if(eventos.size() == 0)
+			System.out.println("No hay eventos disponibles.");
+		else{
+			for(Evento e : eventos){
+				imprimeEvento(e);
+			}
+		}
+	}
+	private static void imprimeEvento(Evento e){
+		System.out.println(e.toString());
 	}
 	private static void mostrarInformacionDNI(String dni){
 		ArrayList<Evento> evInscritos = g.obtenerEventosEInscripciones(dni);
