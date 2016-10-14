@@ -69,7 +69,7 @@ public class ConexionBD {
 					double precio =rs.getDouble("EV_PRECIO");
 					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
 					Date fecha_fin_insc=rs.getDate("EV_FECHA_FIN_INSC");
-					g.getEventos().add(new Evento(id, nombre, tipo, precio, distancia,ConversorFechas.convertFechaJavaSQL(fecha_comienzo),ConversorFechas.convertFechaJavaSQL(fecha_fin_insc)));
+					g.getEventos().add(new Evento(id, nombre, tipo, precio, distancia,ConversorFechas.convertFechaJavaSQL(fecha_comienzo),ConversorFechas.convertFechaJavaSQL(fecha_fin_insc),200));
 				}
 				System.out.println("Datos de eventos cargados");
 				rs.close();

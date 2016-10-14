@@ -102,9 +102,22 @@ public class Gestor {
 		return null;
 	}
 
-	public void añadirInscripcionEvento(Atleta atl,int evento) {
+	public void añadirInscripcionEvento(Atleta atl,Evento evento) {
 		Date fechaActual = new Date(Calendar.getInstance().getTimeInMillis());
-		inscripciones.add(new Inscripcion(evento, atl, 0, fechaActual));
+
+		boolean repetido =false;
+		for (int i = 0; i < inscripciones.size(); i++) {
+			if(inscripciones.get(i).getIdEvento()==evento.getId() && 
+					inscripciones.get(i).getAtleta()== atl){
+				repetido=true;				
+			}
+		}
+		if(!repetido && evento.getPlazas()>0 ){
+			Inscripcion ins = new Inscripcion(evento, atl, fechaActual);
+			System.out.println("Se ha inscrito correctamente. Detalles:");
+			System.out.println(ins.toString());
+			inscripciones.add(ins);
+		}
 		
 		
 	}
@@ -120,7 +133,7 @@ public class Gestor {
 	
 	public Evento obtenerEventoPorId(int id){
 		for(Evento e : eventos){
-			if(e.id == id)
+			if(e.getId() == id)
 				return e;
 		}
 		return null;

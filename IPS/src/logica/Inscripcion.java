@@ -16,7 +16,9 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	
 	private int dorsal;
 	private Atleta atleta;
+	private String categoria;
 	private int estado;
+	private Evento evento;
 	private int id_evento;
 	private Date fechaInscripcion;
 	private Date fechaLimite;
@@ -25,18 +27,21 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	/**
 	 * Constructor de Inscripcion estandar desde la aplicacion 
 	 * @param atleta
-	 * @param dorsal
+	 * @param dorsal -> NO SE PUEDE PASAR COMO PARAMETRO. CALCULAR DENTRO
+	 * @param 
 	 * @param fechaInscrip
 	 */
-	public Inscripcion (int id_evento,Atleta atleta, int dorsal, Date fechaInscrip) 
+	public Inscripcion (Evento event, Atleta atleta, Date fechaInscrip) 
 	{
 		this.atleta = atleta;
-		this.dorsal = dorsal;
 		this.fechaInscripcion = fechaInscrip;
 		this.estado = PREINSCRITO;
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=0;
-		this.id_evento= id_evento;
+		this.evento= event;
+		// Al crear una inscripcion se decrementa plazas y se añade inscripcion al evento
+		this.evento.setPlazas(this.evento.getPlazas()-1);
+		evento.añadirInscrito(this);
 	}
 	
 	
