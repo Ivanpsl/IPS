@@ -1,8 +1,5 @@
 package logica;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -15,6 +12,7 @@ public class Gestor {
 	
 	ArrayList<Evento> eventos;
 	ArrayList<Atleta> atletas;
+	ArrayList<Inscripcion> inscripciones;
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
 	
@@ -22,6 +20,7 @@ public class Gestor {
 	public Gestor(){
 		this.eventos  = new ArrayList<Evento>();
 		this.atletas= new ArrayList<Atleta>();
+		this.inscripciones=new ArrayList<Inscripcion>();
 		cargarDatos();
 	}
 	
@@ -103,8 +102,9 @@ public class Gestor {
 		return null;
 	}
 
-	public void añadirInscripcionEvento(Atleta atl) {
-
+	public void añadirInscripcionEvento(Atleta atl,int evento) {
+		Date fechaActual = new Date(Calendar.getInstance().getTimeInMillis());
+		inscripciones.add(new Inscripcion(evento, atl, 0, fechaActual));
 		
 		
 	}
@@ -128,6 +128,14 @@ public class Gestor {
 
 	public void addAtleta(Atleta atl) {
 		atletas.add(atl);
+		
+	}
+
+	public void listarEventosAbiertos() {
+		ArrayList<Evento> eventosAbiertos = getEventosAbiertos();
+		for (int i = 0; i < eventosAbiertos.size(); i++) {
+			System.out.println(i+". "+ eventos.get(i).toString());
+		}
 		
 	}
 	

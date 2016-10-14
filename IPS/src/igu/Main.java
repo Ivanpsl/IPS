@@ -37,7 +37,7 @@ public class Main {
 			System.out.println("mostrarEventos -> muestra los eventos disponibles para un atleta.");
 			System.out.println("mostrarAtletas -> Muestra los atletas inscritos a un evento a seleccionar.");
 			System.out.println("mostrarInformacionDNI - DNI -> Muestra los eventos a los que se ha inscrito alguien con ese DNI");
-			System.out.println("añadirInscripcionEvento - idEvento(int) - DNI - ");
+			System.out.println("inscribirseAEvento - idEvento(int) - DNI - ");
 			System.out.println("Fin -> termina con la ejecucion del programa.");
 			
 			System.out.print("\nEscriba: ");
@@ -64,54 +64,51 @@ public class Main {
 		case "Fin":
 			ejecucion = false;
 			break;
-		case "añadirInscripcionEvento":
-			pedirDatos();
+		case "inscribirseAEvento":
+			System.out.println("Seleccione una opcion: ");
+			g.listarEventosAbiertos();
+			int respuesta = Integer.parseInt(consoleRead());
+			pedirDatosInscripcion(respuesta );
 			
 			break;
 		default:
 			System.out.println("Comando no reconocido.");
 		}
 	}
-	private static void pedirDatos() {
-		BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
+	private static void pedirDatosInscripcion(int evento) {
+		//BufferedReader in = new BufferedReader (new InputStreamReader(System.in));
 		String DNI="";
 		String nombre="";
 		String categoria="";
 		int sexo=-1;
 		int edad=-1;
 		System.out.println("Introduzca su DNI");
-		try {
-			DNI = in.readLine();
-			if(!DNI.equals("")&& !g.comprobarAtletaRegistrado(DNI)){
-				while(nombre.equals("") || nombre==null){
-				System.out.println("Introduzca su nombre");
-				nombre =in.readLine();
-				}
-				while(edad <0 || edad >120){
-					System.out.println("Introduzca su edad (0 - 120)");
-					edad =Integer.parseInt(in.readLine());
-				}
-				while(sexo !=0 || sexo !=1){
-					System.out.println("Introduzca su sexo ( 0 -> M , 1 -> F");
-					sexo =Integer.parseInt(in.readLine());
-				}
-				Atleta atl =new Atleta(DNI, nombre, categoria, edad, sexo);
-				g.addAtleta(atl);
-				g.añadirInscripcionEvento(atl);
-			}else{
-				Atleta atl = g.buscarAtletaPorDNI(DNI);
+		DNI = consoleRead();
+		if(!DNI.equals("")&& !g.comprobarAtletaRegistrado(DNI)){
+			while(nombre.equals("") || nombre==null){
+			System.out.println("Introduzca su nombre");
+			nombre =consoleRead();
+			}
+			while(edad <0 || edad >120){
+				System.out.println("Introduzca su edad (0 - 120)");
+				edad =Integer.parseInt(consoleRead());
+			}
+			while(sexo <0 || sexo >1){
+				System.out.println("Introduzca su sexo ( 0 -> M , 1 -> F");
+				sexo =Integer.parseInt(consoleRead());
+			}
+			Atleta atl =new Atleta(DNI, nombre, categoria, edad, sexo);
+			g.addAtleta(atl);
+			g.añadirInscripcionEvento(atl,evento);
+		}else{
+			Atleta atl = g.buscarAtletaPorDNI(DNI);
 //				String respuesta="";
-				System.out.println("Ya está registrado");
+			System.out.println("Ya está registrado");
 //				System.out.println("DNI: "+ DNI +"\n Nombre :"+atl.getNombre()+
 //						"\n Sexo: "+ (atl.getSexo()==0 ? "Masculino":"Femenino")+
 //						"\n edad: "+ atl.getEdad());
 //				respuesta = in.readLine();
-				g.añadirInscripcionEvento(atl);
-			}
-			
-		} catch (IOException e) {
-			System.err.println("Lectura no valida");
-			e.printStackTrace();
+			g.añadirInscripcionEvento(atl,evento);
 		}
 		
 	}
@@ -154,8 +151,9 @@ public class Main {
 		}
 	}
 	private static String consoleRead(){
-		InputStreamReader isr = new InputStreamReader(System.in);
-		BufferedReader br = new BufferedReader (isr);
+		BufferedReader br = new BufferedReader (new InputStreamReader(System.in));
+	//	InputStreamReader isr = new InputStreamReader(System.in);
+	//	BufferedReader br = new BufferedReader (isr);
 		String lectura = "";
 		try {
 			lectura = br.readLine();
