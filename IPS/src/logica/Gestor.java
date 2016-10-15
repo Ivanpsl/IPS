@@ -12,7 +12,7 @@ public class Gestor {
 	
 	ArrayList<Evento> eventos;
 	ArrayList<Atleta> atletas;
-	ArrayList<Inscripcion> inscripciones;
+	
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
 	
@@ -20,7 +20,6 @@ public class Gestor {
 	public Gestor(){
 		this.eventos  = new ArrayList<Evento>();
 		this.atletas= new ArrayList<Atleta>();
-		this.inscripciones=new ArrayList<Inscripcion>();
 		cargarDatos();
 	}
 	
@@ -106,17 +105,17 @@ public class Gestor {
 		Date fechaActual = new Date(Calendar.getInstance().getTimeInMillis());
 
 		boolean repetido =false;
-		for (int i = 0; i < inscripciones.size(); i++) {
-			if(inscripciones.get(i).getIdEvento()==evento.getId() && 
-					inscripciones.get(i).getAtleta()== atl){
+		for (int i = 0; i < evento.getInscritosEvento().size(); i++) {
+			if(evento.getInscritosEvento().get(i).getIdEvento()==evento.getId() && 
+					evento.getInscritosEvento().get(i).getAtleta()== atl){
 				repetido=true;				
 			}
 		}
-		if(!repetido && evento.getPlazas()>0 ){
-			Inscripcion ins = new Inscripcion(evento, atl, fechaActual);
+		if(!repetido && evento.getPlazasDisponibles()>0 ){
+			Inscripcion ins = new Inscripcion(atl, fechaActual);
 			System.out.println("Se ha inscrito correctamente. Detalles:");
 			System.out.println(ins.toString());
-			inscripciones.add(ins);
+			evento.añadirInscrito(ins);
 		}
 		
 		

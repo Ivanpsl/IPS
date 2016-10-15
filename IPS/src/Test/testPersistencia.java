@@ -17,7 +17,7 @@ public class testPersistencia {
 	public void test() {
 		ArrayList<Evento> ev = new ArrayList<Evento>();
 		GestorFicheros gF = new GestorFicheros();
-		gF.cargarEventos(ev);
+		//gF.cargarEventos(ev);
 		System.out.println(ev.toString());
 	}
 	

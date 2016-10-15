@@ -13,17 +13,20 @@ public class Evento {
 	int id;
 	String nombre;
 	String tipo;
-	int plazas;
+	int plazasDisponibles;
+	int plazasTotales;
 	double precio;
 	double distancia;
 	Date fechaCompeticion;
 	Date fechaFinInscripcion;
 	Clasificacion clasificacion;
+	boolean finalizado = false;
+
 	//De momento se considera una unica fecha de cada tipo. 
 	
 	public Evento(int id, String name, String type, double price, 
 			double distancia, java.util.Date fecha_comienzo, 
-			java.util.Date fecha_fin_insc, int plazasDisp) {
+			java.util.Date fecha_fin_insc, int plazasTotales, boolean finalizado) {
 		
 		this.inscripciones = new ArrayList<Inscripcion>();
 		this.id=id;
@@ -32,13 +35,19 @@ public class Evento {
 		this.fechaFinInscripcion = (Date) fecha_fin_insc; 
 		this.precio = price;
 		this.tipo = type;
-		this.plazas= plazasDisp;
+		this.plazasDisponibles= plazasTotales;
 		this.distancia= distancia;
+		this.finalizado=finalizado;
+		if(finalizado){
+			generarClasificacion();
+		}
 	}
 	
 	
 	public void añadirInscrito(Inscripcion inscripcion){
 		inscripciones.add(inscripcion);
+		// Al crear una inscripcion se decrementa plazas y se añade inscripcion al evento
+		setPlazasDisponibles(getPlazasDisponibles()-1);
 	}
 	
 
@@ -56,7 +65,9 @@ public class Evento {
 		}
 		return sB.toString();
 	}
-
+	public boolean getFinalizado(){
+		return finalizado;
+	}
 	public String getNombre() {
 		return this.nombre;
 	}
@@ -69,18 +80,16 @@ public class Evento {
 		return this.precio;
 	}
 	
-	
-
-	public int getPlazas() {
-		return plazas;
+	public int getPlazasDisponibles() {
+		return plazasDisponibles;
 	}
 	
-
-
-	public void setPlazas(int plazas) {
-		this.plazas = plazas;
+	public void setPlazasDisponibles(int plazas) {
+		this.plazasDisponibles = plazas;
 	}
-
+	public int getPlazasTotales(){
+		return plazasTotales;
+	}
 
 	public Date getFechaCompeticion() {
 		return this.fechaCompeticion;

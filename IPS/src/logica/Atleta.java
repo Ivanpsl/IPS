@@ -18,9 +18,7 @@ public class Atleta {
 		this.fechaNacimiento=fecha;
 		this.sexo=sexo;
 	}
-	private void setDNI(String dNI) {
-		DNI = dNI;
-	}
+
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
@@ -28,9 +26,7 @@ public class Atleta {
 	{
 		this.sexo = sexo;
 	}
-	
 
-	
 	public void setFechaNacimiento(String fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
@@ -46,6 +42,9 @@ public class Atleta {
 	}
 	public int getEdad(){
 		return edad;
+	}
+	public String getFechaNacimiento(){
+		return fechaNacimiento;
 	}
 	public String toString(){
 		StringBuilder sB= new StringBuilder();

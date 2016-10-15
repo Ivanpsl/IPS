@@ -1,4 +1,4 @@
-package persistencia;
+package utiles;
 
 import logica.Atleta;
 import logica.Evento;
@@ -6,7 +6,7 @@ import logica.Gestor;
 import logica.Inscripcion;
 
 public class Asignador {
-
+	
 	/**
 	 * Metodo asignarAtleta que relaciona la inscripcion
 	 * con el atleta
@@ -16,7 +16,7 @@ public class Asignador {
 	 * @param dni dni del atleta dueño de la inscripcion 
 	 * @return true si lo encuentra, false si no
 	 */
-	public boolean asignarAtleta(Gestor g, Inscripcion ins, String dni){
+	public static boolean asignarAtleta(Gestor g, Inscripcion ins, String dni){
 		for(Atleta at: g.getAtletas()){
 			if(dni.equals(at.getDNI())){
 				ins.setAtleta(at);
@@ -31,7 +31,7 @@ public class Asignador {
 	 * @param id: id del evento al que pertenece 
 	 * @return true si lo consigo, false si no
 	 */
-	public boolean asignarAEvento(Gestor g, Inscripcion ins, int id){
+	public static boolean asignarAEvento(Gestor g, Inscripcion ins, int id){
 		for(Evento ev : g.getEventos()){
 			if(id==ev.getId()){
 				ev.añadirInscrito(ins);

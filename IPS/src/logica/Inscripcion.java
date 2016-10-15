@@ -14,34 +14,33 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	private final int MAXDIAS = 2;
 	private static String dateFormat = "yyyy/MM/dd";
 	
-	private int dorsal;
-	private Atleta atleta;
-	private String categoria;
+	private int dorsal; //-1 sin asignar
+	private Atleta atleta; //Necesario para relacionar el atleta con sus inscripciones
+	private String categoria; 
 	private int estado;
-	private Evento evento;
 	private int id_evento;
 	private Date fechaInscripcion;
 	private Date fechaLimite;
 	private int tiempo_segundos;
 	
 	/**
-	 * Constructor de Inscripcion estandar desde la aplicacion 
+	 * Constructor de Inscripcion e
+	 * standar desde la aplicacion 
 	 * @param atleta
 	 * @param dorsal -> NO SE PUEDE PASAR COMO PARAMETRO. CALCULAR DENTRO
 	 * @param 
 	 * @param fechaInscrip
 	 */
-	public Inscripcion (Evento event, Atleta atleta, Date fechaInscrip) 
+	public Inscripcion (Atleta atleta, Date fechaInscrip) 
 	{
 		this.atleta = atleta;
 		this.fechaInscripcion = fechaInscrip;
 		this.estado = PREINSCRITO;
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=0;
-		this.evento= event;
-		// Al crear una inscripcion se decrementa plazas y se añade inscripcion al evento
-		this.evento.setPlazas(this.evento.getPlazas()-1);
-		evento.añadirInscrito(this);
+		this.dorsal=-1;
+		//calcularCategoria();
+	
 	}
 	
 	
@@ -52,15 +51,16 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	 * @param estado
 	 * @param segundos
 	 */
-	public Inscripcion (int id_evento, int dorsal, java.util.Date fecha_ins, int estado, int segundos) 
+	public Inscripcion (int id_evento, int dorsal, java.util.Date fecha_ins, int estado, int segundos, String categoria) 
 	{
 		this.id_evento=id_evento;
 		this.atleta = null;
 		this.dorsal = dorsal;
 		this.estado = estado;
-		fechaInscripcion= ConversorFechas.convertFechaJavaSQL(fecha_ins);
+		this.fechaInscripcion= ConversorFechas.convertFechaJavaSQL(fecha_ins);
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=segundos;
+		this.categoria=categoria;
 	}
 	
 	
@@ -106,6 +106,9 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	public int getResultado(){
 		return tiempo_segundos;
 	}
+	public String getCategoria(){
+		return categoria;
+	}
 	public String toString()
 	{
 		StringBuilder sB= new StringBuilder();
@@ -113,7 +116,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		sB.append("\t\tEstado: " + getEstado() + " Dorsal: " + getDorsal() + " F.Inscripción: " + getFechaInscripcion());
 		return sB.toString();
 	}
-	
+
 	
 	@Override
 	public int compareTo(Inscripcion i) {

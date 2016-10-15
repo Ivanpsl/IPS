@@ -10,6 +10,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import utiles.Asignador;
 import utiles.ConversorFechas;
 import logica.Atleta;
 import logica.Evento;
@@ -53,7 +54,6 @@ public class ConexionBD {
 
 		}else{
 			Statement st;
-			Asignador asignador = new Asignador();
 			try {
 				//Eventos
 				System.out.println("Cargando datos de eventos...");
@@ -69,7 +69,11 @@ public class ConexionBD {
 					double precio =rs.getDouble("EV_PRECIO");
 					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
 					Date fecha_fin_insc=rs.getDate("EV_FECHA_FIN_INSC");
-					g.getEventos().add(new Evento(id, nombre, tipo, precio, distancia,ConversorFechas.convertFechaJavaSQL(fecha_comienzo),ConversorFechas.convertFechaJavaSQL(fecha_fin_insc),200));
+					int finalizado= rs.getInt("EV_FINALIZADO");
+					boolean fin;
+					if(finalizado==0) fin=false;
+					else fin=true;
+					g.getEventos().add(new Evento(id, nombre, tipo, precio, distancia,ConversorFechas.convertFechaJavaSQL(fecha_comienzo),ConversorFechas.convertFechaJavaSQL(fecha_fin_insc),200,fin));
 				}
 				System.out.println("Datos de eventos cargados");
 				rs.close();
@@ -84,10 +88,10 @@ public class ConexionBD {
 				while(rs2.next()){
 					String dni = rs2.getString("AT_DNI");
 					String nombre =rs2.getString("AT_NOMBRE");
-					String categoria =rs2.getString("AT_CATEGORIA");
 					int sexo =rs2.getInt("AT_SEXO");
-					int edad =rs2.getInt("AT_EDAD");
-					g.getAtletas().add(new Atleta(dni, nombre, categoria, edad, sexo));
+					String fecha =rs2.getString("AT_FECHA_NACIMIENTO");
+					
+					g.getAtletas().add(new Atleta(dni, nombre,fecha, sexo));
 
 				}
 				System.out.println("Datos de atletas cargados");
@@ -106,11 +110,12 @@ public class ConexionBD {
 					Date fecha_ins =rs3.getDate("INS_FECHA_INS");
 					int segundos = rs3.getInt("INS_RESULTADO_SEG");
 					int dorsal = rs3.getInt("INS_DORSAL");
-					Inscripcion inscripcion = new Inscripcion(id,dorsal, fecha_ins, estado, segundos);
-					if(asignador.asignarAtleta(g, inscripcion, dni))
+					String categoria = rs3.getString("INS_CATEGORIA");
+					Inscripcion inscripcion = new Inscripcion(id,dorsal, fecha_ins, estado, segundos, categoria);
+					if(Asignador.asignarAtleta(g, inscripcion, dni))
 						System.out.println("Inscripcion asignada a atleta correctamente." 
 								+ "  ---> " + inscripcion.toString());
-					if(asignador.asignarAEvento(g, inscripcion, id))
+					if(Asignador.asignarAEvento(g, inscripcion, id))
 						System.out.println("Inscripcion asignada a evento correctamente   -----> " + inscripcion.toString());
 				}
 
@@ -131,7 +136,7 @@ public class ConexionBD {
 			System.err.println("No es posible añadir eventos a ninguna BD." );
 		else{
 			try {
-				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?)");
+				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?,?)");
 				int id= ev.getId();
 				String nombre = ev.getNombre();
 				String tipo= ev.getTipo();
@@ -139,6 +144,11 @@ public class ConexionBD {
 				double precio = ev.getPrecio();
 				Date fecha_comienzo = ev.getFechaCompeticion();
 				Date fechaFin = ev.getFechaFinInscripcion();
+				int plazasTotales= ev.getPlazasTotales();
+				int fin;
+				if(ev.getFinalizado()) fin =1;
+				else fin=0;
+				
 				st.setInt(1,id);
 				st.setString(2,nombre);
 				st.setString(3,tipo);
@@ -146,6 +156,8 @@ public class ConexionBD {
 				st.setDouble(5,precio);
 				st.setDate(6, (java.sql.Date) fecha_comienzo);
 				st.setDate(7, (java.sql.Date) fechaFin);
+				st.setInt(8, plazasTotales);
+				st.setInt(9, fin );
 				st.executeUpdate();
 				st.close();
 				con.close();
@@ -156,38 +168,50 @@ public class ConexionBD {
 		}
 	}
 	
+	public void añadirAtleta(Atleta at){
+		Connection con =conectar();
+		if(con==null)
+			System.err.println("No es posible añadir datos a ninguna BD." );
+		else{
+			try {
+				PreparedStatement st = con.prepareStatement("INSERT INTO ATLETA VALUES (?,?,?,?)");
+				String dni= at.getDNI();
+				String nombre = at.getNombre();
+				int sexo = at.getSexo();
+				String fNacimiento = at.getFechaNacimiento();
+				st.setString(1,dni);
+				st.setString(2,nombre);
+				st.setInt(3,sexo);
+				st.setString(4,fNacimiento);
+				st.executeUpdate();
+				st.close();
+				
+				con.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
 	public void añadirInscrito(Atleta at, Inscripcion ins){
 		Connection con =conectar();
 		if(con==null)
 			System.err.println("No es posible añadir datos a ninguna BD." );
 		else{
 			try {
-				PreparedStatement st = con.prepareStatement("INSERT INTO ATLETA VALUES (?,?,?,?,?)");
-				String dni= at.getDNI();
-				String nombre = at.getNombre();
-				String categoria= at.getCategoria();
-				int sexo = at.getSexo();
-				int edad = at.getEdad();
-				st.setString(1,dni);
-				st.setString(2,nombre);
-				st.setString(3,categoria);
-				st.setInt(4,sexo);
-				st.setInt(5,edad);
-				st.executeUpdate();
-				st.close();
-				
-				PreparedStatement st2 = con.prepareStatement("INSERT INTO INSCRIPCION VALUES (?,?,?,?,?,?)");
+				PreparedStatement st2 = con.prepareStatement("INSERT INTO INSCRIPCION VALUES (?,?,?,?,?,?,?)");
 				int ev_id = ins.getIdEvento();
 				int estado = ins.getEstado();
 				Date fechaIns = ins.getFechaInscripcion();
 				int res_Segundos = ins.getResultado();
 				int dorsal = ins.getDorsal();
-				st2.setString(1,dni);
+				st2.setString(1,at.getDNI());
 				st2.setInt(2,ev_id);
 				st2.setInt(3,estado);
 				st2.setDate(4,(java.sql.Date) fechaIns);
 				st2.setInt(5,res_Segundos);
 				st2.setInt(6, dorsal);
+				st2.setString(7, ins.getCategoria());
 				st2.executeUpdate();
 				st2.close();
 				
@@ -198,6 +222,7 @@ public class ConexionBD {
 			}
 		}
 	}
+	
 	
 	
 	
