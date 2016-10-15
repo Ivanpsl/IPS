@@ -35,6 +35,7 @@ public class Evento {
 		this.fechaFinInscripcion = (Date) fecha_fin_insc; 
 		this.precio = price;
 		this.tipo = type;
+		this.plazasTotales=plazasTotales;
 		this.plazasDisponibles= plazasTotales;
 		this.distancia= distancia;
 		this.finalizado=finalizado;

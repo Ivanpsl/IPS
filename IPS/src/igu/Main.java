@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.sql.Date;
+import java.sql.SQLData;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -16,17 +19,19 @@ import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;
 import oracle.net.aso.g;
+import utiles.ConversorFechas;
 
 public class Main {
 	static Gestor g;
 	static boolean ejecucion = true;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, ParseException {
 		g = new Gestor();
 //		System.out.println(g.getEventos().toString());
 //		Date fechaprueba = new Date(116, 2, 24);
 //		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
 		mostrarComandosDisponibles();
+	
 	
 	}
 

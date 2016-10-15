@@ -157,7 +157,7 @@ public class ConexionBD {
 				st.setDate(6, (java.sql.Date) fecha_comienzo);
 				st.setDate(7, (java.sql.Date) fechaFin);
 				st.setInt(8, plazasTotales);
-				st.setInt(9, fin );
+				st.setInt(9, fin);
 				st.executeUpdate();
 				st.close();
 				con.close();

@@ -142,6 +142,14 @@ public class Gestor {
 		atletas.add(atl);
 		
 	}
+	public void crearEvento(String nombre, String tipo, double precio, double distancia, Date fecha_comienzo, Date fecha_fin_insc, int plazasTotales){
+		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo, precio, distancia,fecha_comienzo, 
+				 fecha_fin_insc, plazasTotales, false);
+		eventos.add(nuevoEvento);
+		bd.añadirEventoABD(nuevoEvento);
+			
+	
+	}
 
 	public void listarEventosAbiertos() {
 		ArrayList<Evento> eventosAbiertos = getEventosAbiertos();
