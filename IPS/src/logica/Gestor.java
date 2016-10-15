@@ -1,8 +1,12 @@
 package logica;
 
+import java.awt.HeadlessException;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
+
+import javax.swing.JOptionPane;
 
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
@@ -21,10 +25,14 @@ public class Gestor {
 		this.eventos  = new ArrayList<Evento>();
 		this.atletas= new ArrayList<Atleta>();
 		cargarDatos();
+		
 	}
 	
 	private void cargarDatos(){
-		bd.cargarDatos(this);
+		if(!bd.cargarDatos(this)) {
+			JOptionPane.showMessageDialog(null, "Imposible conectar con la base de datos","ERROR",JOptionPane.ERROR_MESSAGE);
+			System.exit(0);
+		}
 	}
 	public ArrayList<Evento> getEventos(){
 		return eventos;

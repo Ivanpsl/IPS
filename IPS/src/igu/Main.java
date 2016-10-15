@@ -1,25 +1,17 @@
 package igu;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.Date;
-import java.sql.SQLData;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Iterator;
-
+import java.sql.Date;
+import utiles.ConversorFechas;
 import logica.Atleta;
 import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;
-import oracle.net.aso.g;
-import utiles.ConversorFechas;
 
 public class Main {
 	static Gestor g;
@@ -27,17 +19,17 @@ public class Main {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		g = new Gestor();
+		
 //		System.out.println(g.getEventos().toString());
 //		Date fechaprueba = new Date(116, 2, 24);
 //		Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
 		mostrarComandosDisponibles();
-	
-	
 	}
 
 	private static void mostrarComandosDisponibles() {
 		while (ejecucion) {
-			System.out.println("Escribir los siguientes comandos para mostrar contenido:");
+			
+			System.out.println("\nEscribir los siguientes comandos para mostrar contenido:");
 			System.out.println(); 
 			System.out.println("mostrarEventos -> muestra los eventos disponibles para un atleta.");
 			System.out.println("mostrarAtletas -> Muestra los atletas inscritos a un evento a seleccionar.");
@@ -218,6 +210,7 @@ public class Main {
 				imprimeEvento(e);
 			}
 		}
+	
 	}
 	private static void imprimeEvento(Evento e){
 		System.out.println(e.toString());
@@ -246,5 +239,7 @@ public class Main {
 		}
 		return lectura;
 	}
+	
+	
 
 }

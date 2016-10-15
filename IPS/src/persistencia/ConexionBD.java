@@ -35,7 +35,7 @@ public class ConexionBD {
 				login="SA";
 				password= "";	
 			}
-	
+		
 		return DriverManager.getConnection(url, login, password);
 		
 		} catch (SQLException e) {
@@ -47,11 +47,11 @@ public class ConexionBD {
 	}
 
 
-	public void cargarDatos(Gestor g){
+	public boolean cargarDatos(Gestor g){
 		System.out.println("Conectando con la base de datos...");
 		Connection con =conectar();
 		if(con==null){
-
+			return false;
 		}else{
 			Statement st;
 			try {
@@ -123,10 +123,11 @@ public class ConexionBD {
 				st.close();
 				System.out.println("Datos de inscripciones cargados");
 				con.close();
-
+				return true;
 			} catch (SQLException e) {
 				System.err.println("Error al cargar datos de la BD.");
 				e.printStackTrace();
+				return false;
 			}
 		}
 	}
