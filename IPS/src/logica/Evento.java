@@ -3,6 +3,8 @@ package logica;
 import java.sql.Date;
 import java.util.ArrayList;
 
+import persistencia.ConexionBD;
+
 public class Evento {
 
 
@@ -39,9 +41,7 @@ public class Evento {
 		this.plazasDisponibles= plazasTotales;
 		this.distancia= distancia;
 		this.finalizado=finalizado;
-		if(finalizado){
-			generarClasificacion();
-		}
+		
 	}
 	
 	
@@ -58,7 +58,7 @@ public class Evento {
 
 	public String toString() {
 		StringBuilder sB= new StringBuilder();
-		sB.append("\n\n **[ID:" + getId() + " Nombre: " + getNombre() + " ]\nTipo: " + getTipo() + "Precio: " + getPrecio() + " Distancia(km): " + getDistancia() + "\n");
+		sB.append("\n\n **[ID:" + getId() + " Nombre: " + getNombre() + " ]\nTipo: " + getTipo() + " Precio: " + getPrecio() + " Distancia(km): " + getDistancia() + "\n");
 		sB.append("F.Competición: " + getFechaCompeticion() + " F.Inscripción: " + getFechaFinInscripcion());
 		sB.append(" \nParticipantes: " );
 		for(Inscripcion i : inscripciones){
@@ -109,11 +109,22 @@ public class Evento {
 		return this.distancia;
 	}
 	
-	public void asignarTiemposDorsal(int dorsal, int tiempo){
+	/**
+	 * Metodo usado para asignar a cada dorsal el tiempo obtenido del fichero de resultados
+	 * @param dorsal: Dorsal del corredor
+	 * @param tiempo: tiempo en segudos que ha tardado en completar la carrera
+	 */
+	public void asignarTiemposDorsal(int dorsal, int tiempo,ConexionBD bd){
+		boolean encontrado=false;
 		for(Inscripcion p : inscripciones){
-			if(p.getDorsal()==dorsal) p.setTiempoSegundos(tiempo);
-			else System.err.println("Participante con dorsal " + dorsal +" y con un tiempo de " + tiempo + "seg. no ha sido encontrado" );
+			if(p.getDorsal()==dorsal){
+				p.setTiempoSegundos(tiempo);
+				bd.asignarTiempo(p, tiempo);
+				encontrado=true;
+			}
 		}
+		if(!encontrado)
+			System.err.println("Participante con dorsal " + dorsal +" y con un tiempo de " + tiempo + "seg. no ha sido encontrado" );
 	}
 	/***
 	 * Metodo generarCLasificacion que genera las clasificaciones de la carrera y sera llamado al final de la competicion
@@ -123,4 +134,16 @@ public class Evento {
 	}
 	
 	
+	public Clasificacion getClasificacion(){
+		return clasificacion;
+	}
+	
+	/**
+	 * Metodo que da por concluido el evento, lo marca como finalizado y genera las clasificaciones en funcion de los resultados
+	 * 
+	 */
+	public void setFinalizado(){
+		finalizado=true;
+		generarClasificacion();
+	}
 }

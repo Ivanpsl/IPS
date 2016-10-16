@@ -6,8 +6,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 
 import utiles.Asignador;
@@ -77,8 +75,6 @@ public class ConexionBD {
 				}
 				System.out.println("Datos de eventos cargados");
 				rs.close();
-
-
 				//Atletas
 				System.out.println("Cargando datos de atletas...");
 				st = con.createStatement();
@@ -96,7 +92,6 @@ public class ConexionBD {
 				}
 				System.out.println("Datos de atletas cargados");
 				rs2.close();
-
 				//Incripcion
 				System.out.println("Cargando datos de inscripcion...");
 				st = con.createStatement();
@@ -224,8 +219,72 @@ public class ConexionBD {
 		}
 	}
 	
-	
-	
+	public void asignarDorsal(Inscripcion inscripcion, int dorsal){
+		Connection con =conectar();
+		if(con==null)
+			System.err.println("No es posible encontrar ninguna BD." );
+		else{ 
+			try {
+				
+				PreparedStatement st;
+				st = con.prepareStatement("UPDATE INSCRIPCION SET INS_DORSAL=? WHERE AT_DNI=?");
+				st.setInt(1,dorsal);
+				st.setString(2, inscripcion.getAtleta().getDNI());
+				int res = st.executeUpdate();
+				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \n\t");
+				System.out.println("Inscripcion " + inscripcion.toString() + " Actualizada con dorsal " + dorsal);
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
+	public void asignarTiempo(Inscripcion inscripcion, int tiempo){
+		Connection con =conectar();
+		if(con==null)
+			System.err.println("No es posible encontrar ninguna BD." );
+		else{ 
+			try {
+				
+				PreparedStatement st;
+				st = con.prepareStatement("UPDATE INSCRIPCION SET INS_RESULTADO_SEG=? WHERE AT_DNI=?");
+				st.setInt(1,tiempo);
+				st.setString(2, inscripcion.getAtleta().getDNI());
+				int res = st.executeUpdate();
+				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \t");
+				System.out.println("Inscripcion  [" + inscripcion.toString() + "] Actualizada con tiempo " + tiempo);
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
+	public void marcarComoFinalizado(Evento ev){
+		Connection con =conectar();
+		if(con==null)
+			System.err.println("No es posible encontrar ninguna BD." );
+		else{ 
+			try {
+				
+				PreparedStatement st;
+				st = con.prepareStatement("UPDATE EVENTOS SET EV_FINALIZADO=1 WHERE EV_ID=?");
+				st.setInt(1,ev.getId());
+				int res = st.executeUpdate();
+				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \n\t");
+				System.out.println("- El evento con ID : " + ev.getId() + " ha sido marcado como FINALIZADO");
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
+
 	
 	public void resetearDatosBD(){
 		Connection con =conectar();

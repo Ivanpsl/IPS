@@ -1,8 +1,6 @@
 package logica;
 
-import java.awt.HeadlessException;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -16,6 +14,7 @@ public class Gestor {
 	
 	ArrayList<Evento> eventos;
 	ArrayList<Atleta> atletas;
+	Organizador organizador;
 	
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
@@ -27,11 +26,16 @@ public class Gestor {
 		cargarDatos();
 		
 	}
-	
+	/**
+	 * Metodo que llama a la base de datos para cargar todos los datos
+	 */
 	private void cargarDatos(){
 		if(!bd.cargarDatos(this)) {
 			JOptionPane.showMessageDialog(null, "Imposible conectar con la base de datos","ERROR",JOptionPane.ERROR_MESSAGE);
 			System.exit(0);
+		}
+		for(Evento e: eventos){
+			if(e.getFinalizado())e.generarClasificacion();
 		}
 	}
 	public ArrayList<Evento> getEventos(){
@@ -124,19 +128,12 @@ public class Gestor {
 			System.out.println("Se ha inscrito correctamente. Detalles:");
 			System.out.println(ins.toString());
 			evento.añadirInscrito(ins);
+			bd.añadirInscrito(atl, ins);
 		}
 		
 		
 	}
-	
-	/**
-	 * Metodo llamado al finalizar el evento para obtener los resultados de las clasificaciones
-	 * @param ev
-	 */
-	public void obtenerTiempos(Evento ev){
-		gF.obtenerResultadosEvento(ev);
-		ev.generarClasificacion();
-	}
+
 	
 	public Evento obtenerEventoPorId(int id){
 		for(Evento e : eventos){
@@ -148,15 +145,33 @@ public class Gestor {
 
 	public void addAtleta(Atleta atl) {
 		atletas.add(atl);
-		
+		bd.añadirAtleta(atl);
 	}
+	/***
+	 * Metodo usado para crear eventos y añadirlos tanto al array como a la base de datos
+	 * @param nombre
+	 * @param tipo
+	 * @param precio
+	 * @param distancia
+	 * @param fecha_comienzo
+	 * @param fecha_fin_insc
+	 * @param plazasTotales
+	 */
 	public void crearEvento(String nombre, String tipo, double precio, double distancia, Date fecha_comienzo, Date fecha_fin_insc, int plazasTotales){
 		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo, precio, distancia,fecha_comienzo, 
 				 fecha_fin_insc, plazasTotales, false);
 		eventos.add(nuevoEvento);
 		bd.añadirEventoABD(nuevoEvento);
-			
+	}
 	
+	/**
+	 * Metodo que da por concluido el evento con el id que se le pasa por parametro y busca el fichero con los resultados
+	 * @param id: id del evento que finaliza
+	 */
+	public void finalizarEvento(int id){
+		gF.obtenerResultadosEvento(obtenerEventoPorId(id),bd);
+		eventos.get(id).setFinalizado();
+		bd.marcarComoFinalizado(obtenerEventoPorId(id));
 	}
 
 	public void listarEventosAbiertos() {

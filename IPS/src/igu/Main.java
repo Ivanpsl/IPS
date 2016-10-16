@@ -7,11 +7,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.sql.Date;
+
 import utiles.ConversorFechas;
 import logica.Atleta;
+import logica.Clasificacion;
 import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;
+import logica.Organizador;
 
 public class Main {
 	static Gestor g;
@@ -34,7 +37,8 @@ public class Main {
 			System.out.println("mostrarEventos -> muestra los eventos disponibles para un atleta.");
 			System.out.println("mostrarAtletas -> Muestra los atletas inscritos a un evento a seleccionar.");
 			System.out.println("mostrarInformacionDNI - DNI -> Muestra los eventos a los que se ha inscrito alguien con ese DNI");
-			System.out.println("inscribirseAEvento - idEvento(int) - DNI - ");
+			System.out.println("mostrarClasificacion - idEvento(int) -> Muestra los resultados de un evento ");
+			System.out.println("inscribirseAEvento  ");
 			System.out.println("Fin -> termina con la ejecucion del programa.");
 			
 			System.out.print("\nEscriba: ");
@@ -57,6 +61,9 @@ public class Main {
 			break;
 		case "mostrarInformacionDNI":
 			mostrarInformacionDNI(cachos[1]);
+			break;
+		case "mostrarClasificacion":
+			mostrarClasificacion(Integer.parseInt(cachos[1]));
 			break;
 		case "Fin":
 			ejecucion = false;
@@ -215,15 +222,83 @@ public class Main {
 	private static void imprimeEvento(Evento e){
 		System.out.println(e.toString());
 	}
+	
+	
+	/**
+	 * Evento que muestra por consola toda la informacion registrada acerca del atleta con el dni que se le pasa por parametro
+	 * @param dni:
+	 */
 	private static void mostrarInformacionDNI(String dni){
 		ArrayList<Evento> evInscritos = g.obtenerEventosEInscripciones(dni);
-		System.out.println("Eventos inscritos: ");
+		System.out.println("EVENTOS INSCRITOS: ");
 		for(Evento e: evInscritos){
 			Inscripcion inscripcion = g.getInscripcion(dni, e);
 			System.out.println(" *** Evento: " + e.getId() + " Nombre del evento: " + e.getNombre() );
 			
 			System.out.println("/n Datos de la inscripcion: ");
 			System.out.println("/n/t/t "+ inscripcion.toString());
+			if(e.getFinalizado()){
+				System.out.println("--RESULTADOS DE LA CARRERA: ");
+				Clasificacion cl = e.getClasificacion();
+				int posCategoria=-1;
+				int posAbsoluta=cl.obtenerPosicion(inscripcion, posCategoria);
+				String tiempo;
+				if(inscripcion.getTiempoSegundos()==0) tiempo ="--";
+				else tiempo =""+ inscripcion.getTiempoSegundos();
+				System.out.println("Tiempo: " + inscripcion.getTiempoSegundos() + " Posicion absoluta: " + 
+				posAbsoluta + " Posicion en categoria " + tiempo + ": " + posCategoria);
+			}
+		}
+	}
+	
+	/**
+	 * Metodo que muestra las tablas de resultados del evento con la id que se le pasa como parametro
+	 * @param id: id del evento que se desea consultar
+	 */
+	private static void mostrarClasificacion(int id){
+		if(id>g.getEventos().size()) 
+		{
+			System.err.println("El evento especificado no existe");
+		}else{
+			Evento evento = g.getEventos().get(id);
+			if(!evento.getFinalizado()){
+				System.err.println("El evento aun no ha finalizado y no existen resultados");
+			}else{
+				
+				ArrayList<Inscripcion> clasificacionMasculina= evento.getClasificacion().obtenerClasificacion("M");
+				ArrayList<Inscripcion> clasificacionFemenina= evento.getClasificacion().obtenerClasificacion("F");
+				ArrayList<Inscripcion> clasificacionAbsoluta= evento.getClasificacion().obtenerClasificacion("A");
+				System.out.println("Clasificacion absoluta: \n");
+				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
+				for(int i=0; i<clasificacionAbsoluta.size(); i++){
+					Atleta corredor= clasificacionAbsoluta.get(i).getAtleta();
+					String sexo;
+					if(corredor.getSexo()==0)sexo="Hombre";
+					else sexo="Mujer";
+					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
+							clasificacionAbsoluta.get(i).getTiempoSegundos()  );
+				}
+				System.out.println("Clasificacion Femenina: \n");
+				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
+				for(int i=0; i<clasificacionFemenina.size(); i++){
+					Atleta corredor= clasificacionFemenina.get(i).getAtleta();
+					String sexo;
+					if(corredor.getSexo()==0)sexo="Hombre";
+					else sexo="Mujer";
+					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
+							clasificacionFemenina.get(i).getTiempoSegundos()  );
+				}
+				System.out.println("Clasificacion Masculina: \n");
+				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
+				for(int i=0; i<clasificacionMasculina.size(); i++){
+					Atleta corredor= clasificacionMasculina.get(i).getAtleta();
+					String sexo;
+					if(corredor.getSexo()==0)sexo="Hombre";
+					else sexo="Mujer";
+					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
+							clasificacionMasculina.get(i).getTiempoSegundos()  );
+				}
+			}
 		}
 	}
 	private static String consoleRead(){

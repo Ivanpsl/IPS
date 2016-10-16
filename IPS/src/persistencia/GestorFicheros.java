@@ -4,10 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 
 import logica.Evento;
 
@@ -46,8 +42,8 @@ public class GestorFicheros {
 //		        new RuntimeException("Error de entrada/salida.");
 //	    }
 //	 }
-	public void obtenerResultadosEvento(Evento ev) {
-	    String nombreFichero = "ficheros/resultados/resulatado"+ ev.getId()+".dat";
+	public void obtenerResultadosEvento(Evento ev, ConexionBD bd) {
+	    String nombreFichero = "ficheros/resultados/resultado"+ev.getId()+".dat";
 	    String linea=null;
 	    try {
 	      BufferedReader fichero = new BufferedReader(new FileReader(nombreFichero));
@@ -56,12 +52,13 @@ public class GestorFicheros {
 	    	  
 	        linea = fichero.readLine();
 	        String[] trozos = linea.split("-");
-	        ev.asignarTiemposDorsal(Integer.parseInt(trozos[0]), Integer.parseInt(trozos[1]));
+	        ev.asignarTiemposDorsal(Integer.parseInt(trozos[0]), Integer.parseInt(trozos[1]), bd);
 	      }
 	      fichero.close();
+	      System.out.println("[DAT] Fichero de resultados del evento con ID" + ev.getId() + " ha sido cargado correctamente.");
 	    }
 	    catch (FileNotFoundException fnfe){
-	        System.out.println("El archivo no se ha encontrado.");
+	        System.err.println("El archivo no se ha encontrado.");
 	    }
 	    catch(IOException ioe){
 	        new RuntimeException("Error de entrada/salida.");

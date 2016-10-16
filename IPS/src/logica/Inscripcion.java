@@ -11,6 +11,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	public static final int PENDIENTEPAGO = 1;
 	public static final int PAGADO = 2;
 	
+	
 	private final int MAXDIAS = 2;
 	private static String dateFormat = "yyyy/MM/dd";
 	
@@ -111,9 +112,16 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	}
 	public String toString()
 	{
+		String dorsal;
+		if(getDorsal()==-1) dorsal= "[Sin asignar]";
+		else dorsal= "" + getDorsal();
+		String estado;
+		if(getEstado()==PREINSCRITO)estado = "Preinscrito";
+		else if(getEstado()==PENDIENTEPAGO) estado="Pendiente de pago";
+		else estado="Pagado";
 		StringBuilder sB= new StringBuilder();
 		sB.append("Datos atleta: " + getAtleta().toString() + "\n");
-		sB.append("\t\tEstado: " + getEstado() + " Dorsal: " + getDorsal() + " F.Inscripción: " + getFechaInscripcion());
+		sB.append("\t\tEstado: " + estado + ". Dorsal: " + dorsal + ". F.Inscripción: " + getFechaInscripcion());
 		return sB.toString();
 	}
 

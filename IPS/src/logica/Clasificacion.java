@@ -13,6 +13,7 @@ public class Clasificacion {
 	public Clasificacion(ArrayList<Inscripcion> inscripciones){
 		calcularInscripciones(inscripciones);
 	}
+	
 	private void calcularInscripciones(ArrayList<Inscripcion> ins){
 		clasificacionAbsoluta=ins;
 		ordenar(clasificacionAbsoluta);
@@ -33,14 +34,44 @@ public class Clasificacion {
 			}
 		});
 	}
+	
+	/**
+	 * Metodo que devuelve la clasificacion ordenada segun los resultados de la carrera
+	 * @param tipo: A = Absoluta, M= Masculina, F=femenina
+	 * @return ArrayList con los resultados ordenados
+	 */
 	public ArrayList<Inscripcion> obtenerClasificacion(String tipo){
-		if(tipo.equals("absoluta")) return clasificacionAbsoluta;
-		if(tipo.equals("masculina")) return clasificacionMasculina;
-		if(tipo.equals("femenina")) return clasificacionFemenina;
+		if(tipo.equals("A")) return clasificacionAbsoluta;
+		if(tipo.equals("M")) return clasificacionMasculina;
+		if(tipo.equals("F")) return clasificacionFemenina;
 		else {
 			System.err.println("No existe ninguna clasificacion de ese tipo");
 			return null;
 		}
-		
+	}
+	
+	//en el return devuelve la absoluta, mientras que en la variable posCategoria devuelve la de su categoria
+	public int obtenerPosicion(Inscripcion inscrito, int posCategoria){
+		if(inscrito.getCategoria().equals("Masculina")){
+			for(int i=0; i<clasificacionMasculina.size(); i++){
+				if(clasificacionMasculina.get(i).getAtleta().equals(inscrito.getAtleta())){
+					posCategoria=i+1;
+					break;
+				}
+			}
+		}else{
+			for(int i=0; i<clasificacionFemenina.size(); i++){
+				if(clasificacionFemenina.get(i).getAtleta().equals(inscrito.getAtleta())){
+					posCategoria=i+1;
+					break;
+				}
+			}
+		}	for(int i=0; i<clasificacionAbsoluta.size(); i++){
+				if(clasificacionAbsoluta.get(i).getAtleta().equals(inscrito.getAtleta())){
+					return i+1;
+					
+				}
+			}
+		return -1;
 	}
 }

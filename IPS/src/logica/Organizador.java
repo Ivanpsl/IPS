@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import persistencia.ConexionBD;
+
 public class Organizador {
 	
 	//club, federeacion, entidad publica o cooperativa
@@ -50,6 +52,7 @@ public class Organizador {
 	 */
 	public void asignarDorsales()
 	{
+		ConexionBD db = new ConexionBD();
 		Collections.sort(evento.getInscritosEvento());
 		
 		ArrayList<Inscripcion> inscritos = evento.getInscritosEvento();
@@ -57,6 +60,7 @@ public class Organizador {
 		
 		for (Inscripcion i : inscritos){
 			i.setDorsal(cont);
+			db.asignarDorsal(i, cont);
 			cont++;
 		}
 	}
