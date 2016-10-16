@@ -27,6 +27,7 @@ public class Main {
 		// Date fechaprueba = new Date(116, 2, 24);
 		// Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
 		mostrarComandosDisponibles();
+		
 	}
 
 	private static void mostrarComandosDisponibles() {
