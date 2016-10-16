@@ -1,6 +1,8 @@
 package utiles;
 
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class ConversorFechas {
@@ -38,5 +40,37 @@ public class ConversorFechas {
 		long fin = fechaFin.getTime();
 		result = (int)((fin - inicio)/1000);
 		return result;
+	}
+	
+	/**
+	 * Utiliza el String fechaNacimiento para calcular su edad.
+	 * @param fecha
+	 */
+	public static int fechaNacimientoEdad(String fecha)
+	{
+		Calendar fechaActual = Calendar.getInstance();
+		Calendar fechaNacimiento = Calendar.getInstance(); //para que no se queje
+		java.util.Date fechaNac = null;
+		
+		try 
+		{
+			fechaNac = new SimpleDateFormat("dd/MM/yyyy").parse(fecha);
+		} 
+		catch (ParseException e) {
+			System.err.println("Error al convertir la fecha de nacimiento a edad \n" + e.getMessage());
+		}
+		
+		fechaNacimiento.setTime(fechaNac);
+		
+        int año = fechaActual.get(Calendar.YEAR)- fechaNacimiento.get(Calendar.YEAR);
+        int mes =fechaActual.get(Calendar.MONTH)- fechaNacimiento.get(Calendar.MONTH);
+        int dia = fechaActual.get(Calendar.DATE)- fechaNacimiento.get(Calendar.DATE);
+        
+        if(mes < 0 || (mes == 0 && dia < 0))
+        {
+        	año--;
+        }
+        
+        return año;
 	}
 }

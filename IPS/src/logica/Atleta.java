@@ -2,6 +2,8 @@ package logica;
 
 import java.sql.Date;
 
+import utiles.ConversorFechas;
+
 public class Atleta {
 	
 	public static final int MASCULINO = 0;
@@ -34,6 +36,11 @@ public class Atleta {
 	public void setSexo(int sexo)
 	{
 		this.sexo = sexo;
+	}
+	
+	public void setEdad()
+	{
+		this.edad = ConversorFechas.fechaNacimientoEdad(fechaNacimiento);
 	}
 
 	public void setFechaNacimiento(String fechaNacimiento) {
