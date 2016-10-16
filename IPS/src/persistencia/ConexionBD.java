@@ -38,7 +38,7 @@ public class ConexionBD {
 		
 		} catch (SQLException e) {
 			System.err.println("No se ha podido conectar con la base de datos");
-			e.printStackTrace();
+		//	e.printStackTrace();
 			return null;
 		}
 	

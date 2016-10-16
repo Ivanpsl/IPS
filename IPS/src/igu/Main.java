@@ -4,17 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.sql.Date;
-
-import utiles.ConversorFechas;
 import logica.Atleta;
 import logica.Clasificacion;
 import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;
-import logica.Organizador;
+
 
 public class Main {
 	static Gestor g;
@@ -283,7 +279,11 @@ public class Main {
 		if(id>g.getEventos().size()) 
 		{
 			System.err.println("El evento especificado no existe");
-		}else{
+		}
+		if(!g.obtenerEventoPorId(id).getFinalizado()){
+			System.err.println("El evento especificado no se ha finalizado y no existen resultados");
+		}
+		else{
 			Evento evento = g.getEventos().get(id);
 			if(!evento.getFinalizado()){
 				System.err.println("El evento aun no ha finalizado y no existen resultados");
@@ -302,7 +302,7 @@ public class Main {
 					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
 							clasificacionAbsoluta.get(i).getTiempoSegundos()  );
 				}
-				System.out.println("Clasificacion Femenina: \n");
+				System.out.println("\nClasificacion Femenina: ");
 				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
 				for(int i=0; i<clasificacionFemenina.size(); i++){
 					Atleta corredor= clasificacionFemenina.get(i).getAtleta();
@@ -312,7 +312,7 @@ public class Main {
 					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
 							clasificacionFemenina.get(i).getTiempoSegundos()  );
 				}
-				System.out.println("Clasificacion Masculina: \n");
+				System.out.println("\nClasificacion Masculina: \n");
 				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
 				for(int i=0; i<clasificacionMasculina.size(); i++){
 					Atleta corredor= clasificacionMasculina.get(i).getAtleta();
