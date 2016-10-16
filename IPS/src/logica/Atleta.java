@@ -1,5 +1,6 @@
 package logica;
 
+import java.sql.Date;
 
 public class Atleta {
 	
@@ -9,6 +10,7 @@ public class Atleta {
 	String DNI;
 	String nombre;
 	String fechaNacimiento;
+	Date fechaNacimientoDate;
 	int sexo;
 	int edad;
 	
@@ -18,7 +20,14 @@ public class Atleta {
 		this.fechaNacimiento=fecha;
 		this.sexo=sexo;
 	}
-
+	
+	public Atleta(String dni, String nombre, java.sql.Date fecha, int sexo){
+		this.DNI = dni;
+		this.nombre = nombre;
+		this.fechaNacimiento=fecha.toString();
+		this.fechaNacimientoDate = fecha;
+		this.sexo=sexo;
+	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
