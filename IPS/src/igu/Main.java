@@ -3,7 +3,6 @@ package igu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
 
@@ -20,12 +19,8 @@ public class Main {
 
 	public static void main(String[] args) throws IOException, ParseException {
 		g = new Gestor();
-		
-		// System.out.println(g.getEventos().toString());
-		// Date fechaprueba = new Date(116, 2, 24);
-		// Inscripcion.sumarRestarDiasFecha(fechaprueba, 2);
+
 		mostrarComandosDisponibles();
-		
 	}
 
 	private static void mostrarComandosDisponibles() {
@@ -63,6 +58,8 @@ public class Main {
 			break;
 		case "mostrarClasificacion":
 			try{
+				g.comprobarPagados(Integer.parseInt(cachos[1]));
+				g.asignarDorsales(Integer.parseInt(cachos[1]));
 				mostrarClasificacion(Integer.parseInt(cachos[1]));
 			} catch (NumberFormatException e){
 				System.err.println("ID invalido, ha de ser un numero mayor o igual a 0.");
@@ -139,7 +136,7 @@ public class Main {
 		}
 		datos[1] = fechaNacimiento;
 		while (sexo < 0 || sexo > 1) {
-			System.out.println("Introduzca su sexo ( 0 -> M , 1 -> F");
+			System.out.println("Introduzca su sexo (0 -> Masc , 1 -> Fem)");
 			sexo = Integer.parseInt(consoleRead());
 		}
 		datos[2] = String.valueOf(sexo);
@@ -300,14 +297,14 @@ public class Main {
 				ArrayList<Inscripcion> clasificacionMasculina= evento.getClasificacion().obtenerClasificacion("M");
 				ArrayList<Inscripcion> clasificacionFemenina= evento.getClasificacion().obtenerClasificacion("F");
 				ArrayList<Inscripcion> clasificacionAbsoluta= evento.getClasificacion().obtenerClasificacion("A");
-				System.out.println("Clasificacion absoluta: \n");
+				System.out.println("\nClasificacion absoluta: \n");
 				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
 				for(int i=0; i<clasificacionAbsoluta.size(); i++){
 					Atleta corredor= clasificacionAbsoluta.get(i).getAtleta();
 					String sexo;
 					if(corredor.getSexo()==0)sexo="Hombre";
 					else sexo="Mujer";
-					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
+					System.out.println(i+1 + "\t\t" + sexo +"\t\t"+ corredor.getNombre() + "\t\t" +
 							clasificacionAbsoluta.get(i).getTiempoSegundos()  );
 				}
 				System.out.println("\nClasificacion Femenina: ");
@@ -317,7 +314,7 @@ public class Main {
 					String sexo;
 					if(corredor.getSexo()==0)sexo="Hombre";
 					else sexo="Mujer";
-					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
+					System.out.println(i+1 + "\t\t" + sexo +"\t\t"+ corredor.getNombre() + "\t\t" +
 							clasificacionFemenina.get(i).getTiempoSegundos()  );
 				}
 				System.out.println("\nClasificacion Masculina: \n");
@@ -327,7 +324,7 @@ public class Main {
 					String sexo;
 					if(corredor.getSexo()==0)sexo="Hombre";
 					else sexo="Mujer";
-					System.out.println(i+1 + "\t" + sexo +"\t"+ corredor.getNombre() + "\t" +
+					System.out.println(i+1 + "\t\t" + sexo +"\t\t"+ corredor.getNombre() + "\t\t" +
 							clasificacionMasculina.get(i).getTiempoSegundos()  );
 				}
 			}

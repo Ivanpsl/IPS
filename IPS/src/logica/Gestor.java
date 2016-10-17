@@ -1,8 +1,13 @@
 package logica;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
@@ -129,10 +134,84 @@ public class Gestor {
 			System.out.println("Se ha inscrito correctamente. Detalles:");
 			System.out.println(ins.toString());
 			evento.añadirInscrito(ins);
+			mostrarNumeroCuenta(ins);
 			bd.añadirInscrito(atl, ins);
 		}
+	}
+	
+	/**
+	 * Pasar el número de cuenta al usuario para que pueda pagar, viene en un txt antes de los que han pagado.
+	 * @throws IOException
+	 */
+	public void mostrarNumeroCuenta(Inscripcion ins)
+	{
+		System.out.println("A continuación se mostrará donde realizar la transferencia: \n");
 		
+		try {
+			BufferedReader file = new BufferedReader(new FileReader("ficheros/banco.txt"));
+			String line = file.readLine();
+			System.out.println("Número de cuenta: " + line);
+			System.out.println("Se ha actualizado su estado y ahora consta como Pendiente de Pago.");
+			ins.setEstado(1);
+			bd.actualizarEstadoPago(ins, 1);
+			file.close();
+		}
+		catch (Exception e)
+		{
+			System.err.println("No se ha podido facilitar el número de cuenta. " + e.getMessage());
+		}
+	}
+	
+	/**
+	 * Asignación de dorsales a partir del 10.
+	 * Antes de ello se ordenan los inscritos por fecha de inscripción y estado del pago.
+	 */
+	public void asignarDorsales(int idEvento)
+	{
+		Collections.sort(eventos.get(idEvento).getInscritosEvento());
 		
+		ArrayList<Inscripcion> inscritos = eventos.get(idEvento).getInscritosEvento();
+		int cont = 10;
+		
+		for (Inscripcion i : inscritos){
+			i.setDorsal(cont);
+			bd.asignarDorsal(i, cont);
+			cont++;
+		}
+	}
+	
+	/**
+	 * Método que verifica los DNI del txt para saber que atletas han pagado.
+	 * @throws IOException 
+	 */
+	public void comprobarPagados(int idEvento)
+	{
+		try {
+			BufferedReader fichero = new BufferedReader(new FileReader("ficheros/banco.txt"));
+			String linea = fichero.readLine(); //La primera es el numero de cuenta
+			
+			ArrayList<Inscripcion> inscritos = eventos.get(idEvento).getInscritosEvento();
+			
+			while (fichero.ready()) {
+				linea = fichero.readLine();
+		    	String[] trozos = linea.split("\n");
+		    	for (Inscripcion i : inscritos)
+		    	{
+		    		if (i.getAtleta().getDNI().toUpperCase().equals(trozos[0]))
+		    		{
+		    			i.setEstado(2);
+		    			bd.actualizarEstadoPago(i, 2);
+		    		}
+		    	}
+		    }
+		    fichero.close();
+		    }
+		    catch (FileNotFoundException fnfe) {
+		    	new FileNotFoundException("Fichero del banco no encontrado");
+		    }
+		    catch (IOException ioe) {
+		    	new RuntimeException("Error de entrada/salida.");
+		    }
 	}
 
 	
