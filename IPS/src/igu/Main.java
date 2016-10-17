@@ -43,7 +43,10 @@ public class Main {
 	}
 
 	private static void comandoEscogido(String comand) {
-		System.out.println("Resultado: \n");
+		if (!comand.equals("Fin"))
+		{
+			System.out.println("Resultado: \n");
+		}
 		String[] cachos = comand.split(" - ");
 		switch (cachos[0]) {
 		case "mostrarEventos":
