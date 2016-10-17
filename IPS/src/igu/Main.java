@@ -3,8 +3,10 @@ package igu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.util.ArrayList;
+
 import logica.Atleta;
 import logica.Clasificacion;
 import logica.Evento;
@@ -60,7 +62,12 @@ public class Main {
 			mostrarInformacionDNI(cachos[1]);
 			break;
 		case "mostrarClasificacion":
-			mostrarClasificacion(Integer.parseInt(cachos[1]));
+			try{
+				mostrarClasificacion(Integer.parseInt(cachos[1]));
+			} catch (NumberFormatException e){
+				System.err.println("ID invalido, ha de ser un numero mayor o igual a 0.");
+			}
+			
 			break;
 		case "Fin":
 			ejecucion = false;
@@ -250,23 +257,27 @@ public class Main {
 	 */
 	private static void mostrarInformacionDNI(String dni) {
 		ArrayList<Evento> evInscritos = g.obtenerEventosEInscripciones(dni);
-		System.out.println("EVENTOS INSCRITOS: ");
-		for (Evento e : evInscritos) {
-			Inscripcion inscripcion = g.getInscripcion(dni, e);
-			System.out.println(" *** Evento: " + e.getId() + " Nombre del evento: " + e.getNombre());
-
-			System.out.println("/n Datos de la inscripcion: ");
-			System.out.println("/n/t/t "+ inscripcion.toString());
-			if(e.getFinalizado()){
-				System.out.println("--RESULTADOS DE LA CARRERA: ");
-				Clasificacion cl = e.getClasificacion();
-				int posCategoria=-1;
-				int posAbsoluta=cl.obtenerPosicion(inscripcion, posCategoria);
-				String tiempo;
-				if(inscripcion.getTiempoSegundos()==0) tiempo ="--";
-				else tiempo =""+ inscripcion.getTiempoSegundos();
-				System.out.println("Tiempo: " + inscripcion.getTiempoSegundos() + " Posicion absoluta: " + 
-				posAbsoluta + " Posicion en categoria " + tiempo + ": " + posCategoria);
+		if(evInscritos.size()==0) System.err.println("No existen datos con ese DNI");
+		else{
+			System.out.println("EVENTOS INSCRITOS: ");
+			for (Evento e : evInscritos) {
+				Inscripcion inscripcion = g.getInscripcion(dni, e);
+				System.out.println(" *** Evento: " + e.getId() + " Nombre del evento: " + e.getNombre());
+	
+				System.out.println("\tDatos de la inscripcion: ");
+				System.out.println("\t "+inscripcion.toString());
+				if(e.getFinalizado()){
+					System.out.println("\tRESULTADOS DE LA CARRERA: ");
+					Clasificacion cl = e.getClasificacion();
+					int posCategoria=-1;
+					int posAbsoluta=cl.obtenerPosicionAbsoluta(inscripcion);
+					posCategoria=cl.obtenerPosicionCategoria(inscripcion);
+					String tiempo;
+					if(inscripcion.getTiempoSegundos()==0) tiempo ="--";
+					else tiempo =""+ inscripcion.getTiempoSegundos();
+					System.out.println("\t\tTiempo: " + tiempo + "\n\t\tPosicion absoluta: " + 
+					posAbsoluta + "\n\t\tPosicion en categoria: " + posCategoria);
+				}
 			}
 		}
 	}
@@ -280,10 +291,7 @@ public class Main {
 		{
 			System.err.println("El evento especificado no existe");
 		}
-		if(!g.obtenerEventoPorId(id).getFinalizado()){
-			System.err.println("El evento especificado no se ha finalizado y no existen resultados");
-		}
-		else{
+		else if(id>=0){
 			Evento evento = g.getEventos().get(id);
 			if(!evento.getFinalizado()){
 				System.err.println("El evento aun no ha finalizado y no existen resultados");
@@ -323,6 +331,8 @@ public class Main {
 							clasificacionMasculina.get(i).getTiempoSegundos()  );
 				}
 			}
+		}else {
+			System.err.println("ID invalido, ha de ser un numero mayor o igual a 0.");
 		}
 	}
 

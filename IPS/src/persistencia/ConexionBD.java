@@ -263,6 +263,50 @@ public class ConexionBD {
 			}
 		}
 	}
+	public void asignarCategoria(Inscripcion inscripcion, String categoria){
+		Connection con =conectar();
+		if(con==null)
+			System.err.println("No es posible encontrar ninguna BD." );
+		else{ 
+			try {
+				
+				PreparedStatement st;
+				st = con.prepareStatement("UPDATE INSCRIPCION SET INS_CATEGORIA=? WHERE AT_DNI=?");
+				st.setString(1,categoria);
+				st.setString(2, inscripcion.getAtleta().getDNI());
+				int res = st.executeUpdate();
+				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \t");
+				System.out.println("Inscripcion  [" + inscripcion.toString() + "] Actualizada con categoria " +categoria );
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
+	public void actualizarEstadoPago(Inscripcion inscripcion, int estado){
+		Connection con =conectar();
+		if(con==null)
+			System.err.println("No es posible encontrar ninguna BD." );
+		else{ 
+			try {
+				
+				PreparedStatement st;
+				st = con.prepareStatement("UPDATE INSCRIPCION SET INS_ESTADO=? WHERE AT_DNI=?");
+				st.setInt(1,estado);
+				st.setString(2, inscripcion.getAtleta().getDNI());
+				int res = st.executeUpdate();
+				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \t");
+				System.out.println("Inscripcion  [" + inscripcion.toString() + "] Actualizado el estado del pago"  );
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
 	public void marcarComoFinalizado(Evento ev){
 		Connection con =conectar();
 		if(con==null)

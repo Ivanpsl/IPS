@@ -59,6 +59,7 @@ public class Gestor {
 	public ArrayList<Evento> getEventosDisponibles(){
 		return this.eventos;
 	}
+	
 	public ArrayList<Evento> obtenerEventosEInscripciones(String dni){
 		ArrayList<Evento> evInscrito= new ArrayList<Evento>();
 		for(Evento e: eventos){

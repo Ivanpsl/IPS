@@ -40,10 +40,17 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=0;
 		this.dorsal=-1;
-		//calcularCategoria();
+		calcularCategoria();
 	
 	}
 	
+	public void calcularCategoria(){
+	    if(atleta.getSexo()==0){
+	      this.categoria="Masculino";
+	    }else{
+	      this.categoria="Femenino";
+	    }
+	  }
 	
 	/***
 	 * Constructor de Inscripcion usado para crear inscritos desde la base de datos 
@@ -121,7 +128,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		else estado="Pagado";
 		StringBuilder sB= new StringBuilder();
 		sB.append("Datos atleta: " + getAtleta().toString() + "\n");
-		sB.append("\t\tEstado: " + estado + ". Dorsal: " + dorsal + ". F.Inscripción: " + getFechaInscripcion());
+		sB.append("\tEstado: " + estado + ". Dorsal: " + dorsal + ". F.Inscripción: " + getFechaInscripcion());
 		return sB.toString();
 	}
 

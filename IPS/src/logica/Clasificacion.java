@@ -50,28 +50,36 @@ public class Clasificacion {
 		}
 	}
 	
-	//en el return devuelve la absoluta, mientras que en la variable posCategoria devuelve la de su categoria
-	public int obtenerPosicion(Inscripcion inscrito, int posCategoria){
-		if(inscrito.getCategoria().equals("Masculina")){
-			for(int i=0; i<clasificacionMasculina.size(); i++){
-				if(clasificacionMasculina.get(i).getAtleta().equals(inscrito.getAtleta())){
-					posCategoria=i+1;
-					break;
-				}
-			}
-		}else{
-			for(int i=0; i<clasificacionFemenina.size(); i++){
-				if(clasificacionFemenina.get(i).getAtleta().equals(inscrito.getAtleta())){
-					posCategoria=i+1;
-					break;
-				}
-			}
-		}	for(int i=0; i<clasificacionAbsoluta.size(); i++){
+	 /**
+	  * Metodo que devuelve la posicion de la clasificacion absoluta de un corredor 
+	  * @param inscrito
+	  * @return: posicion
+	  */
+	public int obtenerPosicionAbsoluta(Inscripcion inscrito){
+		for(int i=0; i<clasificacionAbsoluta.size(); i++){
 				if(clasificacionAbsoluta.get(i).getAtleta().equals(inscrito.getAtleta())){
 					return i+1;
 					
 				}
 			}
 		return -1;
+	}
+	
+	public int obtenerPosicionCategoria(Inscripcion inscrito){
+		if(inscrito.getAtleta().getSexo()==0){
+			for(int i=0; i<clasificacionMasculina.size(); i++){
+				if(clasificacionMasculina.get(i).getAtleta().equals(inscrito.getAtleta())){
+					return i+1;
+				}
+			}
+		}else{
+			for(int i=0; i<clasificacionFemenina.size(); i++){
+				if(clasificacionFemenina.get(i).getAtleta().equals(inscrito.getAtleta())){
+					return i+1;
+				}
+			}
+		}
+		return -1;	
+	
 	}
 }
