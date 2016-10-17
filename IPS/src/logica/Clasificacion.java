@@ -18,9 +18,14 @@ public class Clasificacion {
 		clasificacionAbsoluta=ins;
 		ordenar(clasificacionAbsoluta);
 		for(Inscripcion inscripcion: ins){
-			if(inscripcion.getAtleta().getSexo()==0){
-				clasificacionMasculina.add(inscripcion);
-			}else clasificacionFemenina.add(inscripcion);
+			if (inscripcion.getDorsal() != -1)
+			{
+				if(inscripcion.getAtleta().getSexo()==0){
+					clasificacionMasculina.add(inscripcion);
+				}
+				else
+					clasificacionFemenina.add(inscripcion);
+			}
 		}
 		ordenar(clasificacionMasculina);
 		ordenar(clasificacionFemenina);
