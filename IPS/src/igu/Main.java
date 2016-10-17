@@ -63,6 +63,7 @@ public class Main {
 			try{
 				g.comprobarPagados(Integer.parseInt(cachos[1]));
 				g.asignarDorsales(Integer.parseInt(cachos[1]));
+				g.finalizarEvento(Integer.parseInt(cachos[1]));
 				mostrarClasificacion(Integer.parseInt(cachos[1]));
 			} catch (NumberFormatException e){
 				System.err.println("ID invalido, ha de ser un numero mayor o igual a 0.");

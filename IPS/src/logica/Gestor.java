@@ -174,9 +174,17 @@ public class Gestor {
 		int cont = 10;
 		
 		for (Inscripcion i : inscritos){
-			i.setDorsal(cont);
-			bd.asignarDorsal(i, cont);
-			cont++;
+			if (i.getEstado() == 2)
+			{
+				i.setDorsal(cont);
+				bd.asignarDorsal(i, cont);
+				cont++;
+			}
+			else
+			{
+				i.setDorsal(-1);
+				bd.asignarDorsal(i, -1);
+			}
 		}
 	}
 	
