@@ -116,24 +116,24 @@ public class Main {
 			g.añadirInscripcionEvento(atl, evento);
 		} else {
 			Atleta atl = g.buscarAtletaPorDNI(DNI);
-			String respuesta = "";
+			//String respuesta = "";
 			System.out
-					.println("Ya está registrado ¿Quiere modificar sus datos? s/n");
+					.println("Ya está registrado.");
 			System.out.println("DNI: " + DNI + "\n Nombre :" + atl.getNombre()
 					+ "\n Sexo: "
 					+ (atl.getSexo() == 0 ? "Masculino" : "Femenino")
 					+ "\n edad: " + atl.getEdad());
-			while (!respuesta.equals("s") || !respuesta.equals("n")) {
-
-				respuesta = consoleRead();
-			}
-
-			if (respuesta.equals("s")) {
-				String[] datos = pedirDatos();
-				atl.setNombre(datos[0]);
-				atl.setFechaNacimiento(datos[1]);
-				atl.setSexo(Integer.parseInt(datos[2]));
-			}
+//			while (!respuesta.equals("s") || !respuesta.equals("n")) {
+//
+//				respuesta = consoleRead();
+//			}
+//
+//			if (respuesta.equals("s")) {
+//				String[] datos = pedirDatos();
+//				atl.setNombre(datos[0]);
+//				atl.setFechaNacimiento(datos[1]);
+//				atl.setSexo(Integer.parseInt(datos[2]));
+//			}
 			g.añadirInscripcionEvento(atl, evento);
 		}
 

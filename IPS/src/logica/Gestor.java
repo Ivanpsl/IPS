@@ -270,4 +270,20 @@ public class Gestor {
 		
 	}
 	
+	public boolean existeAtletaEnEvento(int id, String dni){
+		Evento ev = null;
+		for(Evento e : eventos){
+			if(e.getId() == id)
+				ev = e;
+		}
+		if(ev != null){
+			for(Inscripcion i : ev.getInscritosEvento()){
+				if(i.getAtleta().getDNI().equals(dni)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 }
