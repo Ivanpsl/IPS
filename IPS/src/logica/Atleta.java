@@ -30,6 +30,13 @@ public class Atleta {
 		this.fechaNacimientoDate = fecha;
 		this.sexo=sexo;
 	}
+	public String getSexoString(){
+		if(this.sexo == MASCULINO){
+			return "MASCULINO";
+		}else{
+			return "FEMENINO";
+		}
+	}
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}

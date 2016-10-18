@@ -246,7 +246,8 @@ public class Main {
 		sb.append("DNI: " + a.getDNI() + "\n");
 		sb.append("Nombre: " + a.getNombre() + "\n");
 		//sb.append("Categoría: " + i.getCategoria() + "\n");
-		sb.append("Categoria: Actualmente no disponible.\n");
+		//sb.append("Categoria: Actualmente no disponible.\n");
+		sb.append("Categoría: " + a.getSexoString() + "\n");
 		sb.append("Fecha de la inscripción: " + i.getFechaInscripcion().toString() + "\n");
 
 		System.out.println(sb.toString());
