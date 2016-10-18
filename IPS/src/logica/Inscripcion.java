@@ -32,8 +32,9 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	 * @param 
 	 * @param fechaInscrip
 	 */
-	public Inscripcion (Atleta atleta, Date fechaInscrip) 
+	public Inscripcion (Atleta atleta, Date fechaInscrip, int id_evento) 
 	{
+		this.id_evento=id_evento;
 		this.atleta = atleta;
 		this.fechaInscripcion = fechaInscrip;
 		this.estado = PREINSCRITO;

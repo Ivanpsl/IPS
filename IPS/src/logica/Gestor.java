@@ -130,7 +130,7 @@ public class Gestor {
 			}
 		}
 		if(!repetido && evento.getPlazasDisponibles()>0 ){
-			Inscripcion ins = new Inscripcion(atl, fechaActual);
+			Inscripcion ins = new Inscripcion(atl, fechaActual,evento.getId());
 			System.out.println("Se ha inscrito correctamente. Detalles:");
 			System.out.println(ins.toString());
 			evento.añadirInscrito(ins);
