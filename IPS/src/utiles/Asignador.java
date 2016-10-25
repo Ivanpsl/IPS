@@ -1,6 +1,6 @@
 package utiles;
 
-import logica.Atleta;
+import usuarios.Atleta;
 import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;

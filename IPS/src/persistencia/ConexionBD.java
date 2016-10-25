@@ -8,9 +8,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
 
+import usuarios.Atleta;
 import utiles.Asignador;
 import utiles.ConversorFechas;
-import logica.Atleta;
 import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;

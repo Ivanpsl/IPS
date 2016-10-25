@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import logica.Atleta;
+import usuarios.Atleta;
 import logica.Clasificacion;
 import logica.Evento;
 import logica.Gestor;
@@ -16,11 +16,11 @@ public class Main {
 	static Gestor g;
 	static boolean ejecucion = true;
 
-	public static void main(String[] args) throws IOException, ParseException {
-		g = new Gestor();
-
-		mostrarComandosDisponibles();
-	}
+//	public static void main(String[] args) throws IOException, ParseException {
+//		g = new Gestor();
+//
+//		mostrarComandosDisponibles();
+//	}
 
 	private static void mostrarComandosDisponibles() {
 		System.out

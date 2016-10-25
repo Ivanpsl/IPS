@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
-import logica.Atleta;
 import logica.Clasificacion;
 import logica.Inscripcion;
 
 import org.junit.Test;
+
+import usuarios.Atleta;
 
 public class testOrdenar {
 

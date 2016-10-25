@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
+import usuarios.Atleta;
 
 public class Gestor {
 	

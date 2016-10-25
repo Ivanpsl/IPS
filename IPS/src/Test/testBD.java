@@ -4,7 +4,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import logica.Atleta;
 import logica.Evento;
 import logica.Gestor;
 import logica.Inscripcion;
@@ -12,6 +11,7 @@ import logica.Inscripcion;
 import org.junit.Test;
 
 import persistencia.ConexionBD;
+import usuarios.Atleta;
 import utiles.ConversorFechas;
 
 public class testBD {
