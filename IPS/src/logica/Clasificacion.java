@@ -10,6 +10,14 @@ public class Clasificacion {
 	ArrayList<Inscripcion> clasificacionMasculina = new ArrayList<Inscripcion>();
 	ArrayList<Inscripcion> clasificacionFemenina = new ArrayList<Inscripcion>();
 	
+	ArrayList<Inscripcion> clasificacionMenores = new ArrayList<Inscripcion>();
+	ArrayList<Inscripcion> veteranosA = new ArrayList<Inscripcion>();
+	ArrayList<Inscripcion> veteranosB = new ArrayList<Inscripcion>();
+	ArrayList<Inscripcion> vetetanosC = new ArrayList<Inscripcion>();
+	ArrayList<Inscripcion> veteranosD = new ArrayList<Inscripcion>();
+	ArrayList<Inscripcion> veteranosF = new ArrayList<Inscripcion>();
+
+	
 	public Clasificacion(ArrayList<Inscripcion> inscripciones){
 		calcularInscripciones(inscripciones);
 	}
