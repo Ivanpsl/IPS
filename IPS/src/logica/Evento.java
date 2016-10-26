@@ -23,6 +23,7 @@ public class Evento {
 	Date fechaFinInscripcion;
 	Clasificacion clasificacion;
 	boolean finalizado = false;
+	ArrayList<Categoria> categoriasDelEvento;
 
 	//De momento se considera una unica fecha de cada tipo. 
 	
@@ -145,5 +146,9 @@ public class Evento {
 	public void setFinalizado(){
 		finalizado=true;
 		generarClasificacion();
+	}
+	
+	public ArrayList<Categoria> getCategorias(){
+		return categoriasDelEvento;
 	}
 }

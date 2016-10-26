@@ -14,6 +14,7 @@ import javax.swing.JOptionPane;
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
 import usuarios.Atleta;
+import usuarios.Organizador;
 
 public class Gestor {
 	

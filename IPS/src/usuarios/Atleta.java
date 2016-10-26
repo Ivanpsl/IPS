@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import utiles.ConversorFechas;
 
-public class Atleta extends Usurario{
+public class Atleta extends Usuario{
 	
 	public static final int MASCULINO = 0;
 	public static final int FEMENINO = 1; 
