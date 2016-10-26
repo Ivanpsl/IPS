@@ -4,7 +4,7 @@ import java.sql.Date;
 
 import utiles.ConversorFechas;
 
-public class Atleta extends Usuario{
+public class Atleta extends Usurario{
 	
 	public static final int MASCULINO = 0;
 	public static final int FEMENINO = 1; 
@@ -17,6 +17,7 @@ public class Atleta extends Usuario{
 	int edad;
 	
 	public Atleta(String dni, String nombre, String fecha, int sexo){
+		super(nombre, "");
 		this.DNI = dni;
 		this.nombre = nombre;
 		this.fechaNacimiento=fecha;
@@ -24,6 +25,24 @@ public class Atleta extends Usuario{
 	}
 	
 	public Atleta(String dni, String nombre, java.sql.Date fecha, int sexo){
+		super(nombre, "");
+		this.DNI = dni;
+		this.nombre = nombre;
+		this.fechaNacimiento=fecha.toString();
+		this.fechaNacimientoDate = fecha;
+		this.sexo=sexo;
+	}
+	/**
+	 * Constructor con usuario y contraseña por si acaso
+	 * @param nombreUsuario
+	 * @param pass
+	 * @param dni
+	 * @param nombre
+	 * @param fecha
+	 * @param sexo
+	 */
+	public Atleta(String nombreUsuario, String pass, String dni, String nombre, java.sql.Date fecha, int sexo){
+		super(nombreUsuario, pass);
 		this.DNI = dni;
 		this.nombre = nombre;
 		this.fechaNacimiento=fecha.toString();
@@ -73,5 +92,11 @@ public class Atleta extends Usuario{
 		StringBuilder sB= new StringBuilder();
 		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Sexo(0-masc, 1-fem): " + getSexo());
 		return sB.toString();
+	}
+
+	@Override
+	public void login() {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -73,4 +73,12 @@ public class ConversorFechas {
         
         return año;
 	}
+	/**
+	 * Devuelve la fecha actual en formato sql
+	 * @return
+	 */
+	public static Date getFechaActual(){
+		Date fecha = new Date(Calendar.getInstance().getTime().getTime());
+		return fecha;
+	}
 }
