@@ -11,9 +11,13 @@ import java.util.Collections;
 
 import javax.swing.JOptionPane;
 
+import logica.Vistas.Atleta;
+import logica.Vistas.Categoria;
+import logica.Vistas.Evento;
+import logica.Vistas.Inscripcion;
+import logica.Vistas.PlazoInscripcion;
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
-import usuarios.Atleta;
 import usuarios.Organizador;
 
 public class Gestor {
@@ -22,6 +26,8 @@ public class Gestor {
 	ArrayList<Evento> eventos;
 	ArrayList<Atleta> atletas;
 	Organizador organizador;
+	
+	
 	
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
@@ -247,9 +253,9 @@ public class Gestor {
 	 * @param fecha_fin_insc
 	 * @param plazasTotales
 	 */
-	public void crearEvento(String nombre, String tipo, double precio, double distancia, Date fecha_comienzo, Date fecha_fin_insc, int plazasTotales){
-		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo, precio, distancia,fecha_comienzo, 
-				 fecha_fin_insc, plazasTotales, false);
+	public void crearEvento(String nombre, String tipo, double distancia, Date fecha_comienzo, Date fecha_fin_insc, int plazasTotales
+			,ArrayList<Categoria> categoriasDelEvento, ArrayList<PlazoInscripcion>  plazos){
+		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos);
 		eventos.add(nuevoEvento);
 		bd.añadirEventoABD(nuevoEvento);
 	}

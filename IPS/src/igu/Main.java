@@ -6,11 +6,11 @@ import java.io.InputStreamReader;
 import java.text.ParseException;
 import java.util.ArrayList;
 
-import usuarios.Atleta;
-import logica.Clasificacion;
-import logica.Evento;
 import logica.Gestor;
-import logica.Inscripcion;
+import logica.Vistas.Atleta;
+import logica.Vistas.Clasificacion;
+import logica.Vistas.Evento;
+import logica.Vistas.Inscripcion;
 
 public class Main {
 	static Gestor g;
@@ -251,7 +251,7 @@ public class Main {
 		sb.append("Nombre: " + e.getNombre() + "\n");
 		sb.append("Tipo: " + e.getTipo() + "\n");
 		sb.append("Distancia: " + e.getDistancia() + "\n");
-		sb.append("Precio: " + e.getPrecio() + "\n");
+//	sb.append("Precio: " + e.getPrecio() + "\n");
 		sb.append("Fecha de la competición: "
 				+ e.getFechaCompeticion().toString() + "\n");
 		sb.append("Fecha fin inscripción: "

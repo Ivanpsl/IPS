@@ -1,6 +1,5 @@
-package logica;
+package logica.Vistas;
 
-import usuarios.Atleta;
 
 public class Categoria{
 	String nombre;

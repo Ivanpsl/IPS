@@ -1,7 +1,8 @@
-package usuarios;
+package logica.Vistas;
 
 import java.sql.Date;
 
+import usuarios.Usuario;
 import utiles.ConversorFechas;
 
 public class Atleta extends Usuario{

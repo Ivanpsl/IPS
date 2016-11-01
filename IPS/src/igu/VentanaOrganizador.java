@@ -8,8 +8,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import logica.Evento;
 import logica.Gestor;
+import logica.Vistas.Evento;
 import usuarios.Organizador;
 import usuarios.Usuario;
 

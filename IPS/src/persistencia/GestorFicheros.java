@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-import logica.Evento;
+import logica.Vistas.Evento;
 
 
 public class GestorFicheros {

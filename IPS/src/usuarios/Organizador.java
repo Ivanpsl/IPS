@@ -2,7 +2,7 @@ package usuarios;
 
 import java.util.ArrayList;
 
-import logica.Evento;
+import logica.Vistas.Evento;
 
 public class Organizador extends Usuario {
 	ArrayList<Evento> misEventos;

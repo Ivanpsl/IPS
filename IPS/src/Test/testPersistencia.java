@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import logica.Evento;
+import logica.Vistas.Evento;
 
 import org.junit.Test;
 

@@ -1,8 +1,7 @@
-package logica;
+package logica.Vistas;
 
 import java.sql.Date;
 
-import usuarios.Atleta;
 import utiles.ConversorFechas;
 
 public class Inscripcion implements Comparable<Inscripcion> {

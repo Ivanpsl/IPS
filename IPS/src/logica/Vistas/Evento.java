@@ -1,7 +1,10 @@
-package logica;
+package logica.Vistas;
 
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import javax.swing.text.PlainDocument;
 
 import persistencia.ConexionBD;
 
@@ -17,34 +20,39 @@ public class Evento {
 	String tipo;
 	int plazasDisponibles;
 	int plazasTotales;
-	double precio;
+	//double precio;
 	double distancia;
+	boolean finalizado = false;
+	
 	Date fechaCompeticion;
 	Date fechaFinInscripcion;
 	Clasificacion clasificacion;
-	boolean finalizado = false;
+	
 	ArrayList<Categoria> categoriasDelEvento;
+	ArrayList<PlazoInscripcion> plazosDeInscripcion;
 
 	//De momento se considera una unica fecha de cada tipo. 
 	
-	public Evento(int id, String name, String type, double price, 
-			double distancia, java.util.Date fecha_comienzo, 
-			java.util.Date fecha_fin_insc, int plazasTotales, boolean finalizado) {
+	public Evento(int id, String name, String type, 
+			double distancia, int plazasTotales, boolean finalizado,ArrayList<Categoria> categoriasDelEvento,
+			ArrayList<PlazoInscripcion> plazos) {
 		
 		this.inscripciones = new ArrayList<Inscripcion>();
 		this.id=id;
 		this.nombre = name;
-		this.fechaCompeticion = (Date) fecha_comienzo;
-		this.fechaFinInscripcion = (Date) fecha_fin_insc; 
-		this.precio = price;
+//		this.fechaCompeticion = (Date) fecha_comienzo;
+//		this.fechaFinInscripcion = (Date) fecha_fin_insc; 
+		//this.precio = price;
 		this.tipo = type;
 		this.plazasTotales=plazasTotales;
 		this.plazasDisponibles= plazasTotales;
 		this.distancia= distancia;
 		this.finalizado=finalizado;
-		
+		this.categoriasDelEvento=categoriasDelEvento;
+		this.plazosDeInscripcion=plazos;
 	}
 	
+
 	
 	public void añadirInscrito(Inscripcion inscripcion){
 		inscripciones.add(inscripcion);
@@ -59,7 +67,7 @@ public class Evento {
 
 	public String toString() {
 		StringBuilder sB= new StringBuilder();
-		sB.append("\n\n **[ID:" + getId() + " Nombre: " + getNombre() + " ]\nTipo: " + getTipo() + " Precio: " + getPrecio() + " Distancia(km): " + getDistancia() + "\n");
+		sB.append("\n\n **[ID:" + getId() + " Nombre: " + getNombre() + " ]\nTipo: " + getTipo() + " Precio: " + " Distancia(km): " + getDistancia() + "\n");
 		sB.append("F.Competición: " + getFechaCompeticion() + " F.Inscripción: " + getFechaFinInscripcion());
 		sB.append(" \nParticipantes: " );
 		for(Inscripcion i : inscripciones){
@@ -78,9 +86,6 @@ public class Evento {
 		return this.tipo;
 	}
 
-	public double getPrecio() {
-		return this.precio;
-	}
 	
 	public int getPlazasDisponibles() {
 		return plazasDisponibles;
@@ -150,5 +155,11 @@ public class Evento {
 	
 	public ArrayList<Categoria> getCategorias(){
 		return categoriasDelEvento;
+	}
+	public void añadirCategoria(Categoria categoria){
+		categoriasDelEvento.add(categoria);
+	}
+	public ArrayList<PlazoInscripcion> getPlazos(){
+		return plazosDeInscripcion;
 	}
 }

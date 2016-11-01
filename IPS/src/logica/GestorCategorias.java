@@ -4,6 +4,9 @@ import java.nio.channels.IllegalSelectorException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import logica.Vistas.Categoria;
+import logica.Vistas.Evento;
+
 public class GestorCategorias {
 	ArrayList<Categoria> categorias;
 	Evento evento;

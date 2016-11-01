@@ -1,4 +1,4 @@
-package logica;
+package logica.Vistas;
 
 import java.util.ArrayList;
 import java.util.Collections;

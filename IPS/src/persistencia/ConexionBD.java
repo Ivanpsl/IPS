@@ -6,14 +6,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Date;
 
-import usuarios.Atleta;
 import utiles.Asignador;
 import utiles.ConversorFechas;
-import logica.Evento;
 import logica.Gestor;
-import logica.Inscripcion;
+import logica.Vistas.Atleta;
+import logica.Vistas.Categoria;
+import logica.Vistas.Evento;
+import logica.Vistas.Inscripcion;
+import logica.Vistas.PlazoInscripcion;
 
 public class ConexionBD {
 
@@ -64,14 +67,18 @@ public class ConexionBD {
 					String nombre =rs.getString("EV_NOMBRE");
 					String tipo =rs.getString("EV_TIPO");
 					double distancia =rs.getDouble("EV_DISTANCIA");
-					double precio =rs.getDouble("EV_PRECIO");
-					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
-					Date fecha_fin_insc=rs.getDate("EV_FECHA_FIN_INSC");
+//					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
+//					Date fecha_fin_insc=rs.getDate("EV_FECHA_FIN_INSC");
+					int plazas = rs.getInt("EV_PLAZAS_TOTALES");
 					int finalizado= rs.getInt("EV_FINALIZADO");
+					String bdPlazos = rs.getString("EV_PLAZOS_INS");
+					String bdCategorias = rs.getString("EV_CATEGORIAS");
 					boolean fin;
 					if(finalizado==0) fin=false;
 					else fin=true;
-					g.getEventos().add(new Evento(id, nombre, tipo, precio, distancia,ConversorFechas.convertFechaJavaSQL(fecha_comienzo),ConversorFechas.convertFechaJavaSQL(fecha_fin_insc),200,fin));
+					ArrayList<PlazoInscripcion> plazos = Asignador.decodificaPlazos(bdPlazos);
+					ArrayList<Categoria> categorias = Asignador.decodificarCategorias(bdCategorias);
+					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos));
 				}
 				System.out.println("Datos de eventos cargados");
 				rs.close();
@@ -137,11 +144,11 @@ public class ConexionBD {
 				String nombre = ev.getNombre();
 				String tipo= ev.getTipo();
 				double distancia = ev.getDistancia();
-				double precio = ev.getPrecio();
-				Date fecha_comienzo = ev.getFechaCompeticion();
-				Date fechaFin = ev.getFechaFinInscripcion();
 				int plazasTotales= ev.getPlazasTotales();
 				int fin;
+				String categorias = Asignador.codificarCategorias(ev.getCategorias());
+				String plazos = Asignador.codificarPlazos(ev.getPlazos());
+				
 				if(ev.getFinalizado()) fin =1;
 				else fin=0;
 				
@@ -149,11 +156,11 @@ public class ConexionBD {
 				st.setString(2,nombre);
 				st.setString(3,tipo);
 				st.setDouble(4,distancia);
-				st.setDouble(5,precio);
-				st.setDate(6, (java.sql.Date) fecha_comienzo);
-				st.setDate(7, (java.sql.Date) fechaFin);
-				st.setInt(8, plazasTotales);
-				st.setInt(9, fin);
+				st.setInt(5, plazasTotales);
+				st.setInt(6, fin);
+				st.setString(7, categorias);
+				st.setString(8,plazos );
+				
 				st.executeUpdate();
 				st.close();
 				con.close();

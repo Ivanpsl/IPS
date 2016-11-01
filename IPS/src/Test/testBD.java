@@ -4,14 +4,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import logica.Evento;
 import logica.Gestor;
-import logica.Inscripcion;
+import logica.Vistas.Atleta;
+import logica.Vistas.Evento;
+import logica.Vistas.Inscripcion;
 
 import org.junit.Test;
 
 import persistencia.ConexionBD;
-import usuarios.Atleta;
 import utiles.ConversorFechas;
 
 public class testBD {
