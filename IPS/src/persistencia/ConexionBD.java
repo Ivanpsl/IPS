@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import utiles.Asignador;
-import utiles.ConversorFechas;
 import logica.Gestor;
 import logica.Vistas.Atleta;
 import logica.Vistas.Categoria;
@@ -139,7 +138,7 @@ public class ConexionBD {
 			System.err.println("No es posible añadir eventos a ninguna BD." );
 		else{
 			try {
-				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?,?)");
+				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?)");
 				int id= ev.getId();
 				String nombre = ev.getNombre();
 				String tipo= ev.getTipo();

@@ -12,8 +12,8 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	public static final int PAGADO = 2;
 	
 	
-	private final int MAXDIAS = 2;
-	private static String dateFormat = "yyyy/MM/dd";
+//	private final int MAXDIAS = 2;
+	//private static String dateFormat = "yyyy/MM/dd";
 	
 	private int dorsal; //-1 sin asignar
 	private Atleta atleta; //Necesario para relacionar el atleta con sus inscripciones

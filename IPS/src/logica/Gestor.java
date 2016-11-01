@@ -27,7 +27,7 @@ public class Gestor {
 	ArrayList<Atleta> atletas;
 	Organizador organizador;
 	
-	
+	Atleta atIdentificado;
 	
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
@@ -50,6 +50,20 @@ public class Gestor {
 		for(Evento e: eventos){
 			if(e.getFinalizado())e.generarClasificacion();
 		}
+	}
+	/**
+	 * Metodo que busca y marca como atleta identificado si es que existe
+	 * @param dni: del atleta buscado
+	 * @return
+	 */
+	public boolean identificarAtletaPorDNI(String dni){
+		atIdentificado=buscarAtletaPorDNI(dni);
+		if(atIdentificado!=null){
+			return true;
+		}return false;
+	}
+	public Atleta getAtletaIdentificado(){
+		return atIdentificado;
 	}
 	public ArrayList<Evento> getEventos(){
 		return eventos;
@@ -243,6 +257,8 @@ public class Gestor {
 		atletas.add(atl);
 		bd.añadirAtleta(atl);
 	}
+	
+	
 	/***
 	 * Metodo usado para crear eventos y añadirlos tanto al array como a la base de datos
 	 * @param nombre
@@ -277,6 +293,8 @@ public class Gestor {
 		}
 		
 	}
+	
+	
 	
 	public boolean existeAtletaEnEvento(int id, String dni){
 		Evento ev = null;

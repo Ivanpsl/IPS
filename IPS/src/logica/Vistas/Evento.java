@@ -2,9 +2,7 @@ package logica.Vistas;
 
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import javax.swing.text.PlainDocument;
 
 import persistencia.ConexionBD;
 
