@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Date;
+import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -19,6 +20,8 @@ import logica.Vistas.PlazoInscripcion;
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
 import usuarios.Organizador;
+import utiles.Comprobaciones;
+import utiles.ConversorFechas;
 
 public class Gestor {
 	
@@ -271,6 +274,14 @@ public class Gestor {
 	 */
 	public void crearEvento(String nombre, String tipo, double distancia, Date fecha_comienzo, Date fecha_fin_insc, int plazasTotales
 			,ArrayList<Categoria> categoriasDelEvento, ArrayList<PlazoInscripcion>  plazos){
+		//Los fallos de argumento que los controle la interfaz para que no se detenga la ejecución. 
+		if(!Comprobaciones.esString(nombre) || !Comprobaciones.esString(tipo) ||  fecha_comienzo == null || fecha_fin_insc == null || categoriasDelEvento == null || plazos == null)
+			throw new IllegalArgumentException();
+		Date fechaActual = ConversorFechas.getFechaActual();
+		if(fecha_comienzo.getTime() <= fechaActual.getTime() || fecha_fin_insc.getTime() <= fechaActual.getTime())
+			throw new DateTimeException("Las fechas ya han pasado introducidas ya han pasado.");
+		
+		//Si todo esta bien se crea el evento y se añade
 		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos);
 		eventos.add(nuevoEvento);
 		bd.añadirEventoABD(nuevoEvento);
