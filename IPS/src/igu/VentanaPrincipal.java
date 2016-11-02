@@ -37,6 +37,7 @@ import javax.swing.border.BevelBorder;
 import logica.Gestor;
 import logica.Vistas.Atleta;
 import javax.swing.JTextField;
+import javax.swing.JTextPane;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -76,6 +77,19 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel panel_7;
 	private JButton btnMostrarResultadosAtleta;
 	private JPanel panel_8;
+	private JPanel pnEventosOrganizador;
+	private JPanel pnCabezeraOrganizador;
+	private JPanel pnCentroOrganizador;
+	private JPanel pnTablaOrganizador;
+	private JScrollPane pnScrollOrganizador;
+	private JTable tablaEventosDelOrganizador;
+	private JPanel pnDescripcionEventoOrganizador;
+	private JPanel pnInfoOrganizador;
+	private JPanel pnAccionesOrg;
+	private JButton btAñadirEventoOr;
+	private JButton btEditarEventoOr;
+	private JLabel lbNombreOr;
+	private JTextPane textPane;
 
 	/**
 	 * Launch the application.
@@ -165,6 +179,8 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnOrganizador() {
 		if (pnOrganizador == null) {
 			pnOrganizador = new JPanel();
+			pnOrganizador.setLayout(new CardLayout(0, 0));
+			pnOrganizador.add(getPnEventosOrganizador(), "pn_Organizador");
 		}
 		return pnOrganizador;
 	}
@@ -444,5 +460,108 @@ public class VentanaPrincipal extends JFrame {
 			panel_8.add(getBtnMostrarResultadosAtleta());
 		}
 		return panel_8;
+	}
+	private JPanel getPnEventosOrganizador() {
+		if (pnEventosOrganizador == null) {
+			pnEventosOrganizador = new JPanel();
+			pnEventosOrganizador.setLayout(new BorderLayout(0, 0));
+			pnEventosOrganizador.add(getPnCabezeraOrganizador(), BorderLayout.NORTH);
+			pnEventosOrganizador.add(getPnCentroOrganizador(), BorderLayout.CENTER);
+		}
+		return pnEventosOrganizador;
+	}
+	private JPanel getPnCabezeraOrganizador() {
+		if (pnCabezeraOrganizador == null) {
+			pnCabezeraOrganizador = new JPanel();
+			pnCabezeraOrganizador.setLayout(new BorderLayout(0, 0));
+			pnCabezeraOrganizador.add(getPnInfoOrganizador(), BorderLayout.CENTER);
+			pnCabezeraOrganizador.add(getPnAccionesOrg(), BorderLayout.EAST);
+		}
+		return pnCabezeraOrganizador;
+	}
+	private JPanel getPnCentroOrganizador() {
+		if (pnCentroOrganizador == null) {
+			pnCentroOrganizador = new JPanel();
+			pnCentroOrganizador.setLayout(new BorderLayout(0, 0));
+			pnCentroOrganizador.add(getPnTablaOrganizador(), BorderLayout.CENTER);
+		}
+		return pnCentroOrganizador;
+	}
+	private JPanel getPnTablaOrganizador() {
+		if (pnTablaOrganizador == null) {
+			pnTablaOrganizador = new JPanel();
+			pnTablaOrganizador.setLayout(new BorderLayout(0, 0));
+			pnTablaOrganizador.add(getPnScrollOrganizador(), BorderLayout.CENTER);
+			pnTablaOrganizador.add(getPnDescripcionEventoOrganizador(), BorderLayout.EAST);
+			pnTablaOrganizador.setBorder(new TitledBorder(null, "Mis eventos",
+					TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		}
+		return pnTablaOrganizador;
+	}
+	private JScrollPane getPnScrollOrganizador() {
+		if (pnScrollOrganizador == null) {
+			pnScrollOrganizador = new JScrollPane();
+			pnScrollOrganizador.setViewportView(getTablaEventosDelOrganizador());
+		}
+		return pnScrollOrganizador;
+	}
+	private JTable getTablaEventosDelOrganizador() {
+		if (tablaEventosDelOrganizador == null) {
+			tablaEventosDelOrganizador = new JTable();
+		}
+		return tablaEventosDelOrganizador;
+	}
+	private JPanel getPnDescripcionEventoOrganizador() {
+		if (pnDescripcionEventoOrganizador == null) {
+			pnDescripcionEventoOrganizador = new JPanel();
+			pnDescripcionEventoOrganizador.setLayout(new GridLayout(0, 1, 0, 0));
+			pnDescripcionEventoOrganizador.add(getTextPane());
+		}
+		return pnDescripcionEventoOrganizador;
+	}
+	private JPanel getPnInfoOrganizador() {
+		if (pnInfoOrganizador == null) {
+			pnInfoOrganizador = new JPanel();
+			pnInfoOrganizador.setLayout(new GridLayout(3, 2, 0, 0));
+			pnInfoOrganizador.add(getLbNombreOr());
+		}
+		return pnInfoOrganizador;
+	}
+	private JPanel getPnAccionesOrg() {
+		if (pnAccionesOrg == null) {
+			pnAccionesOrg = new JPanel();
+			pnAccionesOrg.setLayout(new GridLayout(2, 1, 0, 0));
+			pnAccionesOrg.add(getBtAñadirEventoOr());
+			pnAccionesOrg.add(getBtEditarEventoOr());
+		}
+		return pnAccionesOrg;
+	}
+	private JButton getBtAñadirEventoOr() {
+		if (btAñadirEventoOr == null) {
+			btAñadirEventoOr = new JButton("A\u00F1adir evento");
+			btAñadirEventoOr.setToolTipText("Crear un nuevo evento");
+		}
+		return btAñadirEventoOr;
+	}
+	private JButton getBtEditarEventoOr() {
+		if (btEditarEventoOr == null) {
+			btEditarEventoOr = new JButton("Editar evento");
+			btEditarEventoOr.setToolTipText("Edita el evento seleccionado.");
+			btEditarEventoOr.setMnemonic('E');
+		}
+		return btEditarEventoOr;
+	}
+	private JLabel getLbNombreOr() {
+		if (lbNombreOr == null) {
+			lbNombreOr = new JLabel("Nombre:");
+			lbNombreOr.setHorizontalAlignment(SwingConstants.RIGHT);
+		}
+		return lbNombreOr;
+	}
+	private JTextPane getTextPane() {
+		if (textPane == null) {
+			textPane = new JTextPane();
+		}
+		return textPane;
 	}
 }
