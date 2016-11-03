@@ -28,6 +28,8 @@ public class Evento {
 	
 	ArrayList<Categoria> categoriasDelEvento;
 	ArrayList<PlazoInscripcion> plazosDeInscripcion;
+	
+	ArrayList<String> tiposEventosDefecto;
 
 	//De momento se considera una unica fecha de cada tipo. 
 	
@@ -48,6 +50,29 @@ public class Evento {
 		this.finalizado=finalizado;
 		this.categoriasDelEvento=categoriasDelEvento;
 		this.plazosDeInscripcion=plazos;
+		
+		//Tipos de eventos
+		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
+	}
+	
+	/**
+	 * Crea el arrayList con unos tipos de eventos por defecto. 
+	 */
+	public static void cargarTiposEventosPorDefecto(ArrayList<String> list){
+		list = new ArrayList<String>();
+		list.add("Maratón");
+		list.add("Montaña");
+		list.add("Triatlon");
+	}
+	
+	/**
+	 * Devuelve tipos de eventos por defecto para cargar en la interfaz por ejemplo
+	 * @return
+	 */
+	public static ArrayList<String> getTiposEventosPorDefecto(){
+		ArrayList<String> typeEv = new ArrayList<String>();
+		cargarTiposEventosPorDefecto(typeEv);
+		return typeEv;
 	}
 	
 

@@ -13,6 +13,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
+import javax.swing.ComboBoxModel;
 
 import java.awt.GridLayout;
 
@@ -26,9 +27,11 @@ import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeListener;
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -36,8 +39,17 @@ import javax.swing.border.BevelBorder;
 
 import logica.Gestor;
 import logica.Vistas.Atleta;
+import logica.Vistas.Evento;
+
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
+import javax.swing.SpinnerModel;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.JComboBox;
+import javax.swing.JSpinner;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -90,6 +102,22 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btEditarEventoOr;
 	private JLabel lbNombreOr;
 	private JTextPane textPane;
+	private JPanel pnCrearEvento;
+	private JPanel pnBotonesCrearEvento;
+	private JPanel pnUnoVacio;
+	private JPanel pnDosBotones;
+	private JButton btCancelarEvento;
+	private JButton btCrearEvento;
+	private JPanel pnContenidoCreacionEvento;
+	private JLabel lblNombre;
+	private JTextField tfNombreEvento;
+	private JLabel lblTipo;
+	private JComboBox cbTipoEventos;
+	private JLabel lblDistancia;
+	private JTextField tfDistanciaEvento;
+	private JLabel lblNmeroDePlazas;
+	private JLabel lbKm;
+	private JSpinner spinnerPlazas;
 
 	/**
 	 * Launch the application.
@@ -142,6 +170,8 @@ public class VentanaPrincipal extends JFrame {
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,
 					"pn_inicio");
 	}
+	
+	
 
 	/**
 	 * Metodo usado para cambiar la cabecera de los menus de usuario
@@ -180,9 +210,25 @@ public class VentanaPrincipal extends JFrame {
 		if (pnOrganizador == null) {
 			pnOrganizador = new JPanel();
 			pnOrganizador.setLayout(new CardLayout(0, 0));
-			pnOrganizador.add(getPnEventosOrganizador(), "pn_Organizador");
+			pnOrganizador.add(getPnEventosOrganizador(), "pn_EventosOrganizador");
+			pnOrganizador.add(getPnCrearEvento(), "pn_CrearEvento");
 		}
 		return pnOrganizador;
+	}
+	private void cambiarPanelesOrganizador(String opcion){
+		switch (opcion) {
+		case "crear":
+			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador,
+					"pn_CrearEvento");
+			break;
+		case "misEventos":
+			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador,
+					"pnEventosOrganizador");
+			break;
+		
+		default:
+			break;
+		}
 	}
 
 	private JPanel getPnUsuario() {
@@ -539,6 +585,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtAñadirEventoOr() {
 		if (btAñadirEventoOr == null) {
 			btAñadirEventoOr = new JButton("A\u00F1adir evento");
+			btAñadirEventoOr.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					cambiarPanelesOrganizador("crear");
+				}
+			});
 			btAñadirEventoOr.setToolTipText("Crear un nuevo evento");
 		}
 		return btAñadirEventoOr;
@@ -563,5 +614,195 @@ public class VentanaPrincipal extends JFrame {
 			textPane = new JTextPane();
 		}
 		return textPane;
+	}
+	private JPanel getPnCrearEvento() {
+		if (pnCrearEvento == null) {
+			pnCrearEvento = new JPanel();
+			pnCrearEvento.setLayout(new BorderLayout(0, 0));
+			pnCrearEvento.add(getPnBotonesCrearEvento(), BorderLayout.SOUTH);
+			pnCrearEvento.add(getPnContenidoCreacionEvento(), BorderLayout.CENTER);
+		}
+		return pnCrearEvento;
+	}
+	private JPanel getPnBotonesCrearEvento() {
+		if (pnBotonesCrearEvento == null) {
+			pnBotonesCrearEvento = new JPanel();
+			pnBotonesCrearEvento.setLayout(new GridLayout(1, 2, 0, 0));
+			pnBotonesCrearEvento.add(getPnUnoVacio());
+			pnBotonesCrearEvento.add(getPnDosBotones());
+		}
+		return pnBotonesCrearEvento;
+	}
+	private JPanel getPnUnoVacio() {
+		if (pnUnoVacio == null) {
+			pnUnoVacio = new JPanel();
+		}
+		return pnUnoVacio;
+	}
+	private JPanel getPnDosBotones() {
+		if (pnDosBotones == null) {
+			pnDosBotones = new JPanel();
+			pnDosBotones.setLayout(new GridLayout(0, 2, 20, 10));
+			pnDosBotones.add(getBtCancelarEvento());
+			pnDosBotones.add(getBtCrearEvento());
+		}
+		return pnDosBotones;
+	}
+	private JButton getBtCancelarEvento() {
+		if (btCancelarEvento == null) {
+			btCancelarEvento = new JButton("Cancelar");
+		}
+		return btCancelarEvento;
+	}
+	private JButton getBtCrearEvento() {
+		if (btCrearEvento == null) {
+			btCrearEvento = new JButton("Crear evento");
+			btCrearEvento.setEnabled(false);
+		}
+		return btCrearEvento;
+	}
+	private JPanel getPnContenidoCreacionEvento() {
+		if (pnContenidoCreacionEvento == null) {
+			pnContenidoCreacionEvento = new JPanel();
+			GroupLayout grupoLayout = new GroupLayout(pnContenidoCreacionEvento);
+			grupoLayout.setHorizontalGroup(
+				grupoLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(grupoLayout.createSequentialGroup()
+						.addGap(60)
+						.addGroup(grupoLayout.createParallelGroup(Alignment.LEADING)
+							.addGroup(grupoLayout.createSequentialGroup()
+								.addComponent(getLblNombre(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getTfNombreEvento(), GroupLayout.PREFERRED_SIZE, 106, GroupLayout.PREFERRED_SIZE))
+							.addGroup(grupoLayout.createSequentialGroup()
+								.addGap(10)
+								.addComponent(getLblTipo(), GroupLayout.PREFERRED_SIZE, 48, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
+								.addComponent(getCbTipoEventos(), 0, 118, Short.MAX_VALUE))
+							.addGroup(grupoLayout.createSequentialGroup()
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getLblDistancia(), GroupLayout.PREFERRED_SIZE, 76, GroupLayout.PREFERRED_SIZE)
+								.addPreferredGap(ComponentPlacement.RELATED)
+								.addComponent(getTfDistanciaEvento(), GroupLayout.PREFERRED_SIZE, 50, GroupLayout.PREFERRED_SIZE)
+								.addGap(18)
+								.addComponent(getLbKm()))
+							.addGroup(grupoLayout.createSequentialGroup()
+								.addGap(85)
+								.addComponent(getSpinnerPlazas(), GroupLayout.PREFERRED_SIZE, 38, GroupLayout.PREFERRED_SIZE)))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addComponent(getTfTipoEvetno(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addGap(644))
+					.addGroup(grupoLayout.createSequentialGroup()
+						.addGap(24)
+						.addComponent(getLblNmeroDePlazas(), GroupLayout.PREFERRED_SIZE, 101, GroupLayout.PREFERRED_SIZE)
+						.addContainerGap(869, Short.MAX_VALUE))
+			);
+			grupoLayout.setVerticalGroup(
+				grupoLayout.createParallelGroup(Alignment.LEADING)
+					.addGroup(grupoLayout.createSequentialGroup()
+						.addGap(38)
+						.addGroup(grupoLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblNombre(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getTfNombreEvento(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(grupoLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getCbTipoEventos(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getLblTipo(), GroupLayout.PREFERRED_SIZE, 22, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getTfTipoEvetno(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(grupoLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLbKm())
+							.addComponent(getLblDistancia(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getTfDistanciaEvento(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addPreferredGap(ComponentPlacement.UNRELATED)
+						.addGroup(grupoLayout.createParallelGroup(Alignment.BASELINE)
+							.addComponent(getLblNmeroDePlazas(), GroupLayout.PREFERRED_SIZE, 33, GroupLayout.PREFERRED_SIZE)
+							.addComponent(getSpinnerPlazas(), GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+						.addContainerGap(237, Short.MAX_VALUE))
+			);
+			pnContenidoCreacionEvento.setLayout(grupoLayout);
+		}
+		return pnContenidoCreacionEvento;
+	}
+	private JLabel getLblNombre() {
+		if (lblNombre == null) {
+			lblNombre = new JLabel("Nombre:");
+			lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		return lblNombre;
+	}
+	private JTextField getTfNombreEvento() {
+		if (tfNombreEvento == null) {
+			tfNombreEvento = new JTextField();
+			tfNombreEvento.setColumns(10);
+		}
+		return tfNombreEvento;
+	}
+	private JLabel getLblTipo() {
+		if (lblTipo == null) {
+			lblTipo = new JLabel("Tipo: ");
+			lblTipo.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		return lblTipo;
+	}
+	private JComboBox getCbTipoEventos() {
+		if (cbTipoEventos == null) {
+			ArrayList<String> tiposEventos = new ArrayList<String>();
+			tiposEventos.add(" ");
+			tiposEventos.addAll(Evento.getTiposEventosPorDefecto()); //Cargamos los eventos que tenemos por defecto despues del vacio, que es la opcion que se pone si se quiere añadir uno propio. 
+			cbTipoEventos = new JComboBox();
+			
+		}
+		return cbTipoEventos;
+	}
+	private JLabel getLblDistancia() {
+		if (lblDistancia == null) {
+			lblDistancia = new JLabel("Distancia:");
+			lblDistancia.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		return lblDistancia;
+	}
+	private JTextField getTfDistanciaEvento() {
+		if (tfDistanciaEvento == null) {
+			tfDistanciaEvento = new JTextField();
+			tfDistanciaEvento.setColumns(10);
+		}
+		return tfDistanciaEvento;
+	}
+	private JLabel getLblNmeroDePlazas() {
+		if (lblNmeroDePlazas == null) {
+			lblNmeroDePlazas = new JLabel("N\u00FAmero de plazas:");
+			lblNmeroDePlazas.setHorizontalAlignment(SwingConstants.CENTER);
+		}
+		return lblNmeroDePlazas;
+	}
+	private JLabel getLbKm() {
+		if (lbKm == null) {
+			lbKm = new JLabel("Km");
+		}
+		return lbKm;
+	}
+	int numeroPlazasEvento = 0;
+	private JTextField tfTipoEvetno;
+	private JSpinner getSpinnerPlazas() {
+		if (spinnerPlazas == null) {
+			spinnerPlazas = new JSpinner();
+			SpinnerModel modelo = new SpinnerNumberModel(numeroPlazasEvento, 0, 9999, 1);
+			spinnerPlazas.setModel(modelo);
+		}
+		return spinnerPlazas;
+	}
+	private JTextField getTfTipoEvetno() {
+		if (tfTipoEvetno == null) {
+			tfTipoEvetno = new JTextField();
+			tfTipoEvetno.setHorizontalAlignment(SwingConstants.CENTER);
+			tfTipoEvetno.setColumns(10);
+			if(getCbTipoEventos().getSelectedItem() == " "){
+				tfTipoEvetno.setEnabled(true);
+			}else{
+				tfTipoEvetno.setEnabled(false);
+			}
+		}
+		return tfTipoEvetno;
 	}
 }
