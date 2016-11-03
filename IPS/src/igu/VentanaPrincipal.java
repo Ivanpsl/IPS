@@ -27,7 +27,9 @@ import javax.swing.UIManager;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
+import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.awt.event.ActionEvent;
 
 import javax.swing.border.TitledBorder;
@@ -39,7 +41,10 @@ import javax.swing.border.BevelBorder;
 
 import logica.Gestor;
 import logica.Vistas.Atleta;
+import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
+import logica.Vistas.PlazoInscripcion;
+import utiles.Comprobaciones;
 
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
@@ -52,7 +57,6 @@ import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 
 public class VentanaPrincipal extends JFrame {
-
 	private JPanel pnPrincipal;
 	private JPanel pnInicio;
 	private JPanel pnOrganizador;
@@ -805,4 +809,35 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return tfTipoEvetno;
 	}
+	
+	
+	//-----------------------------------    Métodos para crear un evento
+	
+	/**
+	 * LO QUE DEBERIA SER
+	 */
+	private void crearEvetno(){
+		String nombre = getTfNombreEvento().getText();
+		String tipo = getCbTipoEventos().getSelectedItem().toString();
+		String Stdistancia = getTfDistanciaEvento().getText();
+		int distancia = 0;
+		if(Comprobaciones.esString(Stdistancia)){
+			distancia = Integer.parseInt(Stdistancia);
+		}else{
+			throw new IllegalArgumentException("La distancia no es un número");
+		}
+		Date fechaComienzo = new Date(Calendar.getInstance().getTimeInMillis());
+		Date fechaFinInscripciones = new Date(Calendar.getInstance().getTimeInMillis());
+		ArrayList<Categoria> categoriasParaEvento = new ArrayList<Categoria>();
+		int plazas = (int) getSpinnerPlazas().getValue();
+		//Obtener las categorias del elemento en cuestion
+		//Plazos de inscripcion
+		ArrayList<PlazoInscripcion> plazosInscripcion = new ArrayList<PlazoInscripcion>();
+		
+		
+		//Si todo esta OK
+		g.crearEvento(nombre, tipo, distancia, fechaComienzo, fechaFinInscripciones, plazas, categoriasParaEvento, plazosInscripcion);
+	}
+
+	//---------------------------------- FIN metodos crear un evento
 }
