@@ -175,7 +175,12 @@ public class Evento {
 		finalizado=true;
 		generarClasificacion();
 	}
-	
+
+	public PlazoInscripcion getUltimoPlazo(){
+		if(!finalizado)
+			return plazosDeInscripcion.get(0);
+		return null;	
+	}
 	public ArrayList<Categoria> getCategorias(){
 		return categoriasDelEvento;
 	}

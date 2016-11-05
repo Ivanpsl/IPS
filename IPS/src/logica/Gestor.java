@@ -29,7 +29,7 @@ public class Gestor {
 	ArrayList<Evento> eventos;
 	ArrayList<Atleta> atletas;
 	Organizador organizador;
-	
+	Evento eventoSeleccionado;
 	Atleta atIdentificado;
 	
 	private ConexionBD bd = new ConexionBD();
@@ -304,8 +304,9 @@ public class Gestor {
 		}
 		
 	}
-	
-	
+	public void confirmarSeleccion(Evento ev){
+		eventoSeleccionado=ev;
+	}
 	
 	public boolean existeAtletaEnEvento(int id, String dni){
 		Evento ev = null;
