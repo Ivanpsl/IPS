@@ -4,14 +4,23 @@ import java.sql.Date;
 import java.util.ArrayList;
 
 
+
+import logica.GestorClasificaciones;
 import persistencia.ConexionBD;
 
 public class Evento {
 
 
-
-	private ArrayList<Inscripcion> inscripciones;
-
+	GestorClasificaciones gC= new GestorClasificaciones();
+	
+	private ArrayList<Inscripcion> inscripciones; 
+	private ArrayList<Clasificacion> clasificaciones; 
+	private ArrayList<Categoria> categoriasDelEvento;
+	private ArrayList<PlazoInscripcion> plazosDeInscripcion;
+	
+	ArrayList<String> tiposEventosDefecto;
+	
+	
 	// Datos del evento
 	int id;
 	String nombre;
@@ -24,12 +33,7 @@ public class Evento {
 	
 	Date fechaCompeticion;
 	Date fechaFinInscripcion;
-	Clasificacion clasificacion;
 	
-	ArrayList<Categoria> categoriasDelEvento;
-	ArrayList<PlazoInscripcion> plazosDeInscripcion;
-	
-	ArrayList<String> tiposEventosDefecto;
 
 	//De momento se considera una unica fecha de cada tipo. 
 	
@@ -156,16 +160,13 @@ public class Evento {
 			System.err.println("Participante con dorsal " + dorsal +" y con un tiempo de " + tiempo + "seg. no ha sido encontrado" );
 	}
 	/***
-	 * Metodo generarCLasificacion que genera las clasificaciones de la carrera y sera llamado al final de la competicion
+	 * Metodo generarClasificacion que genera las clasificaciones de la carrera y sera llamado al final de la competicion
 	 */
 	public void generarClasificacion(){
-		clasificacion=new Clasificacion(inscripciones);
+		clasificaciones=gC.calcularInscripciones(inscripciones,categoriasDelEvento);
 	}
 	
-	
-	public Clasificacion getClasificacion(){
-		return clasificacion;
-	}
+
 	
 	/**
 	 * Metodo que da por concluido el evento, lo marca como finalizado y genera las clasificaciones en funcion de los resultados
