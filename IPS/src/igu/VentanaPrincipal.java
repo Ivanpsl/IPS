@@ -249,14 +249,22 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * Metodo usado para navegar por las distintas ventanas que vera el usuario
 	 * @param opcion: 
-	 * 					eventos: panel con la tabla de eventos y donde el usuario selecciona a cual inscribirse 
+	 * 					0: panel de eventos
+	 * 					1: panel de inscripciones
+	 * 					
+	 * 					3: panel resultados evento 
+	 * 					4: panel resultados atleta 
+	 * 
 	 */
-	private void cambiarPanelesUsuario(String opcion) {
-		if (opcion.equals("eventos")){
+	private void cambiarPanelesUsuario(int opcion) {
+		if (opcion==0){
 			reiniciarDatosPulsados();
 			mostrarTablaEventosUsuario();
-			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,
+			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
 					"pn_eventosUsuario");
+		}if(opcion==1){
+			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
+					"pn_inscripcionesUsuario");
 		}
 		
 	
@@ -279,7 +287,7 @@ public class VentanaPrincipal extends JFrame {
 				fila[5] = "ABIERTO";
 				fila[6] = String.valueOf(ev.getUltimoPlazo().getPrecio());
 			} else {
-				if (ev.getClasificacion() != null) {
+				if (ev.getFinalizado()) {
 					fila[4] = "Finalizada";
 				} else
 					fila[4] = "Corriendo";
@@ -298,6 +306,7 @@ public class VentanaPrincipal extends JFrame {
 	 * Metodo que reinicia los datos de la seleccion
 	 */
 	private void reiniciarDatosPulsados() {
+		btnPasarAInscripcion.setEnabled(false);
 		eventoPulsado=null;
 		txEventoPulsadoNombre.setText("");
 		txEventoPulsadoPlazas.setText("");
@@ -313,6 +322,8 @@ public class VentanaPrincipal extends JFrame {
 	private void pulsarEvento(Evento ev,int desc) {
 		eventoPulsado=ev;
 		if(desc==1){ //desc= 1 nos situa en la descripcion del panel de usuarios
+			btnPasarAInscripcion.setEnabled(true);
+			
 			txEventoPulsadoNombre.setText(ev.getNombre());
 			txEventoPulsadoPlazas.setText(String.valueOf(ev.getPlazasDisponibles()));
 			ArrayList<Categoria>cat = ev.getCategorias();
@@ -575,7 +586,7 @@ public class VentanaPrincipal extends JFrame {
 			pnOpciones = new JPanel();
 			pnOpciones.setLayout(new BorderLayout(0, 0));
 			pnOpciones.add(getBtnAtras(), BorderLayout.WEST);
-			pnOpciones.add(getBtnInscribirse(), BorderLayout.EAST);
+			pnOpciones.add(getBtnPasarAInscripcion(), BorderLayout.EAST);
 		}
 		return pnOpciones;
 	}
@@ -1112,7 +1123,7 @@ public class VentanaPrincipal extends JFrame {
 	int numeroPlazasEvento = 0;
 	private JTextField tfTipoEvetno;
 	private JPanel pnInfoEvPulsado;
-	private JButton btnInscribirse;
+	private JButton btnPasarAInscripcion;
 	private JButton btnAtras;
 	private JPanel pnInfoEvPulsadoPlazos;
 	private JLabel lblNombre_1;
@@ -1214,19 +1225,21 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return pnInfoEvPulsado;
 	}
-	private JButton getBtnInscribirse() {
-		if (btnInscribirse == null) {
-			btnInscribirse = new JButton("Inscribirse");
-			btnInscribirse.addActionListener(new ActionListener() {
+	private JButton getBtnPasarAInscripcion() {
+		if (btnPasarAInscripcion == null) {
+			btnPasarAInscripcion = new JButton("Inscribirse");
+			btnPasarAInscripcion.setEnabled(false);
+			btnPasarAInscripcion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					g.confirmarSeleccion(eventoPulsado);
-					((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
-							"pnInscribirse");
-					
+					cambiarPanelesUsuario(1);
+//					((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
+//							"pn_inscripcionesUsuario");
+//					
 				}
 			});
 		}
-		return btnInscribirse;
+		return btnPasarAInscripcion;
 	}
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
@@ -1343,7 +1356,7 @@ public class VentanaPrincipal extends JFrame {
 			pnCardUsuario.add(getPnSelecEventosUsuario(), "pn_eventosUsuario");
 			pnCardUsuario.add(getPnResultadosAtleta(), "pn_ResultadosUsuario");
 			pnCardUsuario.add(getPnResultadosEvento(), "pn_resultadosEvento");
-			pnCardUsuario.add(getPnInscribirse(), "name_17043840420738");
+			pnCardUsuario.add(getPnInscribirse(), "pn_inscripcionesUsuario");
 		}
 		return pnCardUsuario;
 	}
@@ -1535,6 +1548,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnSeleccionarOtroEvento() {
 		if (btnSeleccionarOtroEvento == null) {
 			btnSeleccionarOtroEvento = new JButton("Seleccionar Otro Evento");
+			btnSeleccionarOtroEvento.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					cambiarPanelesUsuario(0);
+				}
+			});
 			btnSeleccionarOtroEvento.setBounds(612, 319, 163, 23);
 		}
 		return btnSeleccionarOtroEvento;
