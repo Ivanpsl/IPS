@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 
+import logica.GestorClasificaciones;
 import logica.Vistas.Atleta;
-import logica.Vistas.Clasificacion;
 import logica.Vistas.Inscripcion;
 
 import org.junit.Test;

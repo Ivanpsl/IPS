@@ -50,6 +50,12 @@ public class Atleta extends Usuario{
 		this.fechaNacimientoDate = fecha;
 		this.sexo=sexo;
 	}
+	public static int getSexotiInt(String sexo){
+		if(sexo.equals(Categoria.FEM)){
+			return FEMENINO;
+		}else
+			return MASCULINO;
+	}
 	public String getSexoString(){
 		if(this.sexo == MASCULINO){
 			return "MASCULINO";

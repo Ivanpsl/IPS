@@ -7,8 +7,8 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import logica.Gestor;
+import logica.GestorClasificaciones;
 import logica.Vistas.Atleta;
-import logica.Vistas.Clasificacion;
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
 
@@ -295,15 +295,15 @@ public class Main {
 				System.out.println("\t "+inscripcion.toString());
 				if(e.getFinalizado()){
 					System.out.println("\tRESULTADOS DE LA CARRERA: ");
-					Clasificacion cl = e.getClasificacion();
-					int posCategoria=-1;
-					int posAbsoluta=cl.obtenerPosicionAbsoluta(inscripcion);
-					posCategoria=cl.obtenerPosicionCategoria(inscripcion);
+//					GestorClasificaciones cl = e.getClasificacion();
+//					int posCategoria=-1;
+//					int posAbsoluta=cl.obtenerPosicionAbsoluta(inscripcion);
+//					posCategoria=cl.obtenerPosicionCategoria(inscripcion);
 					String tiempo;
 					if(inscripcion.getTiempoSegundos()==0) tiempo ="--";
 					else tiempo =""+ inscripcion.getTiempoSegundos();
-					System.out.println("\t\tTiempo: " + tiempo + "\n\t\tPosicion absoluta: " + 
-					posAbsoluta + "\n\t\tPosicion en categoria: " + posCategoria);
+//					System.out.println("\t\tTiempo: " + tiempo + "\n\t\tPosicion absoluta: " + 
+//					posAbsoluta + "\n\t\tPosicion en categoria: " + posCategoria);
 				}
 			}
 		}
@@ -318,74 +318,74 @@ public class Main {
 	 *            : id del evento que se desea consultar
 	 */
 	private static void mostrarClasificacion(int id) {
-		if (id > g.getEventos().size()) {
-			System.err.println("El evento especificado no existe");
-		} else if (id >= 0) {
-			Evento evento = g.getEventos().get(id);
-			if (!evento.getFinalizado()) {
-				System.err
-						.println("El evento aun no ha finalizado y no existen resultados");
-			} else {
-
-				ArrayList<Inscripcion> clasificacionMasculina = evento
-						.getClasificacion().obtenerClasificacion("M");
-				ArrayList<Inscripcion> clasificacionFemenina = evento
-						.getClasificacion().obtenerClasificacion("F");
-				ArrayList<Inscripcion> clasificacionAbsoluta = evento
-						.getClasificacion().obtenerClasificacion("A");
-				System.out.println("\nClasificacion absoluta: \n");
-				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
-				for (int i = 0; i < clasificacionAbsoluta.size(); i++) {
-					Atleta corredor = clasificacionAbsoluta.get(i).getAtleta();
-					String sexo;
-					if (corredor.getSexo() == 0)
-						sexo = "Hombre";
-					else
-						sexo = "Mujer";
-					if(clasificacionAbsoluta.get(i).getDorsal() != -1){
-						System.out.println(i + 1 + "\t\t" + sexo + "\t\t"
-								+ corredor.getNombre() + "\t\t"
-								+ clasificacionAbsoluta.get(i).getTiempoSegundos());
-					}
-				}
-				System.out.println("\nClasificacion Femenina: ");
-				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
-				for (int i = 0; i < clasificacionFemenina.size(); i++) {
-					Atleta corredor = clasificacionFemenina.get(i).getAtleta();
-					String sexo;
-					if (corredor.getSexo() == 0)
-						sexo = "Hombre";
-					else
-						sexo = "Mujer";
-					System.out.println(i + 1 + "\t\t" + sexo + "\t\t"
-							+ corredor.getNombre() + "\t\t"
-							+ clasificacionFemenina.get(i).getTiempoSegundos());
-				}
-				System.out.println("\nClasificacion Masculina: \n");
-				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
-				for (int i = 0; i < clasificacionMasculina.size(); i++) {
-					Atleta corredor = clasificacionMasculina.get(i).getAtleta();
-					String sexo;
-					if (corredor.getSexo() == 0)
-						sexo = "Hombre";
-					else
-						sexo = "Mujer";
-					System.out
-							.println(i
-									+ 1
-									+ "\t\t"
-									+ sexo
-									+ "\t\t"
-									+ corredor.getNombre()
-									+ "\t\t"
-									+ clasificacionMasculina.get(i)
-											.getTiempoSegundos());
-				}
-			}
-		} else {
-			System.err
-					.println("ID invalido, ha de ser un numero mayor o igual a 0.");
-		}
+//		if (id > g.getEventos().size()) {
+//			System.err.println("El evento especificado no existe");
+//		} else if (id >= 0) {
+//			Evento evento = g.getEventos().get(id);
+//			if (!evento.getFinalizado()) {
+//				System.err
+//						.println("El evento aun no ha finalizado y no existen resultados");
+//			} else {
+//
+//				ArrayList<Inscripcion> clasificacionMasculina = evento
+//						.getClasificacion().obtenerClasificacion("M");
+//				ArrayList<Inscripcion> clasificacionFemenina = evento
+//						.getClasificacion().obtenerClasificacion("F");
+//				ArrayList<Inscripcion> clasificacionAbsoluta = evento
+//						.getClasificacion().obtenerClasificacion("A");
+//				System.out.println("\nClasificacion absoluta: \n");
+//				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
+//				for (int i = 0; i < clasificacionAbsoluta.size(); i++) {
+//					Atleta corredor = clasificacionAbsoluta.get(i).getAtleta();
+//					String sexo;
+//					if (corredor.getSexo() == 0)
+//						sexo = "Hombre";
+//					else
+//						sexo = "Mujer";
+//					if(clasificacionAbsoluta.get(i).getDorsal() != -1){
+//						System.out.println(i + 1 + "\t\t" + sexo + "\t\t"
+//								+ corredor.getNombre() + "\t\t"
+//								+ clasificacionAbsoluta.get(i).getTiempoSegundos());
+//					}
+//				}
+//				System.out.println("\nClasificacion Femenina: ");
+//				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
+//				for (int i = 0; i < clasificacionFemenina.size(); i++) {
+//					Atleta corredor = clasificacionFemenina.get(i).getAtleta();
+//					String sexo;
+//					if (corredor.getSexo() == 0)
+//						sexo = "Hombre";
+//					else
+//						sexo = "Mujer";
+//					System.out.println(i + 1 + "\t\t" + sexo + "\t\t"
+//							+ corredor.getNombre() + "\t\t"
+//							+ clasificacionFemenina.get(i).getTiempoSegundos());
+//				}
+//				System.out.println("\nClasificacion Masculina: \n");
+//				System.out.println("Posicion\t  Sexo\t   Nombre\t     Tiempo");
+//				for (int i = 0; i < clasificacionMasculina.size(); i++) {
+//					Atleta corredor = clasificacionMasculina.get(i).getAtleta();
+//					String sexo;
+//					if (corredor.getSexo() == 0)
+//						sexo = "Hombre";
+//					else
+//						sexo = "Mujer";
+//					System.out
+//							.println(i
+//									+ 1
+//									+ "\t\t"
+//									+ sexo
+//									+ "\t\t"
+//									+ corredor.getNombre()
+//									+ "\t\t"
+//									+ clasificacionMasculina.get(i)
+//											.getTiempoSegundos());
+//				}
+//			}
+//		} else {
+//			System.err
+//					.println("ID invalido, ha de ser un numero mayor o igual a 0.");
+//		}
 	}
 
 	private static String consoleRead() {

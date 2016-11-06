@@ -8,13 +8,15 @@ import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
 
 public class GestorCategorias {
-	ArrayList<Categoria> categorias;
+	static ArrayList<Categoria> categorias;
 	Evento evento;
 	// boolean quieroCategoriasPorDefecto;
 
 	// Categorias por defecto
-	Categoria senior = new Categoria("Senior", 18, 35, Categoria.MASCULINO);
-	Categoria seniorFem = new Categoria("Senior", 18, 35, Categoria.MASCULINO);
+	static Categoria[] categoriasDef = {
+	new Categoria("Senior", 18, 35, Categoria.MASCULINO),
+	new Categoria("Senior", 18, 35, Categoria.MASCULINO)
+	};
 
 	public GestorCategorias() {
 
@@ -33,15 +35,15 @@ public class GestorCategorias {
 	 * 
 	 * @param misCat
 	 */
-	public void cargarCaegorias(ArrayList<Categoria> misCat) {
-		categorias = new ArrayList<Categoria>(); // Vaciar
-		if (misCat == null) {
-			categorias.add(senior);
-			categorias.add(seniorFem);
-		} else {
-			categorias.addAll(misCat);
-		}
-		ordenarCategorias();
+	public static void cargarCaegorias(ArrayList<Categoria> misCat) {
+//		categorias = new ArrayList<Categoria>(); // Vaciar
+//		if (misCat == null) {
+//			categorias.add(senior);
+//			categorias.add(seniorFem);
+//		} else {
+//			categorias.addAll(misCat);
+//		}
+		//ordenarCategorias();
 	}
 
 	/**
@@ -65,11 +67,34 @@ public class GestorCategorias {
 		return edades;
 	}
 	
-	private void ordenarCategorias(){
-		if(categorias == null)
-			throw new IllegalSelectorException(); //no hay categorias asignadas
-		categorias.sort(new Comparator<Categoria>() {
-
+//	private static void ordenarCategorias(){
+//		if(categorias == null)
+//			throw new IllegalSelectorException(); //no hay categorias asignadas
+//		categorias.sort(new Comparator<Categoria>() {
+//
+//			@Override
+//			public int compare(Categoria cat1, Categoria cat2) {
+//				return cat1.compareTo(cat2);
+//			}
+//		});
+//	}
+	/**
+	 * Carga las categorias por defecto en una lista que se le pasa como parámetro BUENO
+	 * @param list
+	 */
+	public static void cargarCategoriasPorDefecto(ArrayList<Categoria> list){
+		list = new ArrayList<Categoria>();
+		for(Categoria c : categoriasDef)
+			list.add(c);
+	}
+	/**
+	 * Método para ordenar las categorías de una lista de categorias BUENO
+	 * @param list
+	 */
+	public static void ordenarCategorias(ArrayList<Categoria> list){
+		if(list.isEmpty())
+			throw new IllegalStateException("No hay contenido en la lista de categorías a ordenar");
+		list.sort(new Comparator<Categoria>() {
 			@Override
 			public int compare(Categoria cat1, Categoria cat2) {
 				return cat1.compareTo(cat2);
@@ -82,6 +107,7 @@ public class GestorCategorias {
 		}
 		return false;
 	}
+	
 	/**
 	 * Si este metodo falla igual es por el compare to de la categoria.
 	 * @param categoriasPrueba

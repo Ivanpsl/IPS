@@ -35,6 +35,7 @@ import java.awt.event.ActionEvent;
 
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollPane;
@@ -42,13 +43,16 @@ import javax.swing.JTable;
 import javax.swing.border.BevelBorder;
 
 import logica.Gestor;
+import logica.GestorCategorias;
 import logica.Vistas.Atleta;
 import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
 import logica.Vistas.PlazoInscripcion;
+import usuarios.Organizador;
 import utiles.Comprobaciones;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JCheckBox;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SpinnerModel;
@@ -56,6 +60,8 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
 
@@ -76,6 +82,8 @@ public class VentanaPrincipal extends JFrame {
 	// realizad filtrados
 	private Evento eventoPulsado;
 
+
+	Organizador organizador;
 	private JPanel pnPrincipal;
 	private JPanel pnInicio;
 	private JPanel pnOrganizador;
@@ -151,6 +159,7 @@ public class VentanaPrincipal extends JFrame {
 			public void run() {
 				try {
 					VentanaPrincipal frame = new VentanaPrincipal();
+					frame.setResizable(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -165,6 +174,7 @@ public class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal() {
 		vP = this;
 		g = new Gestor();
+		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1020, 501);
 		pnPrincipal = new JPanel();
@@ -220,8 +230,8 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void cambiarPanelesPrincipales(String opcion) {
 		if (opcion.equals("organizador"))
-			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,
-					"pn_Organizador");
+			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,"pn_Organizador");
+					mostrarTablaEventosOrganizador();
 		if (opcion.equals("usuario")){
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,
 					"pn_usuario");
@@ -270,6 +280,36 @@ public class VentanaPrincipal extends JFrame {
 	
 	}
 
+	// TABLA JAVI
+	/**
+	 * Para cargar la tabla de los eventos que ha creado el organizador.
+	 */
+	private void mostrarTablaEventosOrganizador() {
+		ModeloNoEditable modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
+		ArrayList<Evento> eventosOrganizador = g.getEventosOrganizador(organizador);
+		for (Evento ev : eventosOrganizador) {
+			String[] fila = new String[6];
+			fila[0] = ev.getNombre();
+			fila[1] = ev.getTipo();
+			fila[3] = String.valueOf(ev.getDistancia());
+			if (!ev.getFinalizado()) {
+				fila[4] = "Inscripcion";
+				fila[5] = "ABIERTO";
+				fila[6] = String.valueOf(ev.getUltimoPlazo().getPrecio());
+			} else {
+				if (ev.getFinalizado()) {
+					fila[4] = "Finalizada";
+				} else
+					fila[4] = "Corriendo";
+				fila[5] = "CERRADO";
+				fila[6] = "CERRADO";
+			}
+			modeloTablaOrg.addRow(fila);
+		}
+		tablaEventosDelOrganizador.getTableHeader().setReorderingAllowed(false);
+		tablaEventosDelOrganizador.setModel(modeloTablaOrg);
+		// reiniciarDatosPulsados(); //Hacer uno mio
+	}
 
 	/**
 	 * Metodo usado para mostrar los datos de la tabla de seleccion de evento
@@ -299,7 +339,6 @@ public class VentanaPrincipal extends JFrame {
 		tbEventosSeleccion.getTableHeader().setReorderingAllowed(false);
 		tbEventosSeleccion.setModel(modeloTabla);
 		reiniciarDatosPulsados();
-
 	}
 
 	/**
@@ -859,185 +898,41 @@ public class VentanaPrincipal extends JFrame {
 		return btCrearEvento;
 	}
 
+ArrayList<Categoria> misCategoriasCreadas;
+
 	private JPanel getPnContenidoCreacionEvento() {
 		if (pnContenidoCreacionEvento == null) {
+			misCategoriasCreadas = new ArrayList<Categoria>(); // Lista de
+																// categorias
+																// que vamos a
+																// crear
+
 			pnContenidoCreacionEvento = new JPanel();
-			GroupLayout grupoLayout = new GroupLayout(pnContenidoCreacionEvento);
-			grupoLayout
-					.setHorizontalGroup(grupoLayout
-							.createParallelGroup(Alignment.LEADING)
-							.addGroup(
-									grupoLayout
-											.createSequentialGroup()
-											.addGap(60)
-											.addGroup(
-													grupoLayout
-															.createParallelGroup(
-																	Alignment.LEADING)
-															.addGroup(
-																	grupoLayout
-																			.createSequentialGroup()
-																			.addComponent(
-																					getLblNombre(),
-																					GroupLayout.PREFERRED_SIZE,
-																					76,
-																					GroupLayout.PREFERRED_SIZE)
-																			.addPreferredGap(
-																					ComponentPlacement.RELATED)
-																			.addComponent(
-																					getTfNombreEvento(),
-																					GroupLayout.PREFERRED_SIZE,
-																					106,
-																					GroupLayout.PREFERRED_SIZE))
-															.addGroup(
-																	grupoLayout
-																			.createSequentialGroup()
-																			.addGap(10)
-																			.addComponent(
-																					getLblTipo(),
-																					GroupLayout.PREFERRED_SIZE,
-																					48,
-																					GroupLayout.PREFERRED_SIZE)
-																			.addGap(18)
-																			.addComponent(
-																					getCbTipoEventos(),
-																					0,
-																					118,
-																					Short.MAX_VALUE))
-															.addGroup(
-																	grupoLayout
-																			.createSequentialGroup()
-																			.addPreferredGap(
-																					ComponentPlacement.RELATED)
-																			.addComponent(
-																					getLblDistancia(),
-																					GroupLayout.PREFERRED_SIZE,
-																					76,
-																					GroupLayout.PREFERRED_SIZE)
-																			.addPreferredGap(
-																					ComponentPlacement.RELATED)
-																			.addComponent(
-																					getTfDistanciaEvento(),
-																					GroupLayout.PREFERRED_SIZE,
-																					50,
-																					GroupLayout.PREFERRED_SIZE)
-																			.addGap(18)
-																			.addComponent(
-																					getLbKm()))
-															.addGroup(
-																	grupoLayout
-																			.createSequentialGroup()
-																			.addGap(85)
-																			.addComponent(
-																					getSpinnerPlazas(),
-																					GroupLayout.PREFERRED_SIZE,
-																					38,
-																					GroupLayout.PREFERRED_SIZE)))
-											.addPreferredGap(
-													ComponentPlacement.UNRELATED)
-											.addComponent(getTfTipoEvetno(),
-													GroupLayout.PREFERRED_SIZE,
-													GroupLayout.DEFAULT_SIZE,
-													GroupLayout.PREFERRED_SIZE)
-											.addGap(644))
-							.addGroup(
-									grupoLayout
-											.createSequentialGroup()
-											.addGap(24)
-											.addComponent(
-													getLblNmeroDePlazas(),
-													GroupLayout.PREFERRED_SIZE,
-													101,
-													GroupLayout.PREFERRED_SIZE)
-											.addContainerGap(869,
-													Short.MAX_VALUE)));
-			grupoLayout
-					.setVerticalGroup(grupoLayout
-							.createParallelGroup(Alignment.LEADING)
-							.addGroup(
-									grupoLayout
-											.createSequentialGroup()
-											.addGap(38)
-											.addGroup(
-													grupoLayout
-															.createParallelGroup(
-																	Alignment.BASELINE)
-															.addComponent(
-																	getLblNombre(),
-																	GroupLayout.PREFERRED_SIZE,
-																	33,
-																	GroupLayout.PREFERRED_SIZE)
-															.addComponent(
-																	getTfNombreEvento(),
-																	GroupLayout.PREFERRED_SIZE,
-																	GroupLayout.DEFAULT_SIZE,
-																	GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(
-													ComponentPlacement.UNRELATED)
-											.addGroup(
-													grupoLayout
-															.createParallelGroup(
-																	Alignment.BASELINE)
-															.addComponent(
-																	getCbTipoEventos(),
-																	GroupLayout.PREFERRED_SIZE,
-																	GroupLayout.DEFAULT_SIZE,
-																	GroupLayout.PREFERRED_SIZE)
-															.addComponent(
-																	getLblTipo(),
-																	GroupLayout.PREFERRED_SIZE,
-																	22,
-																	GroupLayout.PREFERRED_SIZE)
-															.addComponent(
-																	getTfTipoEvetno(),
-																	GroupLayout.PREFERRED_SIZE,
-																	GroupLayout.DEFAULT_SIZE,
-																	GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(
-													ComponentPlacement.UNRELATED)
-											.addGroup(
-													grupoLayout
-															.createParallelGroup(
-																	Alignment.BASELINE)
-															.addComponent(
-																	getLbKm())
-															.addComponent(
-																	getLblDistancia(),
-																	GroupLayout.PREFERRED_SIZE,
-																	33,
-																	GroupLayout.PREFERRED_SIZE)
-															.addComponent(
-																	getTfDistanciaEvento(),
-																	GroupLayout.PREFERRED_SIZE,
-																	GroupLayout.DEFAULT_SIZE,
-																	GroupLayout.PREFERRED_SIZE))
-											.addPreferredGap(
-													ComponentPlacement.UNRELATED)
-											.addGroup(
-													grupoLayout
-															.createParallelGroup(
-																	Alignment.BASELINE)
-															.addComponent(
-																	getLblNmeroDePlazas(),
-																	GroupLayout.PREFERRED_SIZE,
-																	33,
-																	GroupLayout.PREFERRED_SIZE)
-															.addComponent(
-																	getSpinnerPlazas(),
-																	GroupLayout.PREFERRED_SIZE,
-																	GroupLayout.DEFAULT_SIZE,
-																	GroupLayout.PREFERRED_SIZE))
-											.addContainerGap(237,
-													Short.MAX_VALUE)));
-			pnContenidoCreacionEvento.setLayout(grupoLayout);
+			pnContenidoCreacionEvento.setLayout(null);
+			pnContenidoCreacionEvento.add(getLblNombre());
+			pnContenidoCreacionEvento.add(getTfNombreEvento());
+			pnContenidoCreacionEvento.add(getLblTipo());
+			pnContenidoCreacionEvento.add(getCbTipoEventos());
+			pnContenidoCreacionEvento.add(getLblDistancia());
+			pnContenidoCreacionEvento.add(getTfDistanciaEvento());
+			pnContenidoCreacionEvento.add(getLbKm());
+			pnContenidoCreacionEvento.add(getSpinnerPlazas());
+			pnContenidoCreacionEvento.add(getTfTipoEvetno());
+			pnContenidoCreacionEvento.add(getLblNmeroDePlazas());
+			pnContenidoCreacionEvento.add(getLblCategorasDelEvento());
+			pnContenidoCreacionEvento.add(getCbCatDef());
+			pnContenidoCreacionEvento.add(getScrollPaneCategorias());
+			pnContenidoCreacionEvento.add(getBtAñadirCat());
+
+			pnContenidoCreacionEvento.add(getBtEditarCategoria());
 		}
 		return pnContenidoCreacionEvento;
 	}
-
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
-			lblNombre = new JLabel("Nombre:");
-			lblNombre.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNombre = new JLabel("Nombre del evento:");
+			lblNombre.setBounds(10, 31, 142, 33);
+			lblNombre.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblNombre;
 	}
@@ -1045,6 +940,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTfNombreEvento() {
 		if (tfNombreEvento == null) {
 			tfNombreEvento = new JTextField();
+			tfNombreEvento.setBounds(162, 37, 106, 20);
 			tfNombreEvento.setColumns(10);
 		}
 		return tfNombreEvento;
@@ -1053,7 +949,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblTipo() {
 		if (lblTipo == null) {
 			lblTipo = new JLabel("Tipo: ");
-			lblTipo.setHorizontalAlignment(SwingConstants.CENTER);
+	lblTipo.setBounds(104, 75, 48, 22);
+			lblTipo.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblTipo;
 	}
@@ -1084,7 +981,7 @@ public class VentanaPrincipal extends JFrame {
 																		// uno
 																		// propio.
 			cbTipoEventos = new JComboBox();
-
+			cbTipoEventos.setBounds(162, 76, 118, 20);
 		}
 		return cbTipoEventos;
 	}
@@ -1092,7 +989,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblDistancia() {
 		if (lblDistancia == null) {
 			lblDistancia = new JLabel("Distancia:");
-			lblDistancia.setHorizontalAlignment(SwingConstants.CENTER);
+			lblDistancia.setBounds(76, 108, 76, 33);
+			lblDistancia.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblDistancia;
 	}
@@ -1100,6 +998,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTfDistanciaEvento() {
 		if (tfDistanciaEvento == null) {
 			tfDistanciaEvento = new JTextField();
+			tfDistanciaEvento.setBounds(162, 114, 50, 20);
 			tfDistanciaEvento.setColumns(10);
 		}
 		return tfDistanciaEvento;
@@ -1108,7 +1007,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblNmeroDePlazas() {
 		if (lblNmeroDePlazas == null) {
 			lblNmeroDePlazas = new JLabel("N\u00FAmero de plazas:");
-			lblNmeroDePlazas.setHorizontalAlignment(SwingConstants.CENTER);
+			lblNmeroDePlazas.setBounds(51, 152, 101, 33);
+			lblNmeroDePlazas.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblNmeroDePlazas;
 	}
@@ -1116,6 +1016,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLbKm() {
 		if (lbKm == null) {
 			lbKm = new JLabel("Km");
+			lbKm.setBounds(222, 117, 14, 14);
 		}
 		return lbKm;
 	}
@@ -1139,6 +1040,10 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel pnCardUsuario;
 	private JPanel pnResultadosAtleta;
 	private JPanel pnResultadosEvento;
+	private JLabel lblCategorasDelEvento;
+	private JCheckBox cbCatDef;
+	private JScrollPane scrollPaneCategorias;
+	private JList list;
 	private JPanel pn_DNI;
 	private JLabel lblDni;
 	private JTextField txtDNIAtleta;
@@ -1163,8 +1068,8 @@ public class VentanaPrincipal extends JFrame {
 	private JSpinner getSpinnerPlazas() {
 		if (spinnerPlazas == null) {
 			spinnerPlazas = new JSpinner();
-			SpinnerModel modelo = new SpinnerNumberModel(numeroPlazasEvento, 0,
-					9999, 1);
+			spinnerPlazas.setBounds(162, 158, 38, 20);
+			SpinnerModel modelo = new SpinnerNumberModel(numeroPlazasEvento, 0, 9999, 1);
 			spinnerPlazas.setModel(modelo);
 		}
 		return spinnerPlazas;
@@ -1173,6 +1078,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTfTipoEvetno() {
 		if (tfTipoEvetno == null) {
 			tfTipoEvetno = new JTextField();
+			tfTipoEvetno.setBounds(308, 76, 106, 20);
 			tfTipoEvetno.setHorizontalAlignment(SwingConstants.CENTER);
 			tfTipoEvetno.setColumns(10);
 			if (getCbTipoEventos().getSelectedItem() == " ") {
@@ -1371,6 +1277,125 @@ public class VentanaPrincipal extends JFrame {
 			pnResultadosEvento = new JPanel();
 		}
 		return pnResultadosEvento;
+	}
+
+	private JLabel getLblCategorasDelEvento() {
+		if (lblCategorasDelEvento == null) {
+			lblCategorasDelEvento = new JLabel("Categor\u00EDas del evento: ");
+			lblCategorasDelEvento.setHorizontalAlignment(SwingConstants.CENTER);
+			lblCategorasDelEvento.setBounds(777, 40, 178, 14);
+		}
+		return lblCategorasDelEvento;
+
+	}
+	private JCheckBox getCbCatDef() {
+
+		if (cbCatDef == null) {
+			cbCatDef = new JCheckBox("Usar categor\u00EDas por defecto");
+			cbCatDef.setSelected(true);
+			cbCatDef.setHorizontalAlignment(SwingConstants.LEFT);
+			cbCatDef.setBounds(777, 73, 178, 23);
+
+		}
+		return cbCatDef;
+	}
+
+	private JScrollPane getScrollPaneCategorias() {
+		if (scrollPaneCategorias == null) {
+			scrollPaneCategorias = new JScrollPane();
+			scrollPaneCategorias.setBounds(777, 115, 178, 130);
+			scrollPaneCategorias.setViewportView(getList());
+		}
+		return scrollPaneCategorias;
+
+	}
+	
+
+	private DefaultListModel<String> modeloListaCategorias = null;
+	ArrayList<Categoria> categoriasAlCrearEvento;
+	private JButton btAñadirCat;
+	private JButton btEditarCategoria;
+	
+	public ArrayList<Categoria> getCategoriasCrearEvento(){
+		return categoriasAlCrearEvento;
+	}
+	public void añadirCategoriaAlCrearEvento(Categoria c){
+		categoriasAlCrearEvento.add(c);
+	}
+	private JList getList() {
+		if (list == null) {
+			modeloListaCategorias = new DefaultListModel<String>();
+			categoriasAlCrearEvento = new ArrayList<Categoria>();
+			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+			list = new JList<String>();
+		}
+		if (getCbCatDef().isSelected()) {
+			cargarCategoriasDefectoLista();
+		} else {
+			cargarMisCategoriasAlModelo();
+
+		}
+		return list;
+	}
+
+	private void cargarMisCategoriasAlModelo() {
+		if (!categoriasAlCrearEvento.isEmpty())
+			for (Categoria c : categoriasAlCrearEvento) {
+				modeloListaCategorias.addElement(c.toString());
+			}
+	}
+
+	private void cargarCategoriasDefectoLista() {
+		ArrayList<Categoria> catDef = new ArrayList<Categoria>();
+		GestorCategorias.cargarCaegorias(catDef);
+		for (Categoria c : catDef) {
+			modeloListaCategorias.addElement(c.toString());
+		}
+
+	}
+	private JButton getBtAñadirCat() {
+
+		if (btAñadirCat == null) {
+			btAñadirCat = new JButton("A\u00F1adir ");
+			btAñadirCat.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this);
+					vcc.setVisible(true);
+				}
+			});
+			btAñadirCat.setToolTipText("A\u00F1ade una categoria al evento");
+			btAñadirCat.setBounds(777, 256, 89, 23);
+		}
+		return btAñadirCat;
+
+	}
+	private JButton getBtEditarCategoria() {
+		if (btEditarCategoria == null) {
+			btEditarCategoria = new JButton("Editar");
+			btEditarCategoria.addActionListener(new ActionListener() {
+
+				public void actionPerformed(ActionEvent arg0) {
+					String catString = getList().getSelectedValue().toString();
+					Categoria cat = null;
+					for(Categoria c : categoriasAlCrearEvento){
+						if(c.toString().equals(catString))
+							cat = c;
+					}
+					if(cat == null){
+						JOptionPane.showMessageDialog(null, "No se encuantra la categoría");
+					}else{
+						categoriasAlCrearEvento.remove(cat);
+						VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this, cat);
+						vcc.setVisible(true);
+					}
+
+				}
+			});
+			btEditarCategoria.setToolTipText("Editar categoria seleccionada");
+			btEditarCategoria.setBounds(866, 256, 89, 23);
+		}
+		return btEditarCategoria;
+
 	}
 	private JPanel getPanel_4_4() {
 		if (pn_DNI == null) {
