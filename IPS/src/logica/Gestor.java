@@ -262,6 +262,10 @@ public class Gestor {
 		bd.añadirAtleta(atl);
 	}
 	
+	public ArrayList<Evento> getEventosOrganizador(Organizador or){
+		return or.getMisEventos();
+	}
+	
 	
 	/***
 	 * Metodo usado para crear eventos y añadirlos tanto al array como a la base de datos
