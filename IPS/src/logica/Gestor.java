@@ -9,6 +9,7 @@ import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -307,6 +308,9 @@ public class Gestor {
 	public void confirmarSeleccion(Evento ev){
 		eventoSeleccionado=ev;
 	}
+	public Evento getEventoSeleccionado(){
+		return eventoSeleccionado;
+	}
 	
 	public boolean existeAtletaEnEvento(int id, String dni){
 		Evento ev = null;
@@ -322,6 +326,13 @@ public class Gestor {
 			}
 		}
 		return false;
+	}
+	public void inscribirLote(List<Atleta> atletasAInscribir) {
+		for (int i = 0; i < atletasAInscribir.size(); i++) {
+			añadirInscripcionEvento(atletasAInscribir.get(i), eventoSeleccionado);
+		}
+		
+		
 	}
 	
 }

@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 import javax.swing.border.TitledBorder;
@@ -47,6 +48,7 @@ import logica.Vistas.Evento;
 import logica.Vistas.PlazoInscripcion;
 import utiles.Comprobaciones;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SpinnerModel;
@@ -56,9 +58,12 @@ import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.JTextArea;
+import javax.swing.JList;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -93,6 +98,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTable tbEventosSeleccion;
 	private JPanel pnOpciones;
 	private JPanel pnInfoEvPulsadoPrincipal;
+	private DefaultListModel<String> modeloLista;
 
 	private VentanaPrincipal vP;
 	private Gestor g;
@@ -134,6 +140,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblNmeroDePlazas;
 	private JLabel lbKm;
 	private JSpinner spinnerPlazas;
+	List<Atleta> atletasAInscribir = new ArrayList<Atleta>();
+	
 
 	/**
 	 * Launch the application.
@@ -166,6 +174,41 @@ public class VentanaPrincipal extends JFrame {
 		pnPrincipal.add(getPnInicio(), "pn_inicio");
 		pnPrincipal.add(getPnOrganizador(), "pn_Organizador");
 		pnPrincipal.add(getPnUsuario(), "pn_usuario");
+	}
+	
+	private void AnadirInscritoALista() {
+		String dni = txtDNIInscribirse.getText();
+		
+		Atleta at = g.buscarAtletaPorDNI(dni);
+		
+		
+		if(!modeloLista.contains(dni) && g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)){
+			atletasAInscribir.add(at);
+			modeloLista.addElement(dni);
+		}
+		txtDNIInscribirse.setText("");
+		txtNombreInscribirse.setText("");
+		txtFechaInscribirse.setText("");
+		
+	}
+	private void inscribir() {
+		g.inscribirLote(atletasAInscribir);
+		modeloLista.removeAllElements();
+		listInscribirse.setModel(modeloLista);
+		
+		txtDNIInscribirse.setText("");
+		txtNombreInscribirse.setText("");
+		txtFechaInscribirse.setText("");
+		
+	}
+	
+	
+	private void autorrellenar() {
+		if(!txtDNIAtleta.getText().equals("")){
+		txtDNIInscribirse.setText(txtDNIAtleta.getText());
+		txtNombreInscribirse.setText(txtNombreAtleta.getText());
+		txtFechaInscribirse.setText(txtFechaNacimiento.getText());
+		}
 	}
 
 	/**
@@ -209,11 +252,13 @@ public class VentanaPrincipal extends JFrame {
 	 * 					eventos: panel con la tabla de eventos y donde el usuario selecciona a cual inscribirse 
 	 */
 	private void cambiarPanelesUsuario(String opcion) {
-		if (opcion.equals("eventos"))
+		if (opcion.equals("eventos")){
 			reiniciarDatosPulsados();
 			mostrarTablaEventosUsuario();
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,
 					"pn_eventosUsuario");
+		}
+		
 	
 	}
 
@@ -290,6 +335,7 @@ public class VentanaPrincipal extends JFrame {
 
 	private void cargarCabeceraAtleta() {
 		Atleta at = g.getAtletaIdentificado();
+		txtDNIAtleta.setText(at.getDNI());
 		txtNombreAtleta.setText(at.getNombre());
 		txtFechaNacimiento.setText(at.getFechaNacimiento());
 		pnAtletaResumen.setBorder(new TitledBorder(null, at.getDNI(),
@@ -529,7 +575,7 @@ public class VentanaPrincipal extends JFrame {
 			pnOpciones = new JPanel();
 			pnOpciones.setLayout(new BorderLayout(0, 0));
 			pnOpciones.add(getBtnAtras(), BorderLayout.WEST);
-			pnOpciones.add(getBtnSiguiente(), BorderLayout.EAST);
+			pnOpciones.add(getBtnInscribirse(), BorderLayout.EAST);
 		}
 		return pnOpciones;
 	}
@@ -596,6 +642,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPanel_7() {
 		if (panel_7 == null) {
 			panel_7 = new JPanel();
+			panel_7.add(getPanel_4_4());
 			panel_7.add(getPnNombre());
 			panel_7.add(getPnFechaNacimiento());
 		}
@@ -1065,7 +1112,7 @@ public class VentanaPrincipal extends JFrame {
 	int numeroPlazasEvento = 0;
 	private JTextField tfTipoEvetno;
 	private JPanel pnInfoEvPulsado;
-	private JButton btnSiguiente;
+	private JButton btnInscribirse;
 	private JButton btnAtras;
 	private JPanel pnInfoEvPulsadoPlazos;
 	private JLabel lblNombre_1;
@@ -1081,6 +1128,26 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel pnCardUsuario;
 	private JPanel pnResultadosAtleta;
 	private JPanel pnResultadosEvento;
+	private JPanel pn_DNI;
+	private JLabel lblDni;
+	private JTextField txtDNIAtleta;
+	private JPanel pnInscribirse;
+	private JPanel pnListaInscritos;
+	private JScrollPane scrollPane_1;
+	private JButton button;
+	private JLabel label;
+	private JTextField txtDNIInscribirse;
+	private JTextField txtNombreInscribirse;
+	private JTextField txtFechaInscribirse;
+	private JLabel label_1;
+	private JLabel label_2;
+	private JLabel label_3;
+	private JLabel label_4;
+	private JTextField txtSexoInscribirse;
+	private JButton btnUsuarioActual;
+	private JList<String> listInscribirse;
+	private JButton btnRealizarInscripcion;
+	private JButton btnSeleccionarOtroEvento;
 
 	private JSpinner getSpinnerPlazas() {
 		if (spinnerPlazas == null) {
@@ -1147,17 +1214,19 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return pnInfoEvPulsado;
 	}
-	private JButton getBtnSiguiente() {
-		if (btnSiguiente == null) {
-			btnSiguiente = new JButton("Inscribirse");
-			btnSiguiente.addActionListener(new ActionListener() {
+	private JButton getBtnInscribirse() {
+		if (btnInscribirse == null) {
+			btnInscribirse = new JButton("Inscribirse");
+			btnInscribirse.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					g.confirmarSeleccion(eventoPulsado);
+					((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
+							"pnInscribirse");
 					
 				}
 			});
 		}
-		return btnSiguiente;
+		return btnInscribirse;
 	}
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
@@ -1274,6 +1343,7 @@ public class VentanaPrincipal extends JFrame {
 			pnCardUsuario.add(getPnSelecEventosUsuario(), "pn_eventosUsuario");
 			pnCardUsuario.add(getPnResultadosAtleta(), "pn_ResultadosUsuario");
 			pnCardUsuario.add(getPnResultadosEvento(), "pn_resultadosEvento");
+			pnCardUsuario.add(getPnInscribirse(), "name_17043840420738");
 		}
 		return pnCardUsuario;
 	}
@@ -1288,5 +1358,185 @@ public class VentanaPrincipal extends JFrame {
 			pnResultadosEvento = new JPanel();
 		}
 		return pnResultadosEvento;
+	}
+	private JPanel getPanel_4_4() {
+		if (pn_DNI == null) {
+			pn_DNI = new JPanel();
+			pn_DNI.add(getLblDni());
+			pn_DNI.add(getTxtDNIAtleta());
+		}
+		return pn_DNI;
+	}
+	private JLabel getLblDni() {
+		if (lblDni == null) {
+			lblDni = new JLabel("DNI:");
+		}
+		return lblDni;
+	}
+	private JTextField getTxtDNIAtleta() {
+		if (txtDNIAtleta == null) {
+			txtDNIAtleta = new JTextField();
+			txtDNIAtleta.setColumns(10);
+		}
+		return txtDNIAtleta;
+	}
+	private JPanel getPnInscribirse() {
+		if (pnInscribirse == null) {
+			pnInscribirse = new JPanel();
+			pnInscribirse.setLayout(null);
+			pnInscribirse.add(getPnListaInscritos());
+			pnInscribirse.add(getLabel());
+			pnInscribirse.add(getTxtDNIInscribirse());
+			pnInscribirse.add(getTxtNombreInscribirse());
+			pnInscribirse.add(getTxtFechaInscribirse());
+			pnInscribirse.add(getLabel_1());
+			pnInscribirse.add(getLabel_2());
+			pnInscribirse.add(getLabel_3());
+			pnInscribirse.add(getLabel_4());
+			pnInscribirse.add(getTxtSexoInscribirse());
+			pnInscribirse.add(getBtnUsuarioActual());
+			pnInscribirse.add(getBtnRealizarInscripcion());
+			pnInscribirse.add(getBtnSeleccionarOtroEvento());
+		}
+		return pnInscribirse;
+	}
+	private JPanel getPnListaInscritos() {
+		if (pnListaInscritos == null) {
+			pnListaInscritos = new JPanel();
+			pnListaInscritos.setLayout(null);
+			pnListaInscritos.setBounds(623, 11, 295, 297);
+			pnListaInscritos.add(getScrollPane_1_1());
+			pnListaInscritos.add(getButton());
+		}
+		return pnListaInscritos;
+	}
+	private JScrollPane getScrollPane_1_1() {
+		if (scrollPane_1 == null) {
+			scrollPane_1 = new JScrollPane();
+			scrollPane_1.setBounds(34, 25, 239, 211);
+			scrollPane_1.setViewportView(getListInscribirse());
+		}
+		return scrollPane_1;
+	}
+	private JButton getButton() {
+		if (button == null) {
+			button = new JButton("A\u00F1adir");
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					AnadirInscritoALista();
+				}
+
+				
+			});
+			button.setBounds(184, 263, 89, 23);
+		}
+		return button;
+	}
+	private JLabel getLabel() {
+		if (label == null) {
+			label = new JLabel("Introduzca sus datos");
+			label.setBounds(177, 48, 165, 33);
+		}
+		return label;
+	}
+	private JTextField getTxtDNIInscribirse() {
+		if (txtDNIInscribirse == null) {
+			txtDNIInscribirse = new JTextField();
+			txtDNIInscribirse.setColumns(10);
+			txtDNIInscribirse.setBounds(291, 92, 86, 20);
+		}
+		return txtDNIInscribirse;
+	}
+	private JTextField getTxtNombreInscribirse() {
+		if (txtNombreInscribirse == null) {
+			txtNombreInscribirse = new JTextField();
+			txtNombreInscribirse.setColumns(10);
+			txtNombreInscribirse.setBounds(291, 151, 86, 20);
+		}
+		return txtNombreInscribirse;
+	}
+	private JTextField getTxtFechaInscribirse() {
+		if (txtFechaInscribirse == null) {
+			txtFechaInscribirse = new JTextField();
+			txtFechaInscribirse.setColumns(10);
+			txtFechaInscribirse.setBounds(291, 254, 86, 20);
+		}
+		return txtFechaInscribirse;
+	}
+	private JLabel getLabel_1() {
+		if (label_1 == null) {
+			label_1 = new JLabel("DNI");
+			label_1.setBounds(136, 92, 46, 14);
+		}
+		return label_1;
+	}
+	private JLabel getLabel_2() {
+		if (label_2 == null) {
+			label_2 = new JLabel("Nombre");
+			label_2.setBounds(136, 154, 46, 14);
+		}
+		return label_2;
+	}
+	private JLabel getLabel_3() {
+		if (label_3 == null) {
+			label_3 = new JLabel("Fecha nacimiento");
+			label_3.setBounds(136, 257, 106, 14);
+		}
+		return label_3;
+	}
+	private JLabel getLabel_4() {
+		if (label_4 == null) {
+			label_4 = new JLabel("Sexo");
+			label_4.setBounds(136, 209, 106, 14);
+		}
+		return label_4;
+	}
+	private JTextField getTxtSexoInscribirse() {
+		if (txtSexoInscribirse == null) {
+			txtSexoInscribirse = new JTextField();
+			txtSexoInscribirse.setColumns(10);
+			txtSexoInscribirse.setBounds(291, 206, 86, 20);
+		}
+		return txtSexoInscribirse;
+	}
+	private JButton getBtnUsuarioActual() {
+		if (btnUsuarioActual == null) {
+			btnUsuarioActual = new JButton("Usuario actual");
+			btnUsuarioActual.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					autorrellenar();
+				}
+			});
+			btnUsuarioActual.setBounds(124, 300, 118, 23);
+		}
+		return btnUsuarioActual;
+	}
+	private JList<String> getListInscribirse() {
+		if (listInscribirse == null) {
+			modeloLista = new DefaultListModel<String>();
+			listInscribirse = new JList<String>(modeloLista);
+		}
+		return listInscribirse;
+	}
+	private JButton getBtnRealizarInscripcion() {
+		if (btnRealizarInscripcion == null) {
+			btnRealizarInscripcion = new JButton("Realizar Inscripcion");
+			btnRealizarInscripcion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					inscribir();
+				}
+
+
+			});
+			btnRealizarInscripcion.setBounds(785, 319, 133, 23);
+		}
+		return btnRealizarInscripcion;
+	}
+	private JButton getBtnSeleccionarOtroEvento() {
+		if (btnSeleccionarOtroEvento == null) {
+			btnSeleccionarOtroEvento = new JButton("Seleccionar Otro Evento");
+			btnSeleccionarOtroEvento.setBounds(612, 319, 163, 23);
+		}
+		return btnSeleccionarOtroEvento;
 	}
 }
