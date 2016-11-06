@@ -76,12 +76,11 @@ public class VentanaPrincipal extends JFrame {
 	private ModeloNoEditable modeloTabla;
 	private ArrayList<Evento> contenidoEventos; // ArrayList que se mostrara en
 												// la tabla
-	private String[] cabeceraTablaSeleccionEventos = { "Nombre", "Tipo",
-			"Distancia", "Estado Carrera", "Plazo", "Precio" };
+	private String[] cabeceraTablaSeleccionEventos = { "Nombre", "Tipo", "Distancia", "Estado Carrera", "Plazo",
+			"Precio" };
 	// private ArrayList<Evento> eventosTabla; //lo usaremos en un futuro para
 	// realizad filtrados
 	private Evento eventoPulsado;
-
 
 	Organizador organizador;
 	private JPanel pnPrincipal;
@@ -149,7 +148,6 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lbKm;
 	private JSpinner spinnerPlazas;
 	List<Atleta> atletasAInscribir = new ArrayList<Atleta>();
-	
 
 	/**
 	 * Launch the application.
@@ -185,39 +183,38 @@ public class VentanaPrincipal extends JFrame {
 		pnPrincipal.add(getPnOrganizador(), "pn_Organizador");
 		pnPrincipal.add(getPnUsuario(), "pn_usuario");
 	}
-	
+
 	private void AnadirInscritoALista() {
 		String dni = txtDNIInscribirse.getText();
-		
+
 		Atleta at = g.buscarAtletaPorDNI(dni);
-		
-		
-		if(!modeloLista.contains(dni) && g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)){
+
+		if (!modeloLista.contains(dni) && g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)) {
 			atletasAInscribir.add(at);
 			modeloLista.addElement(dni);
 		}
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
-		
+
 	}
+
 	private void inscribir() {
 		g.inscribirLote(atletasAInscribir);
 		modeloLista.removeAllElements();
 		listInscribirse.setModel(modeloLista);
-		
+
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
-		
+
 	}
-	
-	
+
 	private void autorrellenar() {
-		if(!txtDNIAtleta.getText().equals("")){
-		txtDNIInscribirse.setText(txtDNIAtleta.getText());
-		txtNombreInscribirse.setText(txtNombreAtleta.getText());
-		txtFechaInscribirse.setText(txtFechaNacimiento.getText());
+		if (!txtDNIAtleta.getText().equals("")) {
+			txtDNIInscribirse.setText(txtDNIAtleta.getText());
+			txtNombreInscribirse.setText(txtNombreAtleta.getText());
+			txtFechaInscribirse.setText(txtFechaNacimiento.getText());
 		}
 	}
 
@@ -230,16 +227,14 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void cambiarPanelesPrincipales(String opcion) {
 		if (opcion.equals("organizador"))
-			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,"pn_Organizador");
-					mostrarTablaEventosOrganizador();
-		if (opcion.equals("usuario")){
-			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,
-					"pn_usuario");
+			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_Organizador");
+		mostrarTablaEventosOrganizador();
+		if (opcion.equals("usuario")) {
+			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_usuario");
 			mostrarTablaEventosUsuario();
 		}
 		if (opcion.equals("inicio"))
-			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal,
-					"pn_inicio");
+			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_inicio");
 	}
 
 	/**
@@ -250,34 +245,30 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void cambiarCabeceraUsuario(int opcion) {
 		if (opcion == 0)
-			((CardLayout) pnCabecera.getLayout()).show(pnCabecera,
-					"usuario_sinIdentificar");
+			((CardLayout) pnCabecera.getLayout()).show(pnCabecera, "usuario_sinIdentificar");
 		if (opcion == 1)
-			((CardLayout) pnCabecera.getLayout()).show(pnCabecera,
-					"usuario_Identificado");
+			((CardLayout) pnCabecera.getLayout()).show(pnCabecera, "usuario_Identificado");
 	}
+
 	/**
 	 * Metodo usado para navegar por las distintas ventanas que vera el usuario
-	 * @param opcion: 
-	 * 					0: panel de eventos
-	 * 					1: panel de inscripciones
-	 * 					
-	 * 					3: panel resultados evento 
-	 * 					4: panel resultados atleta 
+	 * 
+	 * @param opcion:
+	 *            0: panel de eventos 1: panel de inscripciones
+	 * 
+	 *            3: panel resultados evento 4: panel resultados atleta
 	 * 
 	 */
 	private void cambiarPanelesUsuario(int opcion) {
-		if (opcion==0){
+		if (opcion == 0) {
 			reiniciarDatosPulsados();
 			mostrarTablaEventosUsuario();
-			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
-					"pn_eventosUsuario");
-		}if(opcion==1){
-			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
-					"pn_inscripcionesUsuario");
+			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario, "pn_eventosUsuario");
 		}
-		
-	
+		if (opcion == 1) {
+			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario, "pn_inscripcionesUsuario");
+		}
+
 	}
 
 	// TABLA JAVI
@@ -346,7 +337,7 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void reiniciarDatosPulsados() {
 		btnPasarAInscripcion.setEnabled(false);
-		eventoPulsado=null;
+		eventoPulsado = null;
 		txEventoPulsadoNombre.setText("");
 		txEventoPulsadoPlazas.setText("");
 		textAreaCategoriasAdmitidas.setText("");
@@ -355,31 +346,40 @@ public class VentanaPrincipal extends JFrame {
 
 	/**
 	 * 
-	 * @param ev: evento pulsado
-	 * @param desc: identifica que descripcion es, la de eventos de usuario (1) , o la de eventos de organizador (2)
+	 * @param ev:
+	 *            evento pulsado
+	 * @param desc:
+	 *            identifica que descripcion es, la de eventos de usuario (1) ,
+	 *            o la de eventos de organizador (2)
 	 */
-	private void pulsarEvento(Evento ev,int desc) {
-		eventoPulsado=ev;
-		if(desc==1){ //desc= 1 nos situa en la descripcion del panel de usuarios
+	private void pulsarEvento(Evento ev, int desc) {
+		eventoPulsado = ev;
+		if (desc == 1) { // desc= 1 nos situa en la descripcion del panel de
+							// usuarios
 			btnPasarAInscripcion.setEnabled(true);
-			
+
 			txEventoPulsadoNombre.setText(ev.getNombre());
 			txEventoPulsadoPlazas.setText(String.valueOf(ev.getPlazasDisponibles()));
-			ArrayList<Categoria>cat = ev.getCategorias();
-			//ArrayList<Categoria> catEnListado;
+			ArrayList<Categoria> cat = ev.getCategorias();
+			// ArrayList<Categoria> catEnListado;
 			StringBuilder sB = new StringBuilder();
-			for(Categoria c: cat){
+			for (Categoria c : cat) {
 				String sexo;
-				if(c.getSexo()==0) sexo="Masculino";
-				else sexo="Femenino";
-				sB.append(c.getNombre() + " De "+c.getEdadMinima() + " a " + c.getEdadMaxima() + " Sexo: " + sexo + "\n");
+				if (c.getSexo() == 0)
+					sexo = "Masculino";
+				else
+					sexo = "Femenino";
+				sB.append(c.getNombre() + " De " + c.getEdadMinima() + " a " + c.getEdadMaxima() + " Sexo: " + sexo
+						+ "\n");
 			}
 			textAreaCategoriasAdmitidas.setText(sB.toString());
 			ArrayList<PlazoInscripcion> plazos = ev.getPlazos();
 			sB = new StringBuilder();
-			for(PlazoInscripcion p: plazos){
-				sB.append("De: "+ p.getFechaInicio() +" a: " + p.getFechaFin() + " Precio: " + p.getPrecio() + "€ \n");
-			}textAreaPlazosInscripcionEventoUsuario.setText(sB.toString());
+			for (PlazoInscripcion p : plazos) {
+				sB.append(
+						"De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + " Precio: " + p.getPrecio() + "€ \n");
+			}
+			textAreaPlazosInscripcionEventoUsuario.setText(sB.toString());
 		}
 	}
 
@@ -388,8 +388,8 @@ public class VentanaPrincipal extends JFrame {
 		txtDNIAtleta.setText(at.getDNI());
 		txtNombreAtleta.setText(at.getNombre());
 		txtFechaNacimiento.setText(at.getFechaNacimiento());
-		pnAtletaResumen.setBorder(new TitledBorder(null, at.getDNI(),
-				TitledBorder.LEADING, TitledBorder.TOP, null, null));
+		pnAtletaResumen
+				.setBorder(new TitledBorder(null, at.getDNI(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 	}
 
@@ -407,8 +407,7 @@ public class VentanaPrincipal extends JFrame {
 		if (pnOrganizador == null) {
 			pnOrganizador = new JPanel();
 			pnOrganizador.setLayout(new CardLayout(0, 0));
-			pnOrganizador.add(getPnEventosOrganizador(),
-					"pn_EventosOrganizador");
+			pnOrganizador.add(getPnEventosOrganizador(), "pn_EventosOrganizador");
 			pnOrganizador.add(getPnCrearEvento(), "pn_CrearEvento");
 		}
 		return pnOrganizador;
@@ -417,12 +416,10 @@ public class VentanaPrincipal extends JFrame {
 	private void cambiarPanelesOrganizador(String opcion) {
 		switch (opcion) {
 		case "crear":
-			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador,
-					"pn_CrearEvento");
+			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador, "pn_CrearEvento");
 			break;
 		case "misEventos":
-			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador,
-					"pnEventosOrganizador");
+			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador, "pnEventosOrganizador");
 			break;
 
 		default:
@@ -443,8 +440,8 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnCabecera() {
 		if (pnCabecera == null) {
 			pnCabecera = new JPanel();
-			pnCabecera.setBorder(new TitledBorder(null, "Datos del atleta: ",
-					TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnCabecera.setBorder(
+					new TitledBorder(null, "Datos del atleta: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnCabecera.setLayout(new CardLayout(0, 0));
 			pnCabecera.add(getPnIdentificate(), "usuario_sinIdentificar");
 			pnCabecera.add(getPnAtletaResumen(), "usuario_Identificado");
@@ -549,8 +546,7 @@ public class VentanaPrincipal extends JFrame {
 
 	private JLabel getLblParaPoderVer() {
 		if (lblParaPoderVer == null) {
-			lblParaPoderVer = new JLabel(
-					"Para poder ver sus datos y resultados ha de identificarse:");
+			lblParaPoderVer = new JLabel("Para poder ver sus datos y resultados ha de identificarse:");
 		}
 		return lblParaPoderVer;
 	}
@@ -568,18 +564,15 @@ public class VentanaPrincipal extends JFrame {
 			btnIdentificarse = new JButton("Identificarse");
 			btnIdentificarse.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					String dni = JOptionPane.showInputDialog(pnPrincipal,
-							"Introduzca su DNI: ", "Identificacion",
+					String dni = JOptionPane.showInputDialog(pnPrincipal, "Introduzca su DNI: ", "Identificacion",
 							JOptionPane.QUESTION_MESSAGE);
 					if (dni != null) {
 						if (g.identificarAtletaPorDNI(dni)) {
 							cargarCabeceraAtleta();
 							cambiarCabeceraUsuario(1);
 						} else
-							JOptionPane.showInternalMessageDialog(pnPrincipal,
-									"Atleta no identificado",
-									"Error: Atleta no registrado",
-									JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showInternalMessageDialog(pnPrincipal, "Atleta no identificado",
+									"Error: Atleta no registrado", JOptionPane.ERROR_MESSAGE);
 					}
 				}
 			});
@@ -590,8 +583,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnTabla() {
 		if (pnTabla == null) {
 			pnTabla = new JPanel();
-			pnTabla.setBorder(new TitledBorder(null, "Tabla",
-					TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnTabla.setBorder(new TitledBorder(null, "Tabla", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnTabla.setLayout(new BorderLayout(0, 0));
 			pnTabla.add(getScrollPane());
 		}
@@ -613,7 +605,7 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					int fila = tbEventosSeleccion.getSelectedRow();
-					pulsarEvento(contenidoEventos.get(fila),1);
+					pulsarEvento(contenidoEventos.get(fila), 1);
 				}
 			});
 		}
@@ -720,10 +712,8 @@ public class VentanaPrincipal extends JFrame {
 		if (pnEventosOrganizador == null) {
 			pnEventosOrganizador = new JPanel();
 			pnEventosOrganizador.setLayout(new BorderLayout(0, 0));
-			pnEventosOrganizador.add(getPnCabezeraOrganizador(),
-					BorderLayout.NORTH);
-			pnEventosOrganizador.add(getPnCentroOrganizador(),
-					BorderLayout.CENTER);
+			pnEventosOrganizador.add(getPnCabezeraOrganizador(), BorderLayout.NORTH);
+			pnEventosOrganizador.add(getPnCentroOrganizador(), BorderLayout.CENTER);
 		}
 		return pnEventosOrganizador;
 	}
@@ -732,8 +722,7 @@ public class VentanaPrincipal extends JFrame {
 		if (pnCabezeraOrganizador == null) {
 			pnCabezeraOrganizador = new JPanel();
 			pnCabezeraOrganizador.setLayout(new BorderLayout(0, 0));
-			pnCabezeraOrganizador.add(getPnInfoOrganizador(),
-					BorderLayout.CENTER);
+			pnCabezeraOrganizador.add(getPnInfoOrganizador(), BorderLayout.CENTER);
 			pnCabezeraOrganizador.add(getPnAccionesOrg(), BorderLayout.EAST);
 		}
 		return pnCabezeraOrganizador;
@@ -743,8 +732,7 @@ public class VentanaPrincipal extends JFrame {
 		if (pnCentroOrganizador == null) {
 			pnCentroOrganizador = new JPanel();
 			pnCentroOrganizador.setLayout(new BorderLayout(0, 0));
-			pnCentroOrganizador.add(getPnTablaOrganizador(),
-					BorderLayout.CENTER);
+			pnCentroOrganizador.add(getPnTablaOrganizador(), BorderLayout.CENTER);
 		}
 		return pnCentroOrganizador;
 	}
@@ -753,12 +741,10 @@ public class VentanaPrincipal extends JFrame {
 		if (pnTablaOrganizador == null) {
 			pnTablaOrganizador = new JPanel();
 			pnTablaOrganizador.setLayout(new BorderLayout(0, 0));
-			pnTablaOrganizador.add(getPnScrollOrganizador(),
-					BorderLayout.CENTER);
-			pnTablaOrganizador.add(getPnDescripcionEventoOrganizador(),
-					BorderLayout.EAST);
-			pnTablaOrganizador.setBorder(new TitledBorder(null, "Mis eventos",
-					TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnTablaOrganizador.add(getPnScrollOrganizador(), BorderLayout.CENTER);
+			pnTablaOrganizador.add(getPnDescripcionEventoOrganizador(), BorderLayout.EAST);
+			pnTablaOrganizador.setBorder(
+					new TitledBorder(null, "Mis eventos", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		}
 		return pnTablaOrganizador;
 	}
@@ -766,8 +752,7 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPane getPnScrollOrganizador() {
 		if (pnScrollOrganizador == null) {
 			pnScrollOrganizador = new JScrollPane();
-			pnScrollOrganizador
-					.setViewportView(getTablaEventosDelOrganizador());
+			pnScrollOrganizador.setViewportView(getTablaEventosDelOrganizador());
 		}
 		return pnScrollOrganizador;
 	}
@@ -782,8 +767,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnDescripcionEventoOrganizador() {
 		if (pnDescripcionEventoOrganizador == null) {
 			pnDescripcionEventoOrganizador = new JPanel();
-			pnDescripcionEventoOrganizador
-					.setLayout(new GridLayout(0, 1, 0, 0));
+			pnDescripcionEventoOrganizador.setLayout(new GridLayout(0, 1, 0, 0));
 			pnDescripcionEventoOrganizador.add(getTextPane());
 		}
 		return pnDescripcionEventoOrganizador;
@@ -850,8 +834,7 @@ public class VentanaPrincipal extends JFrame {
 			pnCrearEvento = new JPanel();
 			pnCrearEvento.setLayout(new BorderLayout(0, 0));
 			pnCrearEvento.add(getPnBotonesCrearEvento(), BorderLayout.SOUTH);
-			pnCrearEvento.add(getPnContenidoCreacionEvento(),
-					BorderLayout.CENTER);
+			pnCrearEvento.add(getPnContenidoCreacionEvento(), BorderLayout.CENTER);
 		}
 		return pnCrearEvento;
 	}
@@ -898,7 +881,7 @@ public class VentanaPrincipal extends JFrame {
 		return btCrearEvento;
 	}
 
-ArrayList<Categoria> misCategoriasCreadas;
+	ArrayList<Categoria> misCategoriasCreadas;
 
 	private JPanel getPnContenidoCreacionEvento() {
 		if (pnContenidoCreacionEvento == null) {
@@ -928,6 +911,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pnContenidoCreacionEvento;
 	}
+
 	private JLabel getLblNombre() {
 		if (lblNombre == null) {
 			lblNombre = new JLabel("Nombre del evento:");
@@ -949,7 +933,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 	private JLabel getLblTipo() {
 		if (lblTipo == null) {
 			lblTipo = new JLabel("Tipo: ");
-	lblTipo.setBounds(104, 75, 48, 22);
+			lblTipo.setBounds(104, 75, 48, 22);
 			lblTipo.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblTipo;
@@ -1106,8 +1090,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 			throw new IllegalArgumentException("La distancia no es un número");
 		}
 		Date fechaComienzo = new Date(Calendar.getInstance().getTimeInMillis());
-		Date fechaFinInscripciones = new Date(Calendar.getInstance()
-				.getTimeInMillis());
+		Date fechaFinInscripciones = new Date(Calendar.getInstance().getTimeInMillis());
 		ArrayList<Categoria> categoriasParaEvento = new ArrayList<Categoria>();
 		int plazas = (int) getSpinnerPlazas().getValue();
 		// Obtener las categorias del elemento en cuestion
@@ -1115,8 +1098,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		ArrayList<PlazoInscripcion> plazosInscripcion = new ArrayList<PlazoInscripcion>();
 
 		// Si todo esta OK
-		g.crearEvento(nombre, tipo, distancia, fechaComienzo,
-				fechaFinInscripciones, plazas, categoriasParaEvento,
+		g.crearEvento(nombre, tipo, distancia, fechaComienzo, fechaFinInscripciones, plazas, categoriasParaEvento,
 				plazosInscripcion);
 	}
 
@@ -1124,13 +1106,15 @@ ArrayList<Categoria> misCategoriasCreadas;
 	private JPanel getPnInfoEvPulsado() {
 		if (pnInfoEvPulsado == null) {
 			pnInfoEvPulsado = new JPanel();
-			pnInfoEvPulsado.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnInfoEvPulsado.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING,
+					TitledBorder.TOP, null, null));
 			pnInfoEvPulsado.setLayout(new GridLayout(2, 1, 0, 0));
 			pnInfoEvPulsado.add(getPnInfoEvPulsadoPrincipal());
 			pnInfoEvPulsado.add(getPanel_4_2());
 		}
 		return pnInfoEvPulsado;
 	}
+
 	private JButton getBtnPasarAInscripcion() {
 		if (btnPasarAInscripcion == null) {
 			btnPasarAInscripcion = new JButton("Inscribirse");
@@ -1139,14 +1123,16 @@ ArrayList<Categoria> misCategoriasCreadas;
 				public void actionPerformed(ActionEvent arg0) {
 					g.confirmarSeleccion(eventoPulsado);
 					cambiarPanelesUsuario(1);
-//					((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario,
-//							"pn_inscripcionesUsuario");
-//					
+					// ((CardLayout)
+					// pnCardUsuario.getLayout()).show(pnCardUsuario,
+					// "pn_inscripcionesUsuario");
+					//
 				}
 			});
 		}
 		return btnPasarAInscripcion;
 	}
+
 	private JButton getBtnAtras() {
 		if (btnAtras == null) {
 			btnAtras = new JButton("Atras");
@@ -1158,21 +1144,25 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return btnAtras;
 	}
+
 	private JPanel getPanel_4_2() {
 		if (pnInfoEvPulsadoPlazos == null) {
 			pnInfoEvPulsadoPlazos = new JPanel();
-			pnInfoEvPulsadoPlazos.setBorder(new TitledBorder(null, "Plazos de inscripcion: ", TitledBorder.LEADING, TitledBorder.BELOW_TOP, null, null));
+			pnInfoEvPulsadoPlazos.setBorder(new TitledBorder(null, "Plazos de inscripcion: ", TitledBorder.LEADING,
+					TitledBorder.BELOW_TOP, null, null));
 			pnInfoEvPulsadoPlazos.setLayout(new BorderLayout(0, 0));
 			pnInfoEvPulsadoPlazos.add(getTextAreaPlazosInscripcionEventoUsuario());
 		}
 		return pnInfoEvPulsadoPlazos;
 	}
+
 	private JLabel getLblNombre_1() {
 		if (lblNombre_1 == null) {
 			lblNombre_1 = new JLabel("Nombre: ");
 		}
 		return lblNombre_1;
 	}
+
 	private JTextField getTxEventoPulsadoNombre() {
 		if (txEventoPulsadoNombre == null) {
 			txEventoPulsadoNombre = new JTextField();
@@ -1183,6 +1173,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return txEventoPulsadoNombre;
 	}
+
 	private JPanel getPanel_4_3() {
 		if (pnNombreEvPulsado == null) {
 			pnNombreEvPulsado = new JPanel();
@@ -1193,6 +1184,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pnNombreEvPulsado;
 	}
+
 	private JPanel getPnPlazasDisponibles() {
 		if (pnPlazasDisponibles == null) {
 			pnPlazasDisponibles = new JPanel();
@@ -1203,12 +1195,14 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pnPlazasDisponibles;
 	}
+
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
 			lblNewLabel_1 = new JLabel("Plazas diponibles");
 		}
 		return lblNewLabel_1;
 	}
+
 	private JTextField getTxEventoPulsadoPlazas() {
 		if (txEventoPulsadoPlazas == null) {
 			txEventoPulsadoPlazas = new JTextField();
@@ -1219,6 +1213,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return txEventoPulsadoPlazas;
 	}
+
 	private JPanel getPnLinkEventoInfoPulsado() {
 		if (pnLinkEventoInfoPulsado == null) {
 			pnLinkEventoInfoPulsado = new JPanel();
@@ -1228,6 +1223,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pnLinkEventoInfoPulsado;
 	}
+
 	private JTextArea getTextAreaCategoriasAdmitidas() {
 		if (textAreaCategoriasAdmitidas == null) {
 			textAreaCategoriasAdmitidas = new JTextArea();
@@ -1238,15 +1234,18 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return textAreaCategoriasAdmitidas;
 	}
+
 	private JPanel getPnEventoPulsadoCategoriasAdmitidas() {
 		if (pnEventoPulsadoCategoriasAdmitidas == null) {
 			pnEventoPulsadoCategoriasAdmitidas = new JPanel();
-			pnEventoPulsadoCategoriasAdmitidas.setBorder(new TitledBorder(null, "Categorias admitidas: ", TitledBorder.LEADING, TitledBorder.BELOW_TOP, null, null));
+			pnEventoPulsadoCategoriasAdmitidas.setBorder(new TitledBorder(null, "Categorias admitidas: ",
+					TitledBorder.LEADING, TitledBorder.BELOW_TOP, null, null));
 			pnEventoPulsadoCategoriasAdmitidas.setLayout(new BorderLayout(0, 0));
 			pnEventoPulsadoCategoriasAdmitidas.add(getTextAreaCategoriasAdmitidas());
 		}
 		return pnEventoPulsadoCategoriasAdmitidas;
 	}
+
 	private JTextArea getTextAreaPlazosInscripcionEventoUsuario() {
 		if (textAreaPlazosInscripcionEventoUsuario == null) {
 			textAreaPlazosInscripcionEventoUsuario = new JTextArea();
@@ -1255,6 +1254,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return textAreaPlazosInscripcionEventoUsuario;
 	}
+
 	private JPanel getPnCardUsuario() {
 		if (pnCardUsuario == null) {
 			pnCardUsuario = new JPanel();
@@ -1266,12 +1266,14 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pnCardUsuario;
 	}
+
 	private JPanel getPnResultadosAtleta() {
 		if (pnResultadosAtleta == null) {
 			pnResultadosAtleta = new JPanel();
 		}
 		return pnResultadosAtleta;
 	}
+
 	private JPanel getPnResultadosEvento() {
 		if (pnResultadosEvento == null) {
 			pnResultadosEvento = new JPanel();
@@ -1288,6 +1290,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		return lblCategorasDelEvento;
 
 	}
+
 	private JCheckBox getCbCatDef() {
 
 		if (cbCatDef == null) {
@@ -1305,29 +1308,33 @@ ArrayList<Categoria> misCategoriasCreadas;
 			scrollPaneCategorias = new JScrollPane();
 			scrollPaneCategorias.setBounds(777, 115, 178, 130);
 			scrollPaneCategorias.setViewportView(getList());
+			// scrollPane.add(getList()); //Esto no se si estara del todo
+			// bien...
 		}
 		return scrollPaneCategorias;
 
 	}
-	
 
 	private DefaultListModel<String> modeloListaCategorias = null;
 	ArrayList<Categoria> categoriasAlCrearEvento;
 	private JButton btAñadirCat;
 	private JButton btEditarCategoria;
-	
-	public ArrayList<Categoria> getCategoriasCrearEvento(){
+
+	public ArrayList<Categoria> getCategoriasCrearEvento() {
 		return categoriasAlCrearEvento;
 	}
-	public void añadirCategoriaAlCrearEvento(Categoria c){
+
+	public void añadirCategoriaAlCrearEvento(Categoria c) {
 		categoriasAlCrearEvento.add(c);
 	}
+
 	private JList getList() {
 		if (list == null) {
 			modeloListaCategorias = new DefaultListModel<String>();
 			categoriasAlCrearEvento = new ArrayList<Categoria>();
-			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			list = new JList<String>();
+			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		}
 		if (getCbCatDef().isSelected()) {
 			cargarCategoriasDefectoLista();
@@ -1353,6 +1360,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 
 	}
+
 	private JButton getBtAñadirCat() {
 
 		if (btAñadirCat == null) {
@@ -1369,12 +1377,14 @@ ArrayList<Categoria> misCategoriasCreadas;
 		return btAñadirCat;
 
 	}
+
 	private JButton getBtEditarCategoria() {
 		if (btEditarCategoria == null) {
 			btEditarCategoria = new JButton("Editar");
 			btEditarCategoria.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent arg0) {
+					try{
 					String catString = getList().getSelectedValue().toString();
 					Categoria cat = null;
 					for(Categoria c : categoriasAlCrearEvento){
@@ -1388,15 +1398,18 @@ ArrayList<Categoria> misCategoriasCreadas;
 						VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this, cat);
 						vcc.setVisible(true);
 					}
+					}catch(Exception e){
+						System.err.println("Ha cascado al editar probablemente por la lista");
+					}
 
 				}
 			});
 			btEditarCategoria.setToolTipText("Editar categoria seleccionada");
 			btEditarCategoria.setBounds(866, 256, 89, 23);
-		}
-		return btEditarCategoria;
+		}return btEditarCategoria;
 
 	}
+
 	private JPanel getPanel_4_4() {
 		if (pn_DNI == null) {
 			pn_DNI = new JPanel();
@@ -1405,12 +1418,14 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pn_DNI;
 	}
+
 	private JLabel getLblDni() {
 		if (lblDni == null) {
 			lblDni = new JLabel("DNI:");
 		}
 		return lblDni;
 	}
+
 	private JTextField getTxtDNIAtleta() {
 		if (txtDNIAtleta == null) {
 			txtDNIAtleta = new JTextField();
@@ -1418,6 +1433,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return txtDNIAtleta;
 	}
+
 	private JPanel getPnInscribirse() {
 		if (pnInscribirse == null) {
 			pnInscribirse = new JPanel();
@@ -1438,6 +1454,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pnInscribirse;
 	}
+
 	private JPanel getPnListaInscritos() {
 		if (pnListaInscritos == null) {
 			pnListaInscritos = new JPanel();
@@ -1448,6 +1465,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return pnListaInscritos;
 	}
+
 	private JScrollPane getScrollPane_1_1() {
 		if (scrollPane_1 == null) {
 			scrollPane_1 = new JScrollPane();
@@ -1456,6 +1474,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return scrollPane_1;
 	}
+
 	private JButton getButton() {
 		if (button == null) {
 			button = new JButton("A\u00F1adir");
@@ -1464,12 +1483,12 @@ ArrayList<Categoria> misCategoriasCreadas;
 					AnadirInscritoALista();
 				}
 
-				
 			});
 			button.setBounds(184, 263, 89, 23);
 		}
 		return button;
 	}
+
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("Introduzca sus datos");
@@ -1477,6 +1496,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return label;
 	}
+
 	private JTextField getTxtDNIInscribirse() {
 		if (txtDNIInscribirse == null) {
 			txtDNIInscribirse = new JTextField();
@@ -1485,6 +1505,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return txtDNIInscribirse;
 	}
+
 	private JTextField getTxtNombreInscribirse() {
 		if (txtNombreInscribirse == null) {
 			txtNombreInscribirse = new JTextField();
@@ -1493,6 +1514,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return txtNombreInscribirse;
 	}
+
 	private JTextField getTxtFechaInscribirse() {
 		if (txtFechaInscribirse == null) {
 			txtFechaInscribirse = new JTextField();
@@ -1501,6 +1523,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return txtFechaInscribirse;
 	}
+
 	private JLabel getLabel_1() {
 		if (label_1 == null) {
 			label_1 = new JLabel("DNI");
@@ -1508,6 +1531,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return label_1;
 	}
+
 	private JLabel getLabel_2() {
 		if (label_2 == null) {
 			label_2 = new JLabel("Nombre");
@@ -1515,6 +1539,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return label_2;
 	}
+
 	private JLabel getLabel_3() {
 		if (label_3 == null) {
 			label_3 = new JLabel("Fecha nacimiento");
@@ -1522,6 +1547,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return label_3;
 	}
+
 	private JLabel getLabel_4() {
 		if (label_4 == null) {
 			label_4 = new JLabel("Sexo");
@@ -1529,6 +1555,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return label_4;
 	}
+
 	private JTextField getTxtSexoInscribirse() {
 		if (txtSexoInscribirse == null) {
 			txtSexoInscribirse = new JTextField();
@@ -1537,6 +1564,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return txtSexoInscribirse;
 	}
+
 	private JButton getBtnUsuarioActual() {
 		if (btnUsuarioActual == null) {
 			btnUsuarioActual = new JButton("Usuario actual");
@@ -1549,6 +1577,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return btnUsuarioActual;
 	}
+
 	private JList<String> getListInscribirse() {
 		if (listInscribirse == null) {
 			modeloLista = new DefaultListModel<String>();
@@ -1556,6 +1585,7 @@ ArrayList<Categoria> misCategoriasCreadas;
 		}
 		return listInscribirse;
 	}
+
 	private JButton getBtnRealizarInscripcion() {
 		if (btnRealizarInscripcion == null) {
 			btnRealizarInscripcion = new JButton("Realizar Inscripcion");
@@ -1564,12 +1594,12 @@ ArrayList<Categoria> misCategoriasCreadas;
 					inscribir();
 				}
 
-
 			});
 			btnRealizarInscripcion.setBounds(785, 319, 133, 23);
 		}
 		return btnRealizarInscripcion;
 	}
+
 	private JButton getBtnSeleccionarOtroEvento() {
 		if (btnSeleccionarOtroEvento == null) {
 			btnSeleccionarOtroEvento = new JButton("Seleccionar Otro Evento");

@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 
 public class VentanaCreaCategoria extends JDialog {
 
+	private static final long serialVersionUID = -8144900689006861847L;
 	private final JPanel contentPanel = new JPanel();
 	private JButton btnCrear;
 	private JButton btnCancelar;
@@ -43,6 +44,7 @@ public class VentanaCreaCategoria extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * @wbp.parser.constructor
 	 */
 	public VentanaCreaCategoria(VentanaPrincipal v) {
 		this.vp = v;
