@@ -1,6 +1,7 @@
 package logica.Vistas;
 
 import java.sql.Date;
+import java.util.List;
 
 import utiles.ConversorFechas;
 
@@ -17,7 +18,9 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	
 	private int dorsal; //-1 sin asignar
 	private Atleta atleta; //Necesario para relacionar el atleta con sus inscripciones
-	private String categoria; 
+	private Categoria categoria;
+	private String categoriaStr; 
+	private Evento evento;
 	private int estado;
 	private int id_evento;
 	private Date fechaInscripcion;
@@ -32,9 +35,10 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	 * @param 
 	 * @param fechaInscrip
 	 */
-	public Inscripcion (Atleta atleta, Date fechaInscrip, int id_evento) 
+	public Inscripcion (Atleta atleta, Date fechaInscrip, Evento evento) 
 	{
-		this.id_evento=id_evento;
+		this.evento=evento;
+		this.id_evento=evento.getId();
 		this.atleta = atleta;
 		this.fechaInscripcion = fechaInscrip;
 		this.estado = PREINSCRITO;
@@ -46,11 +50,13 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	}
 	
 	public void calcularCategoria(){
-	    if(atleta.getSexo()==0){
-	      this.categoria="Masculino";
-	    }else{
-	      this.categoria="Femenino";
-	    }
+		List<Categoria> categ = evento.getCategorias();
+		for (int i = 0; i < categ.size(); i++) {
+			if(categ.get(i).getEdadMinima()>= atleta.getEdad() && categ.get(i).getEdadMaxima()>= atleta.getEdad()){
+				this.categoria= categ.get(i);
+				this.categoriaStr=categ.get(i).getNombre();
+			}
+		}
 	  }
 	
 	/***
@@ -69,7 +75,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		this.fechaInscripcion= ConversorFechas.convertFechaJavaSQL(fecha_ins);
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=segundos;
-		this.categoria=categoria;
+		this.categoriaStr=categoria;
 	}
 	
 	
@@ -116,7 +122,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		return tiempo_segundos;
 	}
 	public String getCategoria(){
-		return categoria;
+		return categoriaStr;
 	}
 	public String toString()
 	{
