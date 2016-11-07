@@ -50,9 +50,12 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 	private JButton btnCancelar;
 	
 	//Modelos combo
-	DefaultComboBoxModel<Integer> modeloDias;
-	DefaultComboBoxModel<Integer> modeloAños;
-	DefaultComboBoxModel<String> modeloMeses;
+	DefaultComboBoxModel<Integer> modeloDiasA;
+	DefaultComboBoxModel<Integer> modeloDiasB;
+	DefaultComboBoxModel<Integer> modeloAñosA;
+	DefaultComboBoxModel<Integer> modeloAñosB;
+	DefaultComboBoxModel<String> modeloMesesA;
+	DefaultComboBoxModel<String> modeloMesesB;
 	SpinnerNumberModel modeloSpinnerDinero;
 	String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
 	
@@ -63,20 +66,6 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 	private JLabel lbFechaActual;
 	
 	
-	
-	
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		try {
-			VentanaCreaFechaInscripcion dialog = new VentanaCreaFechaInscripcion(null);
-			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-			dialog.setVisible(true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 
 	/**
 	 * Crea el dialogo para editar una fecha. 
@@ -278,10 +267,11 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 					if(fechasCorrectas()){
 						PlazoInscripcion plazo = new PlazoInscripcion(fechaInicio, fechaFin, (int) getSpPrecio().getValue());
 						vp.añadirPlazo(plazo);
+						dispose();
 					}else{
 						JOptionPane.showMessageDialog(null, "Las fechas no estan correctas!");
 					}
-				
+					
 				}
 			});
 			btnCrearPlazo.setBounds(321, 237, 113, 23);
@@ -313,14 +303,17 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 			añosin[i] = 2000+i+16; //Que la fecha empiece este año 2016
 			añosfin[i] = 2000+i+17;
 		}
-		modeloAños = new DefaultComboBoxModel<Integer>(añosin);
+		modeloAñosA = new DefaultComboBoxModel<Integer>(añosin);
+		modeloAñosB = new DefaultComboBoxModel<Integer>(añosin);
 		
 		Integer[] dias = new Integer[31];
 		for(int i = 0; i < dias.length; i++){
 			dias[i] = i+1;
 		}
-		modeloDias = new DefaultComboBoxModel<Integer>(dias);
-		modeloMeses = new DefaultComboBoxModel<String>(meses);
+		modeloDiasA = new DefaultComboBoxModel<Integer>(dias);
+		modeloDiasB = new DefaultComboBoxModel<Integer>(dias);
+		modeloMesesA = new DefaultComboBoxModel<String>(meses);
+		modeloMesesB = new DefaultComboBoxModel<String>(meses);
 		
 	}
 	
@@ -343,12 +336,12 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 	}
 	
 	private void asignarModelosCombo(){
-		getCbDiaFin().setModel(modeloDias);
-		getCbDiaIn().setModel(modeloDias);
-		getCbAñoIn().setModel(modeloAños);
-		getCbAñoFin().setModel(modeloAños);
-		getCbMesFin().setModel(modeloMeses);
-		getCbMesIn().setModel(modeloMeses);
+		getCbDiaFin().setModel(modeloDiasA);
+		getCbDiaIn().setModel(modeloDiasB);
+		getCbAñoIn().setModel(modeloAñosB);
+		getCbAñoFin().setModel(modeloAñosA);
+		getCbMesFin().setModel(modeloMesesA);
+		getCbMesIn().setModel(modeloMesesB);
 	}
 	private JLabel getLbFechaActual() {
 		if (lbFechaActual == null) {

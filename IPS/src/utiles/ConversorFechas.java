@@ -89,7 +89,12 @@ public class ConversorFechas {
 	}
 	public static Date crearFecha(String dia, String numMes, String año){
 		int diaI = Integer.parseInt(dia);
-		int mes = Integer.parseInt(numMes);
+		int mes = 0;
+		try{
+			mes = getNumeroMes(numMes);
+		}catch(Exception e){
+			throw new IllegalArgumentException("Error al pasar del mes String a int");
+		}
 		int añoI = Integer.parseInt(año);
 		@SuppressWarnings("deprecation")
 		Date fecha = new Date(añoI -1900, mes, diaI);

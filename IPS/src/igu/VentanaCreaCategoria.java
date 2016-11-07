@@ -44,6 +44,7 @@ public class VentanaCreaCategoria extends JDialog {
 
 	/**
 	 * Create the dialog.
+	 * 
 	 * @wbp.parser.constructor
 	 */
 	public VentanaCreaCategoria(VentanaPrincipal v) {
@@ -67,9 +68,10 @@ public class VentanaCreaCategoria extends JDialog {
 		contentPanel.add(getLblHasta());
 		contentPanel.add(getTfEdadMaxima());
 	}
-	
+
 	/**
 	 * Otro constructor para cuando se editen las categorias
+	 * 
 	 * @param v
 	 * @param c
 	 */
@@ -93,28 +95,34 @@ public class VentanaCreaCategoria extends JDialog {
 		contentPanel.add(getTfedadMinima());
 		contentPanel.add(getLblHasta());
 		contentPanel.add(getTfEdadMaxima());
-		
-		//Cargamos los datos en las tf
+
+		// Cargamos los datos en las tf
 		cargarDatosCategoria(c);
 	}
-	private void cargarDatosCategoria(Categoria c){
+
+	private void cargarDatosCategoria(Categoria c) {
 		getTfNombre().setText(c.getNombre());
-		getTfedadMinima().setText(c.getEdadMinima()+"");
-		getTfEdadMaxima().setText(c.getEdadMaxima()+"");
-		if(c.getSexo() == Atleta.FEMENINO)
+		getTfedadMinima().setText(c.getEdadMinima() + "");
+		getTfEdadMaxima().setText(c.getEdadMaxima() + "");
+		if (c.getSexo() == Atleta.FEMENINO)
 			getComboSexo().setSelectedIndex(0);
 		getComboSexo().setSelectedIndex(1);
 	}
+
 	private JButton getBtnCrear() {
 		if (btnCrear == null) {
 			btnCrear = new JButton("Crear");
 			btnCrear.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(!datosBienMetidos()){
-						JOptionPane.showMessageDialog(null, "Por favor, compruebe los datos");
+					if (todoCompletado()) {
+						if (!datosBienMetidos()) {
+							JOptionPane.showMessageDialog(null, "Por favor, compruebe los datos");
+						} else {
+							crearCategoria();
+							dispose();
+						}
 					}else{
-						crearCategoria();
-						dispose();
+						JOptionPane.showMessageDialog(null, "Completa todos los campos.");
 					}
 				}
 			});
@@ -123,11 +131,12 @@ public class VentanaCreaCategoria extends JDialog {
 		}
 		return btnCrear;
 	}
+
 	/**
 	 * Crea la categoria y la añade a la lista de la ventana principal
 	 */
-	private void crearCategoria(){
-		if(vp.getCategoriasCrearEvento() == null)
+	private void crearCategoria() {
+		if (vp.getCategoriasCrearEvento() == null)
 			throw new IllegalStateException("La lista de categorias de la vp al crear el evento es nula.");
 		String nombre = getTfNombre().getText();
 		int edadMin = Integer.parseInt(getTfedadMinima().getText());
@@ -135,20 +144,26 @@ public class VentanaCreaCategoria extends JDialog {
 		int Sexo = Atleta.getSexotiInt(getComboSexo().getSelectedItem().toString());
 		Categoria cat = new Categoria(nombre, edadMin, edadMax, Sexo);
 		vp.añadirCategoriaAlCrearEvento(cat);
-		
+
 	}
-	private boolean datosBienMetidos(){
-		if(Comprobaciones.esString(getTfNombre().getText()) 
-				&& Comprobaciones.esNumero(getTfedadMinima().getText())
-				&& Comprobaciones.esNumero(getTfEdadMaxima().getText())
-				){
+
+	private boolean todoCompletado() {
+		if (getTfEdadMaxima().getText().isEmpty() || getTfedadMinima().getText().isEmpty()
+				|| getTfNombre().getText().isEmpty())
+			return false;
+		return true;
+	}
+
+	private boolean datosBienMetidos() {
+		if (Comprobaciones.esString(getTfNombre().getText()) && Comprobaciones.esNumero(getTfedadMinima().getText())
+				&& Comprobaciones.esNumero(getTfEdadMaxima().getText())) {
 			int edadMin = Integer.parseInt(getTfedadMinima().getText());
 			int edadMax = Integer.parseInt(getTfEdadMaxima().getText());
-			if(!(edadMin < edadMax)){
+			if (!(edadMin < edadMax)) {
 				return false;
 			}
 			return true;
-			
+
 		}
 		return false;
 	}
@@ -156,6 +171,11 @@ public class VentanaCreaCategoria extends JDialog {
 	private JButton getBtnCancelar() {
 		if (btnCancelar == null) {
 			btnCancelar = new JButton("Cancelar");
+			btnCancelar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					dispose();
+				}
+			});
 			btnCancelar.setToolTipText("Cancela la creaci\u00F3n de la categor\u00EDa");
 			btnCancelar.setBounds(10, 164, 89, 23);
 		}
@@ -166,7 +186,7 @@ public class VentanaCreaCategoria extends JDialog {
 		if (lblNombre == null) {
 			lblNombre = new JLabel("Nombre:");
 			lblNombre.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblNombre.setBounds(112, 31, 46, 14);
+			lblNombre.setBounds(82, 31, 76, 14);
 		}
 		return lblNombre;
 	}
@@ -184,7 +204,7 @@ public class VentanaCreaCategoria extends JDialog {
 		if (lblSexo == null) {
 			lblSexo = new JLabel("Sexo:");
 			lblSexo.setHorizontalAlignment(SwingConstants.RIGHT);
-			lblSexo.setBounds(112, 75, 46, 14);
+			lblSexo.setBounds(82, 75, 76, 14);
 		}
 		return lblSexo;
 	}
@@ -218,14 +238,14 @@ public class VentanaCreaCategoria extends JDialog {
 			if (getTfEdadMaxima().getText() == "" && tfedadMinima.getText() != "") {
 				getTfEdadMaxima().setText(Integer.parseInt(tfedadMinima.getText()) + 1 + "");
 			}
-			tfedadMinima.addKeyListener(new KeyAdapter() {
-		        @Override
-		        public void keyTyped(KeyEvent e) {
-
-		           if(Comprobaciones.esNumero(e.getKeyChar()+""))
-		        	   tfedadMinima.setText(tfedadMinima.getText()+e.getKeyChar());
-		        }
-		        });
+//			tfedadMinima.addKeyListener(new KeyAdapter() {
+//				@Override
+//				public void keyTyped(KeyEvent e) {
+//
+//					if (Comprobaciones.esNumero(e.getKeyChar() + ""))
+//						tfedadMinima.setText(tfedadMinima.getText() + e.getKeyChar());
+//				}
+//			});
 		}
 		return tfedadMinima;
 	}
@@ -246,14 +266,14 @@ public class VentanaCreaCategoria extends JDialog {
 			if (getTfedadMinima().getText() == "" && tfEdadMaxima.getText() != "") {
 				getTfedadMinima().setText(Integer.parseInt(tfEdadMaxima.getText()) - 1 + "");
 			}
-			tfEdadMaxima.addKeyListener(new KeyAdapter() {
-		        @Override
-		        public void keyTyped(KeyEvent e) {
-
-		           if(Comprobaciones.esNumero(e.getKeyChar()+""))
-		        	   tfEdadMaxima.setText(tfEdadMaxima.getText()+e.getKeyChar());
-		        }
-		        });
+//			tfEdadMaxima.addKeyListener(new KeyAdapter() {
+//				@Override
+//				public void keyTyped(KeyEvent e) {
+//
+//					if (Comprobaciones.esNumero(e.getKeyChar() + ""))
+//						tfEdadMaxima.setText(tfEdadMaxima.getText() + e.getKeyChar());
+//				}
+//			});
 		}
 		return tfEdadMaxima;
 	}

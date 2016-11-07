@@ -75,6 +75,8 @@ import javax.swing.JTextArea;
 import javax.swing.JList;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.ItemListener;
+import java.awt.event.ItemEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -190,47 +192,48 @@ public class VentanaPrincipal extends JFrame {
 		pnPrincipal.add(getPnUsuario(), "pn_usuario");
 	}
 
-	private boolean comprobarDatosInscribirse(){
-		if(txtDNIInscribirse.getText().equals("") || !g.comprobarFecha(txtFechaInscribirse.getText()) || txtSexoInscribirse.getText().equals("")
-			|| txtNombreInscribirse.getText().equals("")){
-		return false;
+	private boolean comprobarDatosInscribirse() {
+		if (txtDNIInscribirse.getText().equals("") || !g.comprobarFecha(txtFechaInscribirse.getText())
+				|| txtSexoInscribirse.getText().equals("") || txtNombreInscribirse.getText().equals("")) {
+			return false;
+		}
+		return true;
 	}
-	return true;
-	}
+
 	private void AnadirInscritoALista() {
-		if(comprobarDatosInscribirse()){
-			int sexo =0;
-			if(txtSexoInscribirse.getText().equals("masculino")){
+		if (comprobarDatosInscribirse()) {
+			int sexo = 0;
+			if (txtSexoInscribirse.getText().equals("masculino")) {
 				sexo = 0;
 			}
-			if(txtSexoInscribirse.getText().equals("femenino")){
+			if (txtSexoInscribirse.getText().equals("femenino")) {
 				sexo = 1;
 			}
-			
+
 			String dni = txtDNIInscribirse.getText();
-	
+
 			Atleta at = g.buscarAtletaPorDNI(dni);
-			if(at ==null){
-				atletasARegistrar.add(new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), 
-						sexo));
+			if (at == null) {
+				atletasARegistrar
+						.add(new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), sexo));
 				JOptionPane.showMessageDialog(null, "Atleta no registrado. Sera registrado en la base de datos");
-				
+
 			}
-	
-			if (!modeloLista.contains(dni) ) {
-				if(!g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)){
+
+			if (!modeloLista.contains(dni)) {
+				if (!g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)) {
 					atletasAInscribir.add(at);
 					modeloLista.addElement(dni);
-				}else{
+				} else {
 					JOptionPane.showMessageDialog(null, "Dni ya inscrito en el evento");
 				}
-			}else{
+			} else {
 				JOptionPane.showMessageDialog(null, "El dni ya esta en la lista");
 			}
 			txtDNIInscribirse.setText("");
 			txtNombreInscribirse.setText("");
 			txtFechaInscribirse.setText("");
-		}else{
+		} else {
 			JOptionPane.showMessageDialog(null, "Rellene bien todos los campos");
 		}
 
@@ -245,11 +248,12 @@ public class VentanaPrincipal extends JFrame {
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
-		
+
 		atletasARegistrar.clear();
 		atletasAInscribir.clear();
 
 	}
+
 	private void borrarDatos() {
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
@@ -388,13 +392,13 @@ public class VentanaPrincipal extends JFrame {
 	private void reiniciarDatosPulsados() {
 		btnPasarAInscripcion.setEnabled(false);
 		btnResultadosEvento.setEnabled(false);
-		
+
 		eventoPulsado = null;
 		txEventoPulsadoNombre.setText("");
 		txEventoPulsadoPlazas.setText("");
 		textAreaCategoriasAdmitidas.setText("");
 		textAreaPlazosInscripcionEventoUsuario.setText("");
-		
+
 	}
 
 	/**
@@ -410,7 +414,8 @@ public class VentanaPrincipal extends JFrame {
 		if (desc == 1) { // desc= 1 nos situa en la descripcion del panel de
 							// usuarios
 			btnPasarAInscripcion.setEnabled(true);
-			if(eventoPulsado.getFinalizado()) btnMostrarResultadosAtleta.setEnabled(true);
+			if (eventoPulsado.getFinalizado())
+				btnMostrarResultadosAtleta.setEnabled(true);
 			txEventoPulsadoNombre.setText(ev.getNombre());
 			txEventoPulsadoPlazas.setText(String.valueOf(ev.getPlazasDisponibles()));
 			ArrayList<Categoria> cat = ev.getCategorias();
@@ -936,24 +941,28 @@ public class VentanaPrincipal extends JFrame {
 			btCrearEvento = new JButton("Crear evento");
 			btCrearEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if(faltaAlgoPorRellenar()){
-						JOptionPane.showConfirmDialog(null, "Por favor, rellene todos los campos.");
+					if (faltaAlgoPorRellenar()) {
+						JOptionPane.showMessageDialog(null, "Por favor, rellene todos los campos.");
 						return;
 					}
 					Evento evento = crearEventoOrgnizador();
-					if(evento == null){
+					if (evento == null) {
 						cambiarPanelesOrganizador("pnEventosOrganizador");
 						return;
 					}
-					//JAVIMENSAJE Mirar aqui a ver si el evento tiene todos los atributos que necesita la bd, si no, que los genere el gestor. 
+					// JAVIMENSAJE Mirar aqui a ver si el evento tiene todos los
+					// atributos que necesita la bd, si no, que los genere el
+					// gestor.
 					g.añadirEvento(evento);
 				}
 			});
 		}
 		return btCrearEvento;
 	}
-	private boolean faltaAlgoPorRellenar(){
-		if(getTfNombreEvento().getText().isEmpty() || getTfDistanciaEvento().getText().isEmpty() || getTfTipoEvetno().getText().isEmpty()){
+
+	private boolean faltaAlgoPorRellenar() {
+		if (getTfNombreEvento().getText().isEmpty() || getTfDistanciaEvento().getText().isEmpty()
+				|| getTfTipoEvetno().getText().isEmpty()) {
 			return true;
 		}
 		return false;
@@ -973,7 +982,7 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getLblNombre());
 			pnContenidoCreacionEvento.add(getTfNombreEvento());
 			pnContenidoCreacionEvento.add(getLblTipo());
-			pnContenidoCreacionEvento.add(getCbTipoEventos());
+			// pnContenidoCreacionEvento.add(getCbTipoEventos());
 			pnContenidoCreacionEvento.add(getLblDistancia());
 			pnContenidoCreacionEvento.add(getTfDistanciaEvento());
 			pnContenidoCreacionEvento.add(getLbKm());
@@ -989,7 +998,7 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getScrollPaneFechasIns());
 			pnContenidoCreacionEvento.add(getBtnAadir());
 			pnContenidoCreacionEvento.add(getBtnEditar());
-			
+
 			JLabel lblFechasInscripcin = new JLabel("Fechas inscripci\u00F3n");
 			lblFechasInscripcin.setHorizontalAlignment(SwingConstants.CENTER);
 			lblFechasInscripcin.setBounds(51, 219, 144, 14);
@@ -1095,7 +1104,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLbKm() {
 		if (lbKm == null) {
 			lbKm = new JLabel("Km");
-			lbKm.setBounds(222, 117, 14, 14);
+			lbKm.setHorizontalAlignment(SwingConstants.CENTER);
+			lbKm.setBounds(222, 117, 29, 14);
 		}
 		return lbKm;
 	}
@@ -1147,7 +1157,7 @@ public class VentanaPrincipal extends JFrame {
 	private JSpinner getSpinnerPlazas() {
 		if (spinnerPlazas == null) {
 			spinnerPlazas = new JSpinner();
-			spinnerPlazas.setBounds(162, 158, 38, 20);
+			spinnerPlazas.setBounds(162, 158, 50, 20);
 			SpinnerModel modelo = new SpinnerNumberModel(numeroPlazasEvento, 0, 9999, 1);
 			spinnerPlazas.setModel(modelo);
 		}
@@ -1161,11 +1171,11 @@ public class VentanaPrincipal extends JFrame {
 			tfTipoEvetno.setBounds(162, 76, 106, 20);
 			tfTipoEvetno.setHorizontalAlignment(SwingConstants.CENTER);
 			tfTipoEvetno.setColumns(10);
-			if (getCbTipoEventos().getSelectedItem() == " ") {
-				tfTipoEvetno.setEnabled(true);
-			} else {
-				tfTipoEvetno.setEnabled(false);
-			}
+			// if (getCbTipoEventos().getSelectedItem() == " ") {
+			// tfTipoEvetno.setEnabled(true);
+			// } else {
+			// tfTipoEvetno.setEnabled(false);
+			// }
 		}
 		return tfTipoEvetno;
 	}
@@ -1390,7 +1400,16 @@ public class VentanaPrincipal extends JFrame {
 
 		if (cbCatDef == null) {
 			cbCatDef = new JCheckBox("Usar categor\u00EDas por defecto");
-			cbCatDef.setSelected(true);
+			cbCatDef.addItemListener(new ItemListener() {
+				public void itemStateChanged(ItemEvent arg0) {
+					if (cbCatDef.isSelected()) {
+						categoriasAlCrearEvento = new ArrayList<Categoria>();
+						GestorCategorias.cargarCategoriasPorDefecto(categoriasAlCrearEvento);
+					}else{
+						categoriasAlCrearEvento = new ArrayList<Categoria>();
+					}
+				}
+			});
 			cbCatDef.setHorizontalAlignment(SwingConstants.LEFT);
 			cbCatDef.setBounds(777, 73, 178, 23);
 
@@ -1484,21 +1503,21 @@ public class VentanaPrincipal extends JFrame {
 			btEditarCategoria.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent arg0) {
-					try{
-					String catString = getList().getSelectedValue().toString();
-					Categoria cat = null;
-					for(Categoria c : categoriasAlCrearEvento){
-						if(c.toString().equals(catString))
-							cat = c;
-					}
-					if(cat == null){
-						JOptionPane.showMessageDialog(null, "No se encuantra la categoría");
-					}else{
-						categoriasAlCrearEvento.remove(cat);
-						VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this, cat);
-						vcc.setVisible(true);
-					}
-					}catch(Exception e){
+					try {
+						String catString = getList().getSelectedValue().toString();
+						Categoria cat = null;
+						for (Categoria c : categoriasAlCrearEvento) {
+							if (c.toString().equals(catString))
+								cat = c;
+						}
+						if (cat == null) {
+							JOptionPane.showMessageDialog(null, "No se encuantra la categoría");
+						} else {
+							categoriasAlCrearEvento.remove(cat);
+							VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this, cat);
+							vcc.setVisible(true);
+						}
+					} catch (Exception e) {
 						System.err.println("Ha cascado al editar probablemente por la lista");
 					}
 
@@ -1506,7 +1525,8 @@ public class VentanaPrincipal extends JFrame {
 			});
 			btEditarCategoria.setToolTipText("Editar categoria seleccionada");
 			btEditarCategoria.setBounds(866, 256, 89, 23);
-		}return btEditarCategoria;
+		}
+		return btEditarCategoria;
 
 	}
 
@@ -1615,10 +1635,10 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
 					char c = arg0.getKeyChar();
-					if(!Character.isAlphabetic(c)){
+					if (!Character.isAlphabetic(c)) {
 						arg0.consume();
 					}
-					
+
 				}
 			});
 			txtNombreInscribirse.setColumns(10);
@@ -1679,7 +1699,7 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void keyTyped(KeyEvent e) {
 					char c = e.getKeyChar();
-					if(!Character.isAlphabetic(c)){
+					if (!Character.isAlphabetic(c)) {
 						e.consume();
 					}
 				}
@@ -1740,6 +1760,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnSeleccionarOtroEvento;
 	}
+
 	private JButton getBtnResultadosEvento() {
 		if (btnResultadosEvento == null) {
 			btnResultadosEvento = new JButton("Ver resultados");
@@ -1747,16 +1768,19 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btnResultadosEvento;
 	}
+
 	private JPanel getPanel_4() {
 		if (panel_4 == null) {
 			panel_4 = new JPanel();
-			panel_4.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel_4.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING, TitledBorder.TOP,
+					null, null));
 			panel_4.setLayout(new BorderLayout(0, 0));
 			panel_4.add(getPnInfoEvPulsado());
 			panel_4.add(getBtnResultadosEvento(), BorderLayout.SOUTH);
 		}
 		return panel_4;
 	}
+
 	private JLabel getLblPlazosDeInscripcin() {
 		if (lblPlazosDeInscripcin == null) {
 			lblPlazosDeInscripcin = new JLabel("Plazos de inscripci\u00F3n");
@@ -1765,6 +1789,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblPlazosDeInscripcin;
 	}
+
 	private JScrollPane getScrollPaneFechasIns() {
 		if (scrollPaneFechasIns == null) {
 			scrollPaneFechasIns = new JScrollPane();
@@ -1773,13 +1798,16 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return scrollPaneFechasIns;
 	}
-	public void añadirPlazo(PlazoInscripcion plazo){
+
+	public void añadirPlazo(PlazoInscripcion plazo) {
 		this.plazosInscripcionNuevoEvento.add(plazo);
 	}
-	public void borrarPlazo(PlazoInscripcion plazo){
+
+	public void borrarPlazo(PlazoInscripcion plazo) {
 		this.plazosInscripcionNuevoEvento.remove(plazo);
 	}
-	//Datos necesarios para las fechas de inscripcion:
+
+	// Datos necesarios para las fechas de inscripcion:
 	DefaultListModel<String> modeloListaFechasInscripcion = new DefaultListModel<String>();
 	ArrayList<PlazoInscripcion> plazosInscripcionNuevoEvento;
 	private JButton btnAadir;
@@ -1791,31 +1819,61 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblDa;
 	private JLabel lbMes;
 	private JLabel lbAño;
+
 	private JList getListFechasInscrip() {
 		if (listFechasInscrip == null) {
 			plazosInscripcionNuevoEvento = new ArrayList<PlazoInscripcion>();
-			
+
 			listFechasInscrip = new JList();
 			listFechasInscrip.setModel(modeloListaFechasInscripcion);
-			
+
 		}
 		return listFechasInscrip;
 	}
+
 	private JButton getBtnAadir() {
 		if (btnAadir == null) {
 			btnAadir = new JButton("A\u00F1adir");
+			btnAadir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					VentanaCreaFechaInscripcion vi = new VentanaCreaFechaInscripcion(VentanaPrincipal.this);
+					vi.setVisible(true);
+				}
+			});
 			btnAadir.setToolTipText("A\u00F1adir un nuevo plazo de inscripci\u00F3n.");
-			btnAadir.setBounds(51, 385, 63, 23);
+			btnAadir.setBounds(51, 385, 72, 23);
 		}
 		return btnAadir;
 	}
+
 	private JButton getBtnEditar() {
 		if (btnEditar == null) {
 			btnEditar = new JButton("Editar");
-			btnEditar.setBounds(133, 385, 67, 23);
+			btnEditar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					if (plazosInscripcionNuevoEvento.isEmpty() || plazosInscripcionNuevoEvento == null
+							|| getListFechasInscrip().getSelectedValue() == null)
+						return;
+
+					PlazoInscripcion miplazo = null;
+					String fechains = getListFechasInscrip().getSelectedValue().toString();
+					for (PlazoInscripcion plazo : plazosInscripcionNuevoEvento) {
+						if (plazo.toString().equals(fechains))
+							miplazo = plazo;
+					}
+					if (miplazo != null) {
+						VentanaCreaFechaInscripcion vi = new VentanaCreaFechaInscripcion(VentanaPrincipal.this,
+								miplazo);
+						vi.setVisible(true);
+					}
+
+				}
+			});
+			btnEditar.setBounds(124, 385, 76, 23);
 		}
 		return btnEditar;
 	}
+
 	private JLabel getLblFechaComienzoEvento() {
 		if (lblFechaComienzoEvento == null) {
 			lblFechaComienzoEvento = new JLabel("Fecha comienzo evento");
@@ -1824,13 +1882,14 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblFechaComienzoEvento;
 	}
+
 	private JComboBox getCbDia() {
 		if (cbDia == null) {
 			cbDia = new JComboBox();
-			
+
 			Integer[] dias = new Integer[31];
-			for(int i = 0; i < dias.length; i++){
-				dias[i] = i+1;
+			for (int i = 0; i < dias.length; i++) {
+				dias[i] = i + 1;
 			}
 			DefaultComboBoxModel<Integer> modelo = new DefaultComboBoxModel<Integer>(dias);
 			cbDia.setModel(modelo);
@@ -1838,6 +1897,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return cbDia;
 	}
+
 	private JComboBox getCbMes() {
 		if (cbMes == null) {
 			cbMes = new JComboBox();
@@ -1848,13 +1908,14 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return cbMes;
 	}
+
 	private JComboBox getCbAño() {
 		if (cbAño == null) {
 			cbAño = new JComboBox();
 			Integer[] años = new Integer[10];
-			for(int i = 0; i < años.length; i++){
-				años[i] = 2000+i+16; //Que la fecha empiece este año 2016
-				
+			for (int i = 0; i < años.length; i++) {
+				años[i] = 2000 + i + 16; // Que la fecha empiece este año 2016
+
 			}
 			DefaultComboBoxModel<Integer> modelo = new DefaultComboBoxModel<Integer>(años);
 			cbAño.setModel(modelo);
@@ -1862,6 +1923,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return cbAño;
 	}
+
 	private JLabel getLblDa() {
 		if (lblDa == null) {
 			lblDa = new JLabel("d\u00EDa");
@@ -1870,6 +1932,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lblDa;
 	}
+
 	private JLabel getLbMes() {
 		if (lbMes == null) {
 			lbMes = new JLabel("mes");
@@ -1878,6 +1941,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbMes;
 	}
+
 	private JLabel getLbAño() {
 		if (lbAño == null) {
 			lbAño = new JLabel("a\u00F1o");
@@ -1886,35 +1950,35 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbAño;
 	}
-	
-	//Crear el evento
+
+	// Crear el evento
 	@SuppressWarnings("deprecation")
-	private Evento crearEventoOrgnizador(){
-		String nombre = getTfNombreEvento().getText(); 
+	private Evento crearEventoOrgnizador() {
+		String nombre = getTfNombreEvento().getText();
 		String tipo = getTfTipoEvetno().getText();
 		String distancia = getTfDistanciaEvento().getText();
 		String plazas = getSpinnerPlazas().getValue().toString();
 		boolean puedoCrearEvento = false;
-		
-		if(!(Comprobaciones.esString(nombre) && Comprobaciones.esString(tipo))){
+
+		if (!(Comprobaciones.esString(nombre) && Comprobaciones.esString(tipo))) {
 			JOptionPane.showMessageDialog(null, "El nombre del evento y el tipo han de ser texto. Nada de numeros");
 			return null;
 		}
-		if(!(Comprobaciones.esNumero(distancia) && Comprobaciones.esNumero(plazas))){
+		if (!(Comprobaciones.esNumero(distancia) && Comprobaciones.esNumero(plazas))) {
 			JOptionPane.showMessageDialog(null, "El numero de plazas y la distancia han de ser números");
 			return null;
 		}
 		ArrayList<PlazoInscripcion> plazos = plazosInscripcionNuevoEvento;
 		ArrayList<Categoria> categorias = categoriasAlCrearEvento;
-		if(plazos == null || plazos.isEmpty()){
+		if (plazos == null || plazos.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No se han establecido plazos de inscripción.");
 			return null;
 		}
-		if(categorias == null || categorias.isEmpty()){
+		if (categorias == null || categorias.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No se han establecido las categorías del evento.");
 			return null;
 		}
-		//Fecha
+		// Fecha
 		int dia = Integer.parseInt(getCbDia().getSelectedItem().toString());
 		String mes = getCbMes().getSelectedItem().toString();
 		int año = Integer.parseInt(getCbAño().getSelectedItem().toString());
@@ -1922,32 +1986,34 @@ public class VentanaPrincipal extends JFrame {
 		try {
 			miFechaComienzo = new Date(año - 1900, ConversorFechas.getNumeroMes(mes), dia);
 		} catch (Exception e) {
-			JOptionPane.showMessageDialog(null, "La fecha no se ha creado correctamente (Puede ser fallo en el código línea 1896)");
+			JOptionPane.showMessageDialog(null,
+					"La fecha no se ha creado correctamente (Puede ser fallo en el código línea 1896)");
 			return null;
 		}
-		
-		if(miFechaComienzo != null){
-			if(miFechaComienzo.getTime() > buscarUltimaFechaInscripcion().getTime()){
+
+		if (miFechaComienzo != null) {
+			if (miFechaComienzo.getTime() > buscarUltimaFechaInscripcion().getTime()) {
 				puedoCrearEvento = true;
 			}
 		}
 		Evento evento = null;
-		if(puedoCrearEvento){
-			evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas), miFechaComienzo, categorias, plazos);
+		if (puedoCrearEvento) {
+			evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas), miFechaComienzo,
+					categorias, plazos);
 		}
 		return evento;
 	}
-	
-	private Date buscarUltimaFechaInscripcion(){
+
+	private Date buscarUltimaFechaInscripcion() {
 		Date fecha = new Date(0);
-		for(PlazoInscripcion plazo : plazosInscripcionNuevoEvento){
-			if(plazo.getFechaFin().getTime() >= fecha.getTime()){
+		for (PlazoInscripcion plazo : plazosInscripcionNuevoEvento) {
+			if (plazo.getFechaFin().getTime() >= fecha.getTime()) {
 				fecha = plazo.getFechaFin();
 			}
 		}
-		if(fecha.getTime() == 0)
+		if (fecha.getTime() == 0)
 			throw new IllegalStateException("No ha encontrado una fecha mayo que 0 milis");
 		return fecha;
 	}
-	
+
 }
