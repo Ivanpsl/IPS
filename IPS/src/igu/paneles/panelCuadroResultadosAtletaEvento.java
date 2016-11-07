@@ -19,6 +19,9 @@ import javax.swing.border.TitledBorder;
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
 import java.awt.FlowLayout;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class panelCuadroResultadosAtletaEvento extends JPanel {
 	
@@ -40,6 +43,8 @@ public class panelCuadroResultadosAtletaEvento extends JPanel {
 	private JLabel lblposicioncat;
 	private JTextField txPosicionCat;
 	private JPanel panel_6;
+	private JButton btnVerMasInformacion;
+	private JPanel panel_3;
 
 	/**
 	 * Panel que se introducira dentro de la seccion donde el atleta podra consultar sus resultados en eventos
@@ -61,9 +66,10 @@ public class panelCuadroResultadosAtletaEvento extends JPanel {
 	private JPanel getPnNombre() {
 		if (pnNombre == null) {
 			pnNombre = new JPanel();
-			pnNombre.setLayout(new GridLayout(0, 2, 0, 0));
+			pnNombre.setLayout(new GridLayout(0, 3, 0, 0));
 			pnNombre.add(getLbNombre());
 			pnNombre.add(getLblCategoria());
+			pnNombre.add(getPanel_3());
 		}
 		return pnNombre;
 	}
@@ -186,5 +192,22 @@ public class panelCuadroResultadosAtletaEvento extends JPanel {
 			panel_6.add(getPanel_4(), BorderLayout.NORTH);
 		}
 		return panel_6;
+	}
+	private JButton getBtnVerMasInformacion() {
+		if (btnVerMasInformacion == null) {
+			btnVerMasInformacion = new JButton("Ver mas informacion");
+			btnVerMasInformacion.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+				}
+			});
+		}
+		return btnVerMasInformacion;
+	}
+	private JPanel getPanel_3() {
+		if (panel_3 == null) {
+			panel_3 = new JPanel();
+			panel_3.add(getBtnVerMasInformacion());
+		}
+		return panel_3;
 	}
 }

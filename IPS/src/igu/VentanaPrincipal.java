@@ -337,11 +337,14 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void reiniciarDatosPulsados() {
 		btnPasarAInscripcion.setEnabled(false);
+		btnResultadosEvento.setEnabled(false);
+		
 		eventoPulsado = null;
 		txEventoPulsadoNombre.setText("");
 		txEventoPulsadoPlazas.setText("");
 		textAreaCategoriasAdmitidas.setText("");
 		textAreaPlazosInscripcionEventoUsuario.setText("");
+		
 	}
 
 	/**
@@ -357,7 +360,7 @@ public class VentanaPrincipal extends JFrame {
 		if (desc == 1) { // desc= 1 nos situa en la descripcion del panel de
 							// usuarios
 			btnPasarAInscripcion.setEnabled(true);
-
+			if(eventoPulsado.getFinalizado()) btnMostrarResultadosAtleta.setEnabled(true);
 			txEventoPulsadoNombre.setText(ev.getNombre());
 			txEventoPulsadoPlazas.setText(String.valueOf(ev.getPlazasDisponibles()));
 			ArrayList<Categoria> cat = ev.getCategorias();
@@ -520,7 +523,7 @@ public class VentanaPrincipal extends JFrame {
 			pnSelecEventosUsuario.setLayout(new BorderLayout(0, 0));
 			pnSelecEventosUsuario.add(getPnTabla(), BorderLayout.CENTER);
 			pnSelecEventosUsuario.add(getPanel_4_1(), BorderLayout.SOUTH);
-			pnSelecEventosUsuario.add(getPnInfoEvPulsado(), BorderLayout.EAST);
+			pnSelecEventosUsuario.add(getPanel_4(), BorderLayout.EAST);
 		}
 		return pnSelecEventosUsuario;
 	}
@@ -1106,8 +1109,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnInfoEvPulsado() {
 		if (pnInfoEvPulsado == null) {
 			pnInfoEvPulsado = new JPanel();
-			pnInfoEvPulsado.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING,
-					TitledBorder.TOP, null, null));
+			pnInfoEvPulsado.setBorder(null);
 			pnInfoEvPulsado.setLayout(new GridLayout(2, 1, 0, 0));
 			pnInfoEvPulsado.add(getPnInfoEvPulsadoPrincipal());
 			pnInfoEvPulsado.add(getPanel_4_2());
@@ -1319,6 +1321,8 @@ public class VentanaPrincipal extends JFrame {
 	ArrayList<Categoria> categoriasAlCrearEvento;
 	private JButton btAñadirCat;
 	private JButton btEditarCategoria;
+	private JButton btnResultadosEvento;
+	private JPanel panel_4;
 
 	public ArrayList<Categoria> getCategoriasCrearEvento() {
 		return categoriasAlCrearEvento;
@@ -1611,5 +1615,22 @@ public class VentanaPrincipal extends JFrame {
 			btnSeleccionarOtroEvento.setBounds(612, 319, 163, 23);
 		}
 		return btnSeleccionarOtroEvento;
+	}
+	private JButton getBtnResultadosEvento() {
+		if (btnResultadosEvento == null) {
+			btnResultadosEvento = new JButton("Ver resultados");
+			btnResultadosEvento.setEnabled(false);
+		}
+		return btnResultadosEvento;
+	}
+	private JPanel getPanel_4() {
+		if (panel_4 == null) {
+			panel_4 = new JPanel();
+			panel_4.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			panel_4.setLayout(new BorderLayout(0, 0));
+			panel_4.add(getPnInfoEvPulsado());
+			panel_4.add(getBtnResultadosEvento(), BorderLayout.SOUTH);
+		}
+		return panel_4;
 	}
 }
