@@ -338,6 +338,28 @@ public class ConexionBD {
 		}
 	}
 
+	public void actualizarPlazos(Evento ev){
+		Connection con =conectar();
+		if(con==null)
+			System.err.println("No es posible encontrar ninguna BD." );
+		else{ 
+			try {
+				
+				PreparedStatement st;
+				st = con.prepareStatement("UPDATE EVENTOS SET EV_PLAZOS_INS=? WHERE EV_ID=?");
+				st.setString(1, Asignador.codificarPlazos(ev.getPlazos()));
+				st.setInt(2,ev.getId());
+				int res = st.executeUpdate();
+				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \n\t");
+				System.out.println("- El evento con ID : " + ev.getId() + " ha actualizado sus plazos");
+				st.close();
+				con.close();
+			} catch (SQLException e) {
+				
+				e.printStackTrace();
+			}
+		}
+	}
 	
 	public void resetearDatosBD(){
 		Connection con =conectar();

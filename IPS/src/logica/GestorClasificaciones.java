@@ -76,8 +76,19 @@ public class GestorClasificaciones {
 					return i+1;
 				}
 			}
-		return -1;
+		return -2;
 	}
+	
+	/**
+	 * MEtodo que devuelve la posicion absoluta en un evento de un corredor
+	 */
+	public int obtenerPosicionAbsoluta(Inscripcion inscrito, Evento evento){
+		for(Clasificacion cl : evento.getClasificaciones()){
+			if(cl.getCategoria().equals("Absoluta")) return obtenerPosicion(inscrito, cl);
+		}
+		return -2;
+	}
+	
 }
 	
 	

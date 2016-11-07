@@ -186,7 +186,16 @@ public class Evento {
 		clasificaciones=gC.calcularInscripciones(inscripciones,categoriasDelEvento);
 	}
 	
-
+	public boolean comprobarFechasInscripcion(Date fechaActual){
+		boolean cambio=false;
+		for(PlazoInscripcion plazo: plazosDeInscripcion){
+			if(fechaActual.before(plazo.getFechaFin())){
+				plazosDeInscripcion.remove(plazo);
+				cambio=true;
+			}
+		}
+		return cambio;
+	}
 	
 	/**
 	 * Metodo que da por concluido el evento, lo marca como finalizado y genera las clasificaciones en funcion de los resultados

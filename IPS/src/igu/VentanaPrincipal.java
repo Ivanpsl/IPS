@@ -176,6 +176,7 @@ public class VentanaPrincipal extends JFrame {
 	 * Create the frame.
 	 */
 	public VentanaPrincipal() {
+		setTitle("Gestor de Eventos");
 		vP = this;
 		g = new Gestor();
 		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER");
@@ -296,8 +297,10 @@ public class VentanaPrincipal extends JFrame {
 	private void cambiarCabeceraUsuario(int opcion) {
 		if (opcion == 0)
 			((CardLayout) pnCabecera.getLayout()).show(pnCabecera, "usuario_sinIdentificar");
-		if (opcion == 1)
+		if (opcion == 1){
 			((CardLayout) pnCabecera.getLayout()).show(pnCabecera, "usuario_Identificado");
+		
+		}
 	}
 
 	/**
@@ -386,6 +389,7 @@ public class VentanaPrincipal extends JFrame {
 	 * Metodo que reinicia los datos de la seleccion
 	 */
 	private void reiniciarDatosPulsados() {
+		
 		btnPasarAInscripcion.setEnabled(false);
 		btnResultadosEvento.setEnabled(false);
 		
@@ -705,6 +709,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTxtNombreAtleta() {
 		if (txtNombreAtleta == null) {
 			txtNombreAtleta = new JTextField();
+			txtNombreAtleta.setEditable(false);
 			txtNombreAtleta.setColumns(10);
 		}
 		return txtNombreAtleta;
@@ -729,6 +734,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTxtFechaNacimiento() {
 		if (txtFechaNacimiento == null) {
 			txtFechaNacimiento = new JTextField();
+			txtFechaNacimiento.setEditable(false);
 			txtFechaNacimiento.setColumns(10);
 		}
 		return txtFechaNacimiento;
@@ -747,6 +753,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnMostrarResultadosAtleta() {
 		if (btnMostrarResultadosAtleta == null) {
 			btnMostrarResultadosAtleta = new JButton("Mostrar resultados");
+			btnMostrarResultadosAtleta.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					DialogResultadosAtleta dR = new DialogResultadosAtleta(g.getAtletaIdentificado(), g,vP);
+				}
+			});
 		}
 		return btnMostrarResultadosAtleta;
 	}
@@ -1234,6 +1245,7 @@ public class VentanaPrincipal extends JFrame {
 			btnAtras.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					reiniciarDatosPulsados();
+					cambiarPanelesPrincipales("inicio");
 				}
 			});
 		}
@@ -1529,6 +1541,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTxtDNIAtleta() {
 		if (txtDNIAtleta == null) {
 			txtDNIAtleta = new JTextField();
+			txtDNIAtleta.setEditable(false);
 			txtDNIAtleta.setColumns(10);
 		}
 		return txtDNIAtleta;
@@ -1743,6 +1756,13 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnResultadosEvento() {
 		if (btnResultadosEvento == null) {
 			btnResultadosEvento = new JButton("Ver resultados");
+			btnResultadosEvento.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					DialogInformacionDeEvento diE= new DialogInformacionDeEvento(vP, eventoPulsado);
+					diE.mostrarClasificaciones();
+					diE.setVisible(true);;
+				}
+			});
 			btnResultadosEvento.setEnabled(false);
 		}
 		return btnResultadosEvento;

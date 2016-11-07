@@ -41,7 +41,20 @@ public class Gestor {
 		this.eventos  = new ArrayList<Evento>();
 		this.atletas= new ArrayList<Atleta>();
 		cargarDatos();
-		
+		comprobarFechasInscripcion();
+	}
+	
+	/**
+	 * Metodo que comprueba las fechas de las inscripciones a cada evento, si se produce un cambio se actualiza 
+	 * la base de datos
+	 * 
+	 */
+	private void comprobarFechasInscripcion(){
+		java.util.Date fechaActualJava = new java.util.Date();
+		Date fecha = new java.sql.Date(fechaActualJava.getTime());
+		for(Evento ev: eventos){
+			if(ev.comprobarFechasInscripcion(fecha)) bd.actualizarPlazos(ev);
+		}
 	}
 	/**
 	 * Metodo que llama a la base de datos para cargar todos los datos
@@ -91,7 +104,7 @@ public class Gestor {
 		return this.eventos;
 	}
 	
-	public ArrayList<Evento> obtenerEventosEInscripciones(String dni){
+	public ArrayList<Evento> obtenerEventosParticipaPorDNI(String dni){
 		ArrayList<Evento> evInscrito= new ArrayList<Evento>();
 		for(Evento e: eventos){
 			for(Inscripcion a: e.getInscritosEvento()){

@@ -172,7 +172,7 @@ public class Main {
 	 *            :
 	 */
 	private static void mostrarInformacionDNI(String dni) {
-		ArrayList<Evento> evInscritos = g.obtenerEventosEInscripciones(dni);
+		ArrayList<Evento> evInscritos = g.obtenerEventosParticipaPorDNI(dni);
 		if(evInscritos.size()==0) System.err.println("No existen datos con ese DNI");
 		else{
 			System.out.println("EVENTOS INSCRITOS: ");

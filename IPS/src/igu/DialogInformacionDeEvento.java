@@ -87,6 +87,8 @@ public class DialogInformacionDeEvento extends JDialog {
 	 * Create the dialog.
 	 */
 	public DialogInformacionDeEvento(VentanaPrincipal vp, Evento ev) {
+		setTitle("Gestor Eventos: Ficha de evento");
+		setModal(true);
 		setType(Type.UTILITY);
 		setAlwaysOnTop(true);
 		this.vP=vp;
@@ -146,6 +148,10 @@ public class DialogInformacionDeEvento extends JDialog {
 			}
 		}
 		rellenarInformacion();
+	}
+	
+	public void mostrarClasificaciones(){
+		tabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Resultados"));
 	}
 	
 	private void rellenarInformacion(){
@@ -227,6 +233,8 @@ public class DialogInformacionDeEvento extends JDialog {
  			areaInscritos.append(inscripcion.getAtleta().toString());
  		}
 	}
+	
+	
 	private void activarDescativarPaneles(boolean general, boolean resultados){
 		int n = tabbedPane.indexOfTab("General");// This line returns one as expected
 		tabbedPane.getTabComponentAt(n).setEnabled(general);
