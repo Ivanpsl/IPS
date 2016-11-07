@@ -911,6 +911,9 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getBtAñadirCat());
 
 			pnContenidoCreacionEvento.add(getBtEditarCategoria());
+			pnContenidoCreacionEvento.add(getScrollPaneFechasIns());
+			pnContenidoCreacionEvento.add(getBtnAadir());
+			pnContenidoCreacionEvento.add(getBtnEditar());
 		}
 		return pnContenidoCreacionEvento;
 	}
@@ -1323,6 +1326,9 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btEditarCategoria;
 	private JButton btnResultadosEvento;
 	private JPanel panel_4;
+	private JLabel lblPlazosDeInscripcin;
+	private JScrollPane scrollPaneFechasIns;
+	private JList<String> listFechasInscrip;
 
 	public ArrayList<Categoria> getCategoriasCrearEvento() {
 		return categoriasAlCrearEvento;
@@ -1632,5 +1638,57 @@ public class VentanaPrincipal extends JFrame {
 			panel_4.add(getBtnResultadosEvento(), BorderLayout.SOUTH);
 		}
 		return panel_4;
+	}
+	private JLabel getLblPlazosDeInscripcin() {
+		if (lblPlazosDeInscripcin == null) {
+			lblPlazosDeInscripcin = new JLabel("Plazos de inscripci\u00F3n");
+			lblPlazosDeInscripcin.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPlazosDeInscripcin.setBounds(51, 214, 145, 14);
+		}
+		return lblPlazosDeInscripcin;
+	}
+	private JScrollPane getScrollPaneFechasIns() {
+		if (scrollPaneFechasIns == null) {
+			scrollPaneFechasIns = new JScrollPane();
+			scrollPaneFechasIns.setBounds(51, 244, 149, 130);
+			scrollPaneFechasIns.setViewportView(getListFechasInscrip());
+		}
+		return scrollPaneFechasIns;
+	}
+	public void añadirPlazo(PlazoInscripcion plazo){
+		this.plazosInscripcionNuevoEvento.add(plazo);
+	}
+	public void borrarPlazo(PlazoInscripcion plazo){
+		this.plazosInscripcionNuevoEvento.remove(plazo);
+	}
+	//Datos necesarios para las fechas de inscripcion:
+	DefaultListModel<String> modeloListaFechasInscripcion = new DefaultListModel<String>();
+	ArrayList<PlazoInscripcion> plazosInscripcionNuevoEvento;
+	private JButton btnAadir;
+	private JButton btnEditar;
+	private JList getListFechasInscrip() {
+		if (listFechasInscrip == null) {
+			plazosInscripcionNuevoEvento = new ArrayList<PlazoInscripcion>();
+			
+			listFechasInscrip = new JList();
+			listFechasInscrip.setModel(modeloListaFechasInscripcion);
+			
+		}
+		return listFechasInscrip;
+	}
+	private JButton getBtnAadir() {
+		if (btnAadir == null) {
+			btnAadir = new JButton("A\u00F1adir");
+			btnAadir.setToolTipText("A\u00F1adir un nuevo plazo de inscripci\u00F3n.");
+			btnAadir.setBounds(51, 385, 63, 23);
+		}
+		return btnAadir;
+	}
+	private JButton getBtnEditar() {
+		if (btnEditar == null) {
+			btnEditar = new JButton("Editar");
+			btnEditar.setBounds(133, 385, 67, 23);
+		}
+		return btnEditar;
 	}
 }

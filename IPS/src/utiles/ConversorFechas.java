@@ -81,4 +81,12 @@ public class ConversorFechas {
 		Date fecha = new Date(Calendar.getInstance().getTime().getTime());
 		return fecha;
 	}
+	public static Date crearFecha(String dia, String numMes, String año){
+		int diaI = Integer.parseInt(dia);
+		int mes = Integer.parseInt(numMes);
+		int añoI = Integer.parseInt(año);
+		@SuppressWarnings("deprecation")
+		Date fecha = new Date(añoI -1900, mes, diaI);
+		return fecha;
+	}
 }
