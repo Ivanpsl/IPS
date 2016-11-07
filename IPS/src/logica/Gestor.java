@@ -291,6 +291,14 @@ public class Gestor {
 		eventos.add(nuevoEvento);
 		bd.añadirEventoABD(nuevoEvento);
 	}
+	/**
+	 * Mirar este metodo y comprobar que se le pasa bien todo lo que necesita la bd (JAVIMENSAJE)
+	 * @param e
+	 */
+	public void añadirEvento(Evento e){
+		eventos.add(e);
+		bd.añadirEventoABD(e);
+	}
 	
 	/**
 	 * Metodo que da por concluido el evento con el id que se le pasa por parametro y busca el fichero con los resultados

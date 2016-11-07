@@ -19,6 +19,12 @@ public class ConversorFechas {
 		Date fechaBuena = convertFechaJavaSQL(calendar.getTime());
 		return fechaBuena;
 	}
+	
+	private static String[] meses = {"Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"};
+	
+	public static String[] getMesestoString(){
+		return meses;
+	}
 	/**
 	 * Convierte una fecha de java.util.Date a sql.Date
 	 * @param fecha Fecha a convertir
@@ -88,5 +94,14 @@ public class ConversorFechas {
 		@SuppressWarnings("deprecation")
 		Date fecha = new Date(añoI -1900, mes, diaI);
 		return fecha;
+	}
+	public static int getNumeroMes(String cad) throws Exception{
+		int it = 0;
+		for(String m : meses){
+			if(m.equals(cad))
+				return it;
+			it++;
+		}
+		throw new Exception("No existe el mes que has metido");
 	}
 }
