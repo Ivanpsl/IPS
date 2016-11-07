@@ -1949,4 +1949,5 @@ public class VentanaPrincipal extends JFrame {
 			throw new IllegalStateException("No ha encontrado una fecha mayo que 0 milis");
 		return fecha;
 	}
+	
 }

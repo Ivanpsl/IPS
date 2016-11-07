@@ -31,7 +31,7 @@ public class Evento {
 	double distancia;
 	boolean finalizado = false;
 	
-	Date fechaCompeticion;
+
 	Date fechaFinInscripcion;
 	Date fechaComienzo;
 
@@ -39,7 +39,7 @@ public class Evento {
 	
 	public Evento(int id, String name, String type, 
 			double distancia, int plazasTotales, boolean finalizado,ArrayList<Categoria> categoriasDelEvento,
-			ArrayList<PlazoInscripcion> plazos) {
+			ArrayList<PlazoInscripcion> plazos,Date fechaComienzo) {
 		
 		this.inscripciones = new ArrayList<Inscripcion>();
 		this.id=id;
@@ -54,7 +54,7 @@ public class Evento {
 		this.finalizado=finalizado;
 		this.categoriasDelEvento=categoriasDelEvento;
 		this.plazosDeInscripcion=plazos;
-		
+		this.fechaComienzo=fechaComienzo;
 		//Tipos de eventos
 		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
 	}
@@ -146,7 +146,7 @@ public class Evento {
 	}
 
 	public Date getFechaCompeticion() {
-		return this.fechaCompeticion;
+		return this.fechaComienzo;
 	}
 
 	public Date getFechaFinInscripcion() {
@@ -210,5 +210,11 @@ public class Evento {
 	}
 	public ArrayList<PlazoInscripcion> getPlazos(){
 		return plazosDeInscripcion;
+	}
+	public ArrayList<Clasificacion> getClasificaciones(){
+		return clasificaciones;
+	}
+	public void setId(int id){
+		this.id=id;
 	}
 }

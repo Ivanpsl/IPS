@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import utiles.Asignador;
+import utiles.ConversorFechas;
 import logica.Gestor;
 import logica.Vistas.Atleta;
 import logica.Vistas.Categoria;
@@ -79,7 +80,7 @@ public class ConexionBD {
 					else fin=true;
 					ArrayList<PlazoInscripcion> plazos = Asignador.decodificaPlazos(bdPlazos);
 					ArrayList<Categoria> categorias = Asignador.decodificarCategorias(bdCategorias);
-					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos,fecha_comienzo));
+					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos,ConversorFechas.convertFechaJavaSQL(fecha_comienzo)));
 				}
 				System.out.println("Datos de eventos cargados");
 				rs.close();

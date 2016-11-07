@@ -287,7 +287,7 @@ public class Gestor {
 			throw new DateTimeException("Las fechas ya han pasado introducidas ya han pasado.");
 		
 		//Si todo esta bien se crea el evento y se añade
-		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos);
+		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos,fecha_comienzo);
 		eventos.add(nuevoEvento);
 		bd.añadirEventoABD(nuevoEvento);
 	}
@@ -296,10 +296,11 @@ public class Gestor {
 	 * @param e
 	 */
 	public void añadirEvento(Evento e){
+		e.setId(eventos.get(eventos.size()-1).getId()+1);
 		eventos.add(e);
 		bd.añadirEventoABD(e);
 	}
-	
+
 	/**
 	 * Metodo que da por concluido el evento con el id que se le pasa por parametro y busca el fichero con los resultados
 	 * @param id: id del evento que finaliza
@@ -310,6 +311,7 @@ public class Gestor {
 		bd.marcarComoFinalizado(obtenerEventoPorId(id));
 	}
 
+	
 	public void listarEventosAbiertos() {
 		ArrayList<Evento> eventosAbiertos = getEventosAbiertos();
 		for (int i = 0; i < eventosAbiertos.size(); i++) {
