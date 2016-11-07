@@ -339,4 +339,75 @@ public class Gestor {
 		
 	}
 	
+	public void registrarAtleta(String DNI, String nombre, String fecha, int sexo, Evento evento) {
+
+
+
+		if (!DNI.equals("") && !comprobarAtletaRegistrado(DNI)) {
+
+			Atleta atl = new Atleta(DNI, nombre, fecha,
+					sexo);
+			addAtleta(atl);
+			
+		} 
+
+
+	}
+	
+	public boolean comprobarFecha(String fecha) {
+
+		char[] array = fecha.toCharArray();
+		if (array.length != 10) {
+			return false;
+		}
+		if (Character.isDigit(array[0]) && Character.isDigit(array[1])
+				&& Character.isDigit(array[3]) && Character.isDigit(array[4])
+				&& Character.isDigit(array[6]) && Character.isDigit(array[7])
+				&& Character.isDigit(array[8]) && Character.isDigit(array[9])
+				&& array[2] == '/' && array[5] == '/') {
+
+			String[] trozos = fecha.split("/");
+			int año = Integer.parseInt(trozos[2]);
+			int dia = Integer.parseInt(trozos[0]);
+
+			int mes = Integer.parseInt(trozos[1]);
+			if (año <= 2015 && año > 1896 && mes > 0 && mes < 13 && dia > 0) {
+				if (mes == 1 || mes == 3 || mes == 5 || mes == 7 || mes == 9
+						|| mes == 11) {
+					if (dia <= 31) {
+						return true;
+					}
+				} else if (mes % 2 == 0 && mes != 2) {
+					if (dia <= 30) {
+						return true;
+					}
+				} else {
+					if (año % 4 == 0 && año % 100 != 0 || año % 400 == 0) {
+						// es bisiesto
+						if (dia <= 29) {
+							return true;
+						}
+					} else {
+						if (dia <= 28) {
+							return true;
+						}
+					}
+				}
+
+			} else {
+				System.out.println("Rango de edad no permitido");
+			}
+		} else {
+			System.out.println("Formato de fecha mal introducido");
+		}
+		return false;
+	}
+	public void registrarLoteAtletas(List<Atleta> atletasARegistrar) {
+		for (int i = 0; i < atletasARegistrar.size(); i++) {
+			registrarAtleta(atletasARegistrar.get(i).getDNI(), atletasARegistrar.get(i).getNombre(), atletasARegistrar.get(i).getFechaNacimiento()
+					, atletasARegistrar.get(i).getSexo(), eventoSeleccionado);
+		}
+		
+	}
+	
 }
