@@ -60,7 +60,7 @@ public class panelCuadroResultadosAtletaEvento extends JPanel {
 		txPosicionAbsoluta.setText("" +posicionAbsoluta);
 		txPosicionCat.setText("" + posicionCategoria);
 		txTiempoAbsoluto.setText("" + ins.getTiempoSegundos());
-		add(getPanel_6_1(), BorderLayout.SOUTH);
+		add(getPanel_6_1(), BorderLayout.CENTER);
 	}
 
 	private JPanel getPnNombre() {
