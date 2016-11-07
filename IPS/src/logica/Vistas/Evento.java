@@ -33,7 +33,7 @@ public class Evento {
 	
 	Date fechaCompeticion;
 	Date fechaFinInscripcion;
-	
+	Date fechaComienzo;
 
 	//De momento se considera una unica fecha de cada tipo. 
 	
@@ -52,6 +52,26 @@ public class Evento {
 		this.plazasDisponibles= plazasTotales;
 		this.distancia= distancia;
 		this.finalizado=finalizado;
+		this.categoriasDelEvento=categoriasDelEvento;
+		this.plazosDeInscripcion=plazos;
+		
+		//Tipos de eventos
+		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
+	}
+	public Evento(String name, String type, 
+			double distancia, int plazasTotales, Date fechaComienzo,ArrayList<Categoria> categoriasDelEvento,
+			ArrayList<PlazoInscripcion> plazos) {
+		
+		this.inscripciones = new ArrayList<Inscripcion>();
+		this.nombre = name;
+//		this.fechaCompeticion = (Date) fecha_comienzo;
+//		this.fechaFinInscripcion = (Date) fecha_fin_insc; 
+		//this.precio = price;
+		this.tipo = type;
+		this.plazasTotales=plazasTotales;
+		this.plazasDisponibles= plazasTotales;
+		this.distancia= distancia;
+		this.fechaComienzo = fechaComienzo;
 		this.categoriasDelEvento=categoriasDelEvento;
 		this.plazosDeInscripcion=plazos;
 		

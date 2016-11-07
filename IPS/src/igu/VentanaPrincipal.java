@@ -14,6 +14,7 @@ import java.awt.FlowLayout;
 import javax.swing.JButton;
 import javax.swing.BoxLayout;
 import javax.swing.ComboBoxModel;
+import javax.swing.DefaultComboBoxModel;
 
 import java.awt.GridLayout;
 
@@ -37,6 +38,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.xml.ws.FaultAction;
 import javax.swing.border.LineBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -50,6 +52,7 @@ import logica.Vistas.Evento;
 import logica.Vistas.PlazoInscripcion;
 import usuarios.Organizador;
 import utiles.Comprobaciones;
+import utiles.ConversorFechas;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
@@ -919,6 +922,11 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtCancelarEvento() {
 		if (btCancelarEvento == null) {
 			btCancelarEvento = new JButton("Cancelar");
+			btCancelarEvento.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					cambiarPanelesOrganizador("pnEventosOrganizador");
+				}
+			});
 		}
 		return btCancelarEvento;
 	}
@@ -926,9 +934,29 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtCrearEvento() {
 		if (btCrearEvento == null) {
 			btCrearEvento = new JButton("Crear evento");
-			btCrearEvento.setEnabled(false);
+			btCrearEvento.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(faltaAlgoPorRellenar()){
+						JOptionPane.showConfirmDialog(null, "Por favor, rellene todos los campos.");
+						return;
+					}
+					Evento evento = crearEventoOrgnizador();
+					if(evento == null){
+						cambiarPanelesOrganizador("pnEventosOrganizador");
+						return;
+					}
+					//JAVIMENSAJE Mirar aqui a ver si el evento tiene todos los atributos que necesita la bd, si no, que los genere el gestor. 
+					g.añadirEvento(evento);
+				}
+			});
 		}
 		return btCrearEvento;
+	}
+	private boolean faltaAlgoPorRellenar(){
+		if(getTfNombreEvento().getText().isEmpty() || getTfDistanciaEvento().getText().isEmpty() || getTfTipoEvetno().getText().isEmpty()){
+			return true;
+		}
+		return false;
 	}
 
 	ArrayList<Categoria> misCategoriasCreadas;
@@ -961,6 +989,18 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getScrollPaneFechasIns());
 			pnContenidoCreacionEvento.add(getBtnAadir());
 			pnContenidoCreacionEvento.add(getBtnEditar());
+			
+			JLabel lblFechasInscripcin = new JLabel("Fechas inscripci\u00F3n");
+			lblFechasInscripcin.setHorizontalAlignment(SwingConstants.CENTER);
+			lblFechasInscripcin.setBounds(51, 219, 144, 14);
+			pnContenidoCreacionEvento.add(lblFechasInscripcin);
+			pnContenidoCreacionEvento.add(getLblFechaComienzoEvento());
+			pnContenidoCreacionEvento.add(getCbDia());
+			pnContenidoCreacionEvento.add(getCbMes());
+			pnContenidoCreacionEvento.add(getCbAño());
+			pnContenidoCreacionEvento.add(getLblDa());
+			pnContenidoCreacionEvento.add(getLbMes());
+			pnContenidoCreacionEvento.add(getLbAño());
 		}
 		return pnContenidoCreacionEvento;
 	}
@@ -977,6 +1017,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTfNombreEvento() {
 		if (tfNombreEvento == null) {
 			tfNombreEvento = new JTextField();
+			tfNombreEvento.setHorizontalAlignment(SwingConstants.CENTER);
 			tfNombreEvento.setBounds(162, 37, 106, 20);
 			tfNombreEvento.setColumns(10);
 		}
@@ -1018,7 +1059,8 @@ public class VentanaPrincipal extends JFrame {
 																		// uno
 																		// propio.
 			cbTipoEventos = new JComboBox();
-			cbTipoEventos.setBounds(162, 76, 118, 20);
+			cbTipoEventos.setEnabled(false);
+			cbTipoEventos.setBounds(298, 76, 118, 20);
 		}
 		return cbTipoEventos;
 	}
@@ -1115,7 +1157,8 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTfTipoEvetno() {
 		if (tfTipoEvetno == null) {
 			tfTipoEvetno = new JTextField();
-			tfTipoEvetno.setBounds(308, 76, 106, 20);
+			tfTipoEvetno.setToolTipText("Tipo de evento (marat\u00F3n, triatl\u00F3n, monta\u00F1a...)");
+			tfTipoEvetno.setBounds(162, 76, 106, 20);
 			tfTipoEvetno.setHorizontalAlignment(SwingConstants.CENTER);
 			tfTipoEvetno.setColumns(10);
 			if (getCbTipoEventos().getSelectedItem() == " ") {
@@ -1741,6 +1784,13 @@ public class VentanaPrincipal extends JFrame {
 	ArrayList<PlazoInscripcion> plazosInscripcionNuevoEvento;
 	private JButton btnAadir;
 	private JButton btnEditar;
+	private JLabel lblFechaComienzoEvento;
+	private JComboBox<Integer> cbDia;
+	private JComboBox<String> cbMes;
+	private JComboBox<Integer> cbAño;
+	private JLabel lblDa;
+	private JLabel lbMes;
+	private JLabel lbAño;
 	private JList getListFechasInscrip() {
 		if (listFechasInscrip == null) {
 			plazosInscripcionNuevoEvento = new ArrayList<PlazoInscripcion>();
@@ -1765,5 +1815,138 @@ public class VentanaPrincipal extends JFrame {
 			btnEditar.setBounds(133, 385, 67, 23);
 		}
 		return btnEditar;
+	}
+	private JLabel getLblFechaComienzoEvento() {
+		if (lblFechaComienzoEvento == null) {
+			lblFechaComienzoEvento = new JLabel("Fecha comienzo evento");
+			lblFechaComienzoEvento.setHorizontalAlignment(SwingConstants.CENTER);
+			lblFechaComienzoEvento.setBounds(222, 219, 163, 14);
+		}
+		return lblFechaComienzoEvento;
+	}
+	private JComboBox getCbDia() {
+		if (cbDia == null) {
+			cbDia = new JComboBox();
+			
+			Integer[] dias = new Integer[31];
+			for(int i = 0; i < dias.length; i++){
+				dias[i] = i+1;
+			}
+			DefaultComboBoxModel<Integer> modelo = new DefaultComboBoxModel<Integer>(dias);
+			cbDia.setModel(modelo);
+			cbDia.setBounds(222, 272, 46, 20);
+		}
+		return cbDia;
+	}
+	private JComboBox getCbMes() {
+		if (cbMes == null) {
+			cbMes = new JComboBox();
+			String[] meses = ConversorFechas.getMesestoString();
+			DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<String>(meses);
+			cbMes.setModel(modelo);
+			cbMes.setBounds(287, 272, 63, 20);
+		}
+		return cbMes;
+	}
+	private JComboBox getCbAño() {
+		if (cbAño == null) {
+			cbAño = new JComboBox();
+			Integer[] años = new Integer[10];
+			for(int i = 0; i < años.length; i++){
+				años[i] = 2000+i+16; //Que la fecha empiece este año 2016
+				
+			}
+			DefaultComboBoxModel<Integer> modelo = new DefaultComboBoxModel<Integer>(años);
+			cbAño.setModel(modelo);
+			cbAño.setBounds(360, 272, 56, 20);
+		}
+		return cbAño;
+	}
+	private JLabel getLblDa() {
+		if (lblDa == null) {
+			lblDa = new JLabel("d\u00EDa");
+			lblDa.setHorizontalAlignment(SwingConstants.CENTER);
+			lblDa.setBounds(222, 246, 46, 14);
+		}
+		return lblDa;
+	}
+	private JLabel getLbMes() {
+		if (lbMes == null) {
+			lbMes = new JLabel("mes");
+			lbMes.setHorizontalAlignment(SwingConstants.CENTER);
+			lbMes.setBounds(287, 246, 63, 14);
+		}
+		return lbMes;
+	}
+	private JLabel getLbAño() {
+		if (lbAño == null) {
+			lbAño = new JLabel("a\u00F1o");
+			lbAño.setHorizontalAlignment(SwingConstants.CENTER);
+			lbAño.setBounds(360, 246, 63, 14);
+		}
+		return lbAño;
+	}
+	
+	//Crear el evento
+	@SuppressWarnings("deprecation")
+	private Evento crearEventoOrgnizador(){
+		String nombre = getTfNombreEvento().getText(); 
+		String tipo = getTfTipoEvetno().getText();
+		String distancia = getTfDistanciaEvento().getText();
+		String plazas = getSpinnerPlazas().getValue().toString();
+		boolean puedoCrearEvento = false;
+		
+		if(!(Comprobaciones.esString(nombre) && Comprobaciones.esString(tipo))){
+			JOptionPane.showMessageDialog(null, "El nombre del evento y el tipo han de ser texto. Nada de numeros");
+			return null;
+		}
+		if(!(Comprobaciones.esNumero(distancia) && Comprobaciones.esNumero(plazas))){
+			JOptionPane.showMessageDialog(null, "El numero de plazas y la distancia han de ser números");
+			return null;
+		}
+		ArrayList<PlazoInscripcion> plazos = plazosInscripcionNuevoEvento;
+		ArrayList<Categoria> categorias = categoriasAlCrearEvento;
+		if(plazos == null || plazos.isEmpty()){
+			JOptionPane.showMessageDialog(null, "No se han establecido plazos de inscripción.");
+			return null;
+		}
+		if(categorias == null || categorias.isEmpty()){
+			JOptionPane.showMessageDialog(null, "No se han establecido las categorías del evento.");
+			return null;
+		}
+		//Fecha
+		int dia = Integer.parseInt(getCbDia().getSelectedItem().toString());
+		String mes = getCbMes().getSelectedItem().toString();
+		int año = Integer.parseInt(getCbAño().getSelectedItem().toString());
+		Date miFechaComienzo = null;
+		try {
+			miFechaComienzo = new Date(año - 1900, ConversorFechas.getNumeroMes(mes), dia);
+		} catch (Exception e) {
+			JOptionPane.showMessageDialog(null, "La fecha no se ha creado correctamente (Puede ser fallo en el código línea 1896)");
+			return null;
+		}
+		
+		if(miFechaComienzo != null){
+			if(miFechaComienzo.getTime() > buscarUltimaFechaInscripcion().getTime()){
+				puedoCrearEvento = true;
+			}
+		}
+		Evento evento = null;
+		if(puedoCrearEvento){
+			evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas), miFechaComienzo, categorias, plazos);
+		}
+		return evento;
+	}
+	
+	private Date buscarUltimaFechaInscripcion(){
+		Date fecha = new Date(0);
+		for(PlazoInscripcion plazo : plazosInscripcionNuevoEvento){
+			if(plazo.getFechaFin().getTime() >= fecha.getTime()){
+				fecha = plazo.getFechaFin();
+			}
+		}
+		if(fecha.getTime() == 0)
+			throw new IllegalStateException("No ha encontrado una fecha mayo que 0 milis");
+		return fecha;
 	}
 }
