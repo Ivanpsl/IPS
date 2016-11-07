@@ -66,18 +66,20 @@ public class ConexionBD {
 					String nombre =rs.getString("EV_NOMBRE");
 					String tipo =rs.getString("EV_TIPO");
 					double distancia =rs.getDouble("EV_DISTANCIA");
-//					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
+					
 //					Date fecha_fin_insc=rs.getDate("EV_FECHA_FIN_INSC");
 					int plazas = rs.getInt("EV_PLAZAS_TOTALES");
 					int finalizado= rs.getInt("EV_FINALIZADO");
 					String bdPlazos = rs.getString("EV_PLAZOS_INS");
 					String bdCategorias = rs.getString("EV_CATEGORIAS");
+					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
+					
 					boolean fin;
 					if(finalizado==0) fin=false;
 					else fin=true;
 					ArrayList<PlazoInscripcion> plazos = Asignador.decodificaPlazos(bdPlazos);
 					ArrayList<Categoria> categorias = Asignador.decodificarCategorias(bdCategorias);
-					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos));
+					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos,fecha_comienzo));
 				}
 				System.out.println("Datos de eventos cargados");
 				rs.close();
@@ -138,7 +140,7 @@ public class ConexionBD {
 			System.err.println("No es posible añadir eventos a ninguna BD." );
 		else{
 			try {
-				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?)");
+				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?,?)");
 				int id= ev.getId();
 				String nombre = ev.getNombre();
 				String tipo= ev.getTipo();
@@ -147,7 +149,7 @@ public class ConexionBD {
 				int fin;
 				String categorias = Asignador.codificarCategorias(ev.getCategorias());
 				String plazos = Asignador.codificarPlazos(ev.getPlazos());
-				
+				Date fechaCompeticion= ev.getFechaCompeticion();
 				if(ev.getFinalizado()) fin =1;
 				else fin=0;
 				
@@ -159,7 +161,7 @@ public class ConexionBD {
 				st.setInt(6, fin);
 				st.setString(7, categorias);
 				st.setString(8,plazos );
-				
+				st.setDate(9, (java.sql.Date) fechaCompeticion);
 				st.executeUpdate();
 				st.close();
 				con.close();
