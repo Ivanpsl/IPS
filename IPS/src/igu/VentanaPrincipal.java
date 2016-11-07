@@ -70,6 +70,8 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTextArea;
 import javax.swing.JList;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -148,6 +150,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lbKm;
 	private JSpinner spinnerPlazas;
 	List<Atleta> atletasAInscribir = new ArrayList<Atleta>();
+	List<Atleta> atletasARegistrar = new ArrayList<Atleta>();
 
 	/**
 	 * Launch the application.
@@ -184,22 +187,54 @@ public class VentanaPrincipal extends JFrame {
 		pnPrincipal.add(getPnUsuario(), "pn_usuario");
 	}
 
+	private boolean comprobarDatosInscribirse(){
+		if(txtDNIInscribirse.getText().equals("") || !g.comprobarFecha(txtFechaInscribirse.getText()) || txtSexoInscribirse.getText().equals("")
+			|| txtNombreInscribirse.getText().equals("")){
+		return false;
+	}
+	return true;
+	}
 	private void AnadirInscritoALista() {
-		String dni = txtDNIInscribirse.getText();
-
-		Atleta at = g.buscarAtletaPorDNI(dni);
-
-		if (!modeloLista.contains(dni) && g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)) {
-			atletasAInscribir.add(at);
-			modeloLista.addElement(dni);
+		if(comprobarDatosInscribirse()){
+			int sexo =0;
+			if(txtSexoInscribirse.getText().equals("masculino")){
+				sexo = 0;
+			}
+			if(txtSexoInscribirse.getText().equals("femenino")){
+				sexo = 1;
+			}
+			
+			String dni = txtDNIInscribirse.getText();
+	
+			Atleta at = g.buscarAtletaPorDNI(dni);
+			if(at ==null){
+				atletasARegistrar.add(new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), 
+						sexo));
+				JOptionPane.showMessageDialog(null, "Atleta no registrado. Sera registrado en la base de datos");
+				
+			}
+	
+			if (!modeloLista.contains(dni) ) {
+				if(!g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)){
+					atletasAInscribir.add(at);
+					modeloLista.addElement(dni);
+				}else{
+					JOptionPane.showMessageDialog(null, "Dni ya inscrito en el evento");
+				}
+			}else{
+				JOptionPane.showMessageDialog(null, "El dni ya esta en la lista");
+			}
+			txtDNIInscribirse.setText("");
+			txtNombreInscribirse.setText("");
+			txtFechaInscribirse.setText("");
+		}else{
+			JOptionPane.showMessageDialog(null, "Rellene bien todos los campos");
 		}
-		txtDNIInscribirse.setText("");
-		txtNombreInscribirse.setText("");
-		txtFechaInscribirse.setText("");
 
 	}
 
 	private void inscribir() {
+		g.registrarLoteAtletas(atletasARegistrar);
 		g.inscribirLote(atletasAInscribir);
 		modeloLista.removeAllElements();
 		listInscribirse.setModel(modeloLista);
@@ -207,7 +242,19 @@ public class VentanaPrincipal extends JFrame {
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
+		
+		atletasARegistrar.clear();
+		atletasAInscribir.clear();
 
+	}
+	private void borrarDatos() {
+		txtDNIInscribirse.setText("");
+		txtNombreInscribirse.setText("");
+		txtFechaInscribirse.setText("");
+		modeloLista.removeAllElements();
+		listInscribirse.setModel(modeloLista);
+		atletasARegistrar.clear();
+		atletasAInscribir.clear();
 	}
 
 	private void autorrellenar() {
@@ -911,6 +958,9 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getBtAñadirCat());
 
 			pnContenidoCreacionEvento.add(getBtEditarCategoria());
+			pnContenidoCreacionEvento.add(getScrollPaneFechasIns());
+			pnContenidoCreacionEvento.add(getBtnAadir());
+			pnContenidoCreacionEvento.add(getBtnEditar());
 		}
 		return pnContenidoCreacionEvento;
 	}
@@ -1044,7 +1094,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField txtFechaInscribirse;
 	private JLabel label_1;
 	private JLabel label_2;
-	private JLabel label_3;
+	private JLabel lblFechaNacimientoddmmyyyy;
 	private JLabel label_4;
 	private JTextField txtSexoInscribirse;
 	private JButton btnUsuarioActual;
@@ -1323,6 +1373,9 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btEditarCategoria;
 	private JButton btnResultadosEvento;
 	private JPanel panel_4;
+	private JLabel lblPlazosDeInscripcin;
+	private JScrollPane scrollPaneFechasIns;
+	private JList<String> listFechasInscrip;
 
 	public ArrayList<Categoria> getCategoriasCrearEvento() {
 		return categoriasAlCrearEvento;
@@ -1449,7 +1502,7 @@ public class VentanaPrincipal extends JFrame {
 			pnInscribirse.add(getTxtFechaInscribirse());
 			pnInscribirse.add(getLabel_1());
 			pnInscribirse.add(getLabel_2());
-			pnInscribirse.add(getLabel_3());
+			pnInscribirse.add(getLblFechaNacimientoddmmyyyy());
 			pnInscribirse.add(getLabel_4());
 			pnInscribirse.add(getTxtSexoInscribirse());
 			pnInscribirse.add(getBtnUsuarioActual());
@@ -1485,6 +1538,7 @@ public class VentanaPrincipal extends JFrame {
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					AnadirInscritoALista();
+					btnRealizarInscripcion.setEnabled(true);
 				}
 
 			});
@@ -1496,7 +1550,8 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLabel() {
 		if (label == null) {
 			label = new JLabel("Introduzca sus datos");
-			label.setBounds(177, 48, 165, 33);
+			label.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			label.setBounds(136, 45, 165, 33);
 		}
 		return label;
 	}
@@ -1505,7 +1560,7 @@ public class VentanaPrincipal extends JFrame {
 		if (txtDNIInscribirse == null) {
 			txtDNIInscribirse = new JTextField();
 			txtDNIInscribirse.setColumns(10);
-			txtDNIInscribirse.setBounds(291, 92, 86, 20);
+			txtDNIInscribirse.setBounds(342, 92, 133, 20);
 		}
 		return txtDNIInscribirse;
 	}
@@ -1513,8 +1568,18 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTxtNombreInscribirse() {
 		if (txtNombreInscribirse == null) {
 			txtNombreInscribirse = new JTextField();
+			txtNombreInscribirse.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c = arg0.getKeyChar();
+					if(!Character.isAlphabetic(c)){
+						arg0.consume();
+					}
+					
+				}
+			});
 			txtNombreInscribirse.setColumns(10);
-			txtNombreInscribirse.setBounds(291, 151, 86, 20);
+			txtNombreInscribirse.setBounds(342, 151, 133, 20);
 		}
 		return txtNombreInscribirse;
 	}
@@ -1523,7 +1588,7 @@ public class VentanaPrincipal extends JFrame {
 		if (txtFechaInscribirse == null) {
 			txtFechaInscribirse = new JTextField();
 			txtFechaInscribirse.setColumns(10);
-			txtFechaInscribirse.setBounds(291, 254, 86, 20);
+			txtFechaInscribirse.setBounds(342, 254, 133, 20);
 		}
 		return txtFechaInscribirse;
 	}
@@ -1531,6 +1596,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLabel_1() {
 		if (label_1 == null) {
 			label_1 = new JLabel("DNI");
+			label_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			label_1.setBounds(136, 92, 46, 14);
 		}
 		return label_1;
@@ -1539,22 +1605,25 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLabel_2() {
 		if (label_2 == null) {
 			label_2 = new JLabel("Nombre");
+			label_2.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			label_2.setBounds(136, 154, 46, 14);
 		}
 		return label_2;
 	}
 
-	private JLabel getLabel_3() {
-		if (label_3 == null) {
-			label_3 = new JLabel("Fecha nacimiento");
-			label_3.setBounds(136, 257, 106, 14);
+	private JLabel getLblFechaNacimientoddmmyyyy() {
+		if (lblFechaNacimientoddmmyyyy == null) {
+			lblFechaNacimientoddmmyyyy = new JLabel("Fecha nacimiento (dd/mm/yyyy)");
+			lblFechaNacimientoddmmyyyy.setFont(new Font("Tahoma", Font.PLAIN, 12));
+			lblFechaNacimientoddmmyyyy.setBounds(136, 257, 196, 14);
 		}
-		return label_3;
+		return lblFechaNacimientoddmmyyyy;
 	}
 
 	private JLabel getLabel_4() {
 		if (label_4 == null) {
 			label_4 = new JLabel("Sexo");
+			label_4.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			label_4.setBounds(136, 209, 106, 14);
 		}
 		return label_4;
@@ -1563,8 +1632,17 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTxtSexoInscribirse() {
 		if (txtSexoInscribirse == null) {
 			txtSexoInscribirse = new JTextField();
+			txtSexoInscribirse.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent e) {
+					char c = e.getKeyChar();
+					if(!Character.isAlphabetic(c)){
+						e.consume();
+					}
+				}
+			});
 			txtSexoInscribirse.setColumns(10);
-			txtSexoInscribirse.setBounds(291, 206, 86, 20);
+			txtSexoInscribirse.setBounds(342, 206, 133, 20);
 		}
 		return txtSexoInscribirse;
 	}
@@ -1593,6 +1671,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnRealizarInscripcion() {
 		if (btnRealizarInscripcion == null) {
 			btnRealizarInscripcion = new JButton("Realizar Inscripcion");
+			btnRealizarInscripcion.setEnabled(false);
 			btnRealizarInscripcion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inscribir();
@@ -1609,7 +1688,9 @@ public class VentanaPrincipal extends JFrame {
 			btnSeleccionarOtroEvento = new JButton("Seleccionar Otro Evento");
 			btnSeleccionarOtroEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					borrarDatos();
 					cambiarPanelesUsuario(0);
+					btnRealizarInscripcion.setEnabled(false);
 				}
 			});
 			btnSeleccionarOtroEvento.setBounds(612, 319, 163, 23);
@@ -1632,5 +1713,57 @@ public class VentanaPrincipal extends JFrame {
 			panel_4.add(getBtnResultadosEvento(), BorderLayout.SOUTH);
 		}
 		return panel_4;
+	}
+	private JLabel getLblPlazosDeInscripcin() {
+		if (lblPlazosDeInscripcin == null) {
+			lblPlazosDeInscripcin = new JLabel("Plazos de inscripci\u00F3n");
+			lblPlazosDeInscripcin.setHorizontalAlignment(SwingConstants.CENTER);
+			lblPlazosDeInscripcin.setBounds(51, 214, 145, 14);
+		}
+		return lblPlazosDeInscripcin;
+	}
+	private JScrollPane getScrollPaneFechasIns() {
+		if (scrollPaneFechasIns == null) {
+			scrollPaneFechasIns = new JScrollPane();
+			scrollPaneFechasIns.setBounds(51, 244, 149, 130);
+			scrollPaneFechasIns.setViewportView(getListFechasInscrip());
+		}
+		return scrollPaneFechasIns;
+	}
+	public void añadirPlazo(PlazoInscripcion plazo){
+		this.plazosInscripcionNuevoEvento.add(plazo);
+	}
+	public void borrarPlazo(PlazoInscripcion plazo){
+		this.plazosInscripcionNuevoEvento.remove(plazo);
+	}
+	//Datos necesarios para las fechas de inscripcion:
+	DefaultListModel<String> modeloListaFechasInscripcion = new DefaultListModel<String>();
+	ArrayList<PlazoInscripcion> plazosInscripcionNuevoEvento;
+	private JButton btnAadir;
+	private JButton btnEditar;
+	private JList getListFechasInscrip() {
+		if (listFechasInscrip == null) {
+			plazosInscripcionNuevoEvento = new ArrayList<PlazoInscripcion>();
+			
+			listFechasInscrip = new JList();
+			listFechasInscrip.setModel(modeloListaFechasInscripcion);
+			
+		}
+		return listFechasInscrip;
+	}
+	private JButton getBtnAadir() {
+		if (btnAadir == null) {
+			btnAadir = new JButton("A\u00F1adir");
+			btnAadir.setToolTipText("A\u00F1adir un nuevo plazo de inscripci\u00F3n.");
+			btnAadir.setBounds(51, 385, 63, 23);
+		}
+		return btnAadir;
+	}
+	private JButton getBtnEditar() {
+		if (btnEditar == null) {
+			btnEditar = new JButton("Editar");
+			btnEditar.setBounds(133, 385, 67, 23);
+		}
+		return btnEditar;
 	}
 }
