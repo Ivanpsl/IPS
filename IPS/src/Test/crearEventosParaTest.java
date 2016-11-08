@@ -52,6 +52,7 @@ public class crearEventosParaTest {
 		Atleta a4 = new Atleta("4", "a4", "1995/12/01", 0);
 		Atleta a5 = new Atleta("5", "a5", "1995/12/01", 0);
 		
+		
 		g.addAtleta(a1);
 		g.addAtleta(a2);
 		g.addAtleta(a3);

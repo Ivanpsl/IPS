@@ -231,6 +231,7 @@ public class VentanaPrincipal extends JFrame {
 			txtDNIInscribirse.setText("");
 			txtNombreInscribirse.setText("");
 			txtFechaInscribirse.setText("");
+			txtSexoInscribirse.setText("");
 		} else {
 			JOptionPane.showMessageDialog(null, "Rellene bien todos los campos");
 			btnRealizarInscripcion.setEnabled(false);
@@ -258,6 +259,7 @@ public class VentanaPrincipal extends JFrame {
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
+		txtSexoInscribirse.setText("");
 		modeloLista.removeAllElements();
 		listInscribirse.setModel(modeloLista);
 		atletasARegistrar.clear();
@@ -340,7 +342,8 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void mostrarTablaEventosOrganizador() {
 		ModeloNoEditable modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
-		ArrayList<Evento> eventosOrganizador = g.getEventos(); // g.getEventosOrganizador(organizador);
+		//ArrayList<Evento> eventosOrganizador = g.getEventos(); // g.getEventosOrganizador(organizador);
+		ArrayList<Evento> eventosOrganizador = organizador.getMisEventos();
 		for (Evento ev : eventosOrganizador) {
 			String[] fila = new String[6];
 			fila[0] = ev.getNombre();
@@ -466,8 +469,8 @@ public class VentanaPrincipal extends JFrame {
 			sB = new StringBuilder();
 			if (plazos != null && plazos.size() > 0)
 				for (PlazoInscripcion p : plazos) {
-					sB.append("De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + " Precio: " + p.getPrecio()
-							+ "Â \n");
+					sB.append("De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + "\nPrecio: " + p.getPrecio()
+							+ "� \n");
 				}
 			else
 				sB.append("PLAZOS CERRADOS");
@@ -836,6 +839,7 @@ public class VentanaPrincipal extends JFrame {
 			btnMostrarResultadosAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					DialogResultadosAtleta dR = new DialogResultadosAtleta(g.getAtletaIdentificado(), g, vP);
+					dR.setVisible(true);
 				}
 			});
 		}
@@ -1029,7 +1033,8 @@ public class VentanaPrincipal extends JFrame {
 			btCrearEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (faltaAlgoPorRellenar()) {
-						JOptionPane.showMessageDialog(null, "Por favor, rellene todos los campos.");
+						JOptionPane.showMessageDialog(null,
+								"Por favor, rellene todos los campos.");
 						return;
 					}
 					Evento evento = crearEventoOrgnizador();
@@ -1043,10 +1048,17 @@ public class VentanaPrincipal extends JFrame {
 					organizador.crearEvento(evento);// Esto deberia actualizarse
 													// a la base de datos.
 					g.a�adirEvento(evento);
+					actualizarModeloTablaOr();
+					cambiarPanelesOrganizador("misEventos");
+
 				}
 			});
 		}
 		return btCrearEvento;
+	}
+	
+	private void actualizarModeloTablaOr(){
+		mostrarTablaEventosOrganizador();
 	}
 
 	private boolean faltaAlgoPorRellenar() {
@@ -1556,12 +1568,16 @@ public class VentanaPrincipal extends JFrame {
 		getListCategoriaOr().setModel(modeloListaCategorias);
 	}
 
+
+
 	private void cargarCategoriasDefectoLista() {
 		if (catDef.isEmpty()) {
+			modeloCategoriasDefecto.clear();
+			getListCategoriaOr().setModel(modeloCategoriasDefecto);
 			catDef = GestorCategorias.getCategoriasDefecto();
-		}
-		for (Categoria c : catDef) {
-			modeloCategoriasDefecto.addElement(c.toString());
+			for (Categoria c : catDef) {
+				modeloCategoriasDefecto.addElement(c.toString());
+			}
 		}
 		getListCategoriaOr().setModel(modeloCategoriasDefecto);
 	}
@@ -2070,9 +2086,11 @@ public class VentanaPrincipal extends JFrame {
 			JOptionPane.showMessageDialog(null, "No se han establecido plazos de inscripciÃ³n.");
 			return null;
 		}
+		if(!getCbCatDef().isSelected()){
 		if (categorias == null || categorias.isEmpty()) {
 			JOptionPane.showMessageDialog(null, "No se han establecido las categorÃ­as del evento.");
 			return null;
+		}
 		}
 		// Fecha
 		int dia = Integer.parseInt(getCbDia().getSelectedItem().toString());

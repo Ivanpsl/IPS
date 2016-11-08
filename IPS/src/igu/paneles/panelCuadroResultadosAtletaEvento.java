@@ -27,6 +27,10 @@ public class panelCuadroResultadosAtletaEvento extends JPanel {
 	
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel pnNombre;
 	private JPanel panel_1;
 	private JLabel lbNombre;
