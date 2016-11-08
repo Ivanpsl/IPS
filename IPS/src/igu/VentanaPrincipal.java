@@ -176,7 +176,7 @@ public class VentanaPrincipal extends JFrame {
 		g = new Gestor();
 		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1020, 501);
+		setBounds(100, 100, 1020, 512);
 		pnPrincipal = new JPanel();
 		pnPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(pnPrincipal);
@@ -230,6 +230,7 @@ public class VentanaPrincipal extends JFrame {
 			txtFechaInscribirse.setText("");
 		} else {
 			JOptionPane.showMessageDialog(null, "Rellene bien todos los campos");
+			btnRealizarInscripcion.setEnabled(false);
 		}
 
 	}
@@ -243,6 +244,7 @@ public class VentanaPrincipal extends JFrame {
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
+		txtSexoInscribirse.setText("");
 
 		atletasARegistrar.clear();
 		atletasAInscribir.clear();
@@ -1674,8 +1676,8 @@ public class VentanaPrincipal extends JFrame {
 			btAñadirAtleta = new JButton("A\u00F1adir");
 			btAñadirAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					AnadirInscritoALista();
 					btnRealizarInscripcion.setEnabled(true);
+					AnadirInscritoALista();
 				}
 
 			});
