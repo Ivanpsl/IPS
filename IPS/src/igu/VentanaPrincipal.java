@@ -29,6 +29,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -54,6 +56,7 @@ import usuarios.Organizador;
 import utiles.Comprobaciones;
 import utiles.ConversorFechas;
 
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JTextField;
@@ -73,10 +76,13 @@ import java.awt.event.MouseEvent;
 
 import javax.swing.JTextArea;
 import javax.swing.JList;
+
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+
+import javax.swing.JRadioButton;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -167,6 +173,7 @@ public class VentanaPrincipal extends JFrame {
 					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setResizable(false);
 					frame.setVisible(true);
+			        
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -212,6 +219,7 @@ public class VentanaPrincipal extends JFrame {
 			}
 
 			String dni = txtDNIInscribirse.getText();
+			dniInscrito = txtDNIInscribirse.getText();
 
 			Atleta at = g.buscarAtletaPorDNI(dni);
 			if (at == null) {
@@ -326,6 +334,9 @@ public class VentanaPrincipal extends JFrame {
 		if (opcion == 1) {
 			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario, "pn_inscripcionesUsuario");
 	
+		}
+		if (opcion == 2) {
+			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario, "pn_pagosUsuario");
 		}
 
 	}
@@ -707,6 +718,7 @@ public class VentanaPrincipal extends JFrame {
 				public void mouseClicked(MouseEvent arg0) {
 					int fila = tbEventosSeleccion.getSelectedRow();
 					pulsarEvento(contenidoEventos.get(fila), 1);
+					eventoSeleccionado = contenidoEventos.get(fila);
 				}
 			});
 		}
@@ -1420,6 +1432,7 @@ public class VentanaPrincipal extends JFrame {
 			pnCardUsuario.add(getPnResultadosAtleta(), "pn_ResultadosUsuario");
 			pnCardUsuario.add(getPnResultadosEvento(), "pn_resultadosEvento");
 			pnCardUsuario.add(getPnInscribirse(), "pn_inscripcionesUsuario");
+			pnCardUsuario.add(getPnPagar(), "pn_pagosUsuario");
 		}
 		return pnCardUsuario;
 	}
@@ -1791,6 +1804,7 @@ public class VentanaPrincipal extends JFrame {
 			btnRealizarInscripcion.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					inscribir();
+					cambiarPanelesUsuario(2);
 				}
 
 			});
@@ -2075,5 +2089,185 @@ public class VentanaPrincipal extends JFrame {
 			throw new IllegalStateException("No ha encontrado una fecha mayo que 0 milis");
 		return fecha;
 	}
+	
+	private JPanel pnPagar;
+	private JLabel lbPagar;
+	private JRadioButton rdbtnTarjeta;
+	private JRadioButton rdbtnTransferencia;
+	private JButton btnFinalizarPago;
+	private JPanel pnTarjeta;
+	private JLabel lbNumeroTarjeta;
+	private JTextField txNumTarjeta;
+	private JLabel lbTitularTarjeta;
+	private JTextField txTituTarjeta;
+	private JPanel pnTransferencia;
+	private JLabel lbNumeroBanco;
+	private JTextField txtEs;
+	private JLabel lbInfor;
+	private final ButtonGroup btGroupPagos = new ButtonGroup();
 
+	String dniInscrito;
+	Evento eventoSeleccionado;
+	
+	private JPanel getPnPagar() {
+		if (pnPagar == null) {
+			pnPagar = new JPanel();
+			pnPagar.setLayout(null);
+			pnPagar.add(getLbPagar());
+			pnPagar.add(getRdbtnTarjeta());
+			pnPagar.add(getRdbtnTransferencia());
+			pnPagar.add(getBtnFinalizarPago());
+			pnPagar.add(getPnTarjeta());
+			pnPagar.add(getPnTransferencia());
+		}
+		return pnPagar;
+	}
+	private JLabel getLbPagar() {
+		if (lbPagar == null) {
+			lbPagar = new JLabel("Seleccione el m\u00E9todo de pago:");
+			lbPagar.setFont(new Font("Tahoma", Font.BOLD, 16));
+			lbPagar.setBounds(10, 22, 261, 29);
+		}
+		return lbPagar;
+	}
+	private JRadioButton getRdbtnTarjeta() {
+		if (rdbtnTarjeta == null) {
+			rdbtnTarjeta = new JRadioButton("Tarjeta Cr\u00E9dito");
+			rdbtnTarjeta.setSelected(true);
+			rdbtnTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			rdbtnTarjeta.setBounds(6, 101, 128, 23);
+			btGroupPagos.add(rdbtnTarjeta);
+		}
+		return rdbtnTarjeta;
+	}
+	private JRadioButton getRdbtnTransferencia() {
+		if (rdbtnTransferencia == null) {
+			rdbtnTransferencia = new JRadioButton("Transferencia");
+			rdbtnTransferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			rdbtnTransferencia.setBounds(6, 228, 109, 23);
+			btGroupPagos.add(rdbtnTransferencia);
+		}
+		return rdbtnTransferencia;
+	}
+	private JButton getBtnFinalizarPago() {
+		if (btnFinalizarPago == null) {
+			btnFinalizarPago = new JButton("Finalizar Pago");
+			btnFinalizarPago.setBounds(800, 323, 128, 23);
+			btnFinalizarPago.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if (rdbtnTarjeta.isSelected())
+					{
+						if (comprobarDatosTarjeta())
+						{
+							g.realizarPagoTarjeta(eventoSeleccionado.getId(), dniInscrito);
+							cambiarPanelesUsuario(0);
+						}
+						else
+							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Crédito", JOptionPane.ERROR_MESSAGE);
+					}
+					else
+					{
+						g.comprobarPagadosBanco(eventoSeleccionado.getId());
+						cambiarPanelesUsuario(0);
+					}
+						
+				}
+			});
+		}
+		return btnFinalizarPago;
+	}
+	
+	public boolean comprobarDatosTarjeta()
+	{
+		if (getTxNumTarjeta().getText() != "" && getTxTituTarjeta().getText() != "")
+			return true;
+		return false;
+	}
+	
+	private JPanel getPnTarjeta() {
+		if (pnTarjeta == null) {
+			pnTarjeta = new JPanel();
+			pnTarjeta.setBorder(new TitledBorder(null, "Datos Tarjeta", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnTarjeta.setBounds(163, 62, 448, 145);
+			pnTarjeta.setLayout(null);
+			pnTarjeta.add(getLbNumeroTarjeta());
+			pnTarjeta.add(getTxNumTarjeta());
+			pnTarjeta.add(getLbTitularTarjeta());
+			pnTarjeta.add(getTxTituTarjeta());
+		}
+		return pnTarjeta;
+	}
+	private JLabel getLbNumeroTarjeta() {
+		if (lbNumeroTarjeta == null) {
+			lbNumeroTarjeta = new JLabel("N\u00FAmero:");
+			lbNumeroTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lbNumeroTarjeta.setBounds(10, 44, 86, 23);
+		}
+		return lbNumeroTarjeta;
+	}
+	private JTextField getTxNumTarjeta() {
+		if (txNumTarjeta == null) {
+			txNumTarjeta = new JTextField();
+			txNumTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txNumTarjeta.setBounds(76, 44, 288, 23);
+			txNumTarjeta.setColumns(10);
+		}
+		return txNumTarjeta;
+	}
+	private JLabel getLbTitularTarjeta() {
+		if (lbTitularTarjeta == null) {
+			lbTitularTarjeta = new JLabel("Titular:");
+			lbTitularTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lbTitularTarjeta.setBounds(10, 96, 56, 23);
+		}
+		return lbTitularTarjeta;
+	}
+	private JTextField getTxTituTarjeta() {
+		if (txTituTarjeta == null) {
+			txTituTarjeta = new JTextField();
+			txTituTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txTituTarjeta.setBounds(76, 96, 288, 23);
+			txTituTarjeta.setColumns(10);
+		}
+		return txTituTarjeta;
+	}
+	private JPanel getPnTransferencia() {
+		if (pnTransferencia == null) {
+			pnTransferencia = new JPanel();
+			pnTransferencia.setBorder(new TitledBorder(null, "Datos del Banco", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnTransferencia.setBounds(163, 219, 448, 103);
+			pnTransferencia.setLayout(null);
+			pnTransferencia.add(getLbNumeroBanco());
+			pnTransferencia.add(getTxtEs());
+			pnTransferencia.add(getLbInfor());
+		}
+		return pnTransferencia;
+	}
+	private JLabel getLbNumeroBanco() {
+		if (lbNumeroBanco == null) {
+			lbNumeroBanco = new JLabel("N\u00FAmero cuenta: ");
+			lbNumeroBanco.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lbNumeroBanco.setBounds(10, 32, 113, 23);
+		}
+		return lbNumeroBanco;
+	}
+	private JTextField getTxtEs() {
+		if (txtEs == null) {
+			txtEs = new JTextField();
+			txtEs.setText("ES12 3456 7891 00 5555555555");
+			txtEs.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txtEs.setEditable(false);
+			txtEs.setBounds(133, 32, 230, 23);
+			txtEs.setColumns(10);
+		}
+		return txtEs;
+	}
+	private JLabel getLbInfor() {
+		if (lbInfor == null) {
+			lbInfor = new JLabel("Dispondr\u00E1 del plazo hasta antes del inicio de la competici\u00F3n");
+			lbInfor.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lbInfor.setBounds(10, 66, 376, 26);
+		}
+		return lbInfor;
+	}
 }

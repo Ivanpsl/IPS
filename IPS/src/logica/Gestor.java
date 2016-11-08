@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -238,24 +240,52 @@ public class Gestor {
 		}
 	}
 	
+	public void realizarPagoTarjeta(int idEvento, String dni)
+	{
+		
+		ArrayList<Inscripcion> inscritos = eventos.get(idEvento).getInscritosEvento();
+		
+		for (Inscripcion i : inscritos)
+    	{
+    		if (i.getAtleta().getDNI().toUpperCase().equals(dni.toUpperCase()))
+    		{
+    			i.setEstado(2);
+    			bd.actualizarEstadoPago(i, 2);
+    		}
+    	}
+	}
+	
 	/**
 	 * Método que verifica los DNI del txt para saber que atletas han pagado.
 	 * @throws IOException 
 	 */
-	public void comprobarPagados(int idEvento)
+	public void comprobarPagadosBanco(int idEvento)
 	{
 		try {
 			BufferedReader fichero = new BufferedReader(new FileReader("ficheros/banco.txt"));
-			String linea = fichero.readLine(); //La primera es el numero de cuenta
 			
 			ArrayList<Inscripcion> inscritos = eventos.get(idEvento).getInscritosEvento();
 			
+	    	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+			
 			while (fichero.ready()) {
-				linea = fichero.readLine();
-		    	String[] trozos = linea.split("\n");
+				String linea = fichero.readLine();
+		    	String[] trozos = linea.split("@");
+		    	
+		    	String dni = trozos[0];
+		    	
+		        java.util.Date parsed = null;
+				try {
+					parsed = format.parse(trozos[1]);
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+				
+		        java.sql.Date fecha = new java.sql.Date(parsed.getTime());
+		    	
 		    	for (Inscripcion i : inscritos)
 		    	{
-		    		if (i.getAtleta().getDNI().toUpperCase().equals(trozos[0]))
+		    		if (i.getAtleta().getDNI().toUpperCase().equals(dni) && fecha.before(eventos.get(idEvento).getFechaCompeticion()))
 		    		{
 		    			i.setEstado(2);
 		    			bd.actualizarEstadoPago(i, 2);
@@ -327,6 +357,7 @@ public class Gestor {
 	 * @param id: id del evento que finaliza
 	 */
 	public void finalizarEvento(int id){
+		asignarDorsales(id);
 		gF.obtenerResultadosEvento(obtenerEventoPorId(id),bd);
 		eventos.get(id).setFinalizado();
 		bd.marcarComoFinalizado(obtenerEventoPorId(id));
