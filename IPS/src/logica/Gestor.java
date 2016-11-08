@@ -341,7 +341,11 @@ public class Gestor {
 	 * @param e
 	 */
 	public void añadirEvento(Evento e){
+		if(!eventos.isEmpty()){
 		e.setId(eventos.get(eventos.size()-1).getId()+1);
+		}else{
+			e.setId(0);
+		}
 		eventos.add(e);
 		bd.añadirEventoABD(e);
 	}
