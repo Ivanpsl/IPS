@@ -282,10 +282,14 @@ public class Gestor {
 				}
 				
 		        java.sql.Date fecha = new java.sql.Date(parsed.getTime());
+		        
+		        int dinero = Integer.parseInt(trozos[2]);
+		        // if (dinero >= eventos.get(idEvento).getPrecio())
 		    	
 		    	for (Inscripcion i : inscritos)
 		    	{
-		    		if (i.getAtleta().getDNI().toUpperCase().equals(dni) && fecha.before(eventos.get(idEvento).getFechaCompeticion()))
+		    		if (i.getAtleta().getDNI().toUpperCase().equals(dni) 
+		    				&& fecha.before(eventos.get(idEvento).getFechaCompeticion()))
 		    		{
 		    			i.setEstado(2);
 		    			bd.actualizarEstadoPago(i, 2);

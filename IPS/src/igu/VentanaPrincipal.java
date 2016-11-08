@@ -12,8 +12,6 @@ import java.awt.CardLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
-import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 
 import java.awt.GridLayout;
@@ -21,30 +19,18 @@ import java.awt.GridLayout;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
 
-import java.awt.SystemColor;
-
-import javax.swing.UIManager;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.awt.event.ActionEvent;
 
 import javax.swing.border.TitledBorder;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.DefaultTableModel;
-import javax.xml.ws.FaultAction;
-import javax.swing.border.LineBorder;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.border.BevelBorder;
 
 import logica.Gestor;
 import logica.GestorCategorias;
@@ -63,10 +49,6 @@ import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
-import javax.swing.GroupLayout;
-import javax.swing.GroupLayout.Alignment;
-import javax.swing.LayoutStyle.ComponentPlacement;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.JComboBox;
 import javax.swing.JSpinner;
@@ -86,6 +68,10 @@ import javax.swing.JRadioButton;
 
 public class VentanaPrincipal extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ModeloNoEditable modeloTabla;
 	private ArrayList<Evento> contenidoEventos; // ArrayList que se mostrara en
 												// la tabla
@@ -211,10 +197,10 @@ public class VentanaPrincipal extends JFrame {
 	private void AnadirInscritoALista() {
 		if (comprobarDatosInscribirse()) {
 			int sexo = 0;
-			if (txtSexoInscribirse.getText().equals("masculino")) {
+			if (txtSexoInscribirse.getText().toUpperCase().equals("MASCULINO")) {
 				sexo = 0;
 			}
-			if (txtSexoInscribirse.getText().equals("femenino")) {
+			if (txtSexoInscribirse.getText().toUpperCase().equals("FEMENINO")) {
 				sexo = 1;
 			}
 
@@ -514,12 +500,33 @@ public class VentanaPrincipal extends JFrame {
 			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador, "pn_CrearEvento");
 			break;
 		case "misEventos":
-			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador, "pnEventosOrganizador");
+			((CardLayout) pnOrganizador.getLayout()).show(pnOrganizador, "pn_EventosOrganizador");
 			break;
 
 		default:
 			break;
 		}
+	}
+	
+	private JButton getBtAtrasOrganizador() {
+		if (btAtrasOrganizador == null) {
+			btAtrasOrganizador = new JButton("Atr\u00E1s");
+			btAtrasOrganizador.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					cambiarPanelesPrincipales("inicio");
+				}
+			});
+		}
+		return btAtrasOrganizador;
+	}
+	private JPanel getPnSurOrganizador() {
+		if (pnSurOrganizador == null) {
+			pnSurOrganizador = new JPanel();
+			FlowLayout flowLayout = (FlowLayout) pnSurOrganizador.getLayout();
+			flowLayout.setAlignment(FlowLayout.LEFT);
+			pnSurOrganizador.add(getBtAtrasOrganizador());
+		}
+		return pnSurOrganizador;
 	}
 
 	private JPanel getPnUsuario() {
@@ -835,6 +842,7 @@ public class VentanaPrincipal extends JFrame {
 			pnEventosOrganizador.setLayout(new BorderLayout(0, 0));
 			pnEventosOrganizador.add(getPnCabezeraOrganizador(), BorderLayout.NORTH);
 			pnEventosOrganizador.add(getPnCentroOrganizador(), BorderLayout.CENTER);
+			pnEventosOrganizador.add(getPnSurOrganizador(), BorderLayout.SOUTH);
 		}
 		return pnEventosOrganizador;
 	}
@@ -992,7 +1000,7 @@ public class VentanaPrincipal extends JFrame {
 			btCancelarEvento = new JButton("Cancelar");
 			btCancelarEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					cambiarPanelesOrganizador("pnEventosOrganizador");
+					cambiarPanelesOrganizador("misEventos");
 				}
 			});
 		}
@@ -1158,7 +1166,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblNmeroDePlazas() {
 		if (lblNmeroDePlazas == null) {
 			lblNmeroDePlazas = new JLabel("N\u00FAmero de plazas:");
-			lblNmeroDePlazas.setBounds(51, 152, 101, 33);
+			lblNmeroDePlazas.setBounds(38, 152, 114, 33);
 			lblNmeroDePlazas.setHorizontalAlignment(SwingConstants.RIGHT);
 		}
 		return lblNmeroDePlazas;
@@ -1202,7 +1210,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel pnInscribirse;
 	private JPanel pnListaInscritos;
 	private JScrollPane scrollPane_1;
-	private JButton button;
+	private JButton btAñadirAtleta;
 	private JLabel label;
 	private JTextField txtDNIInscribirse;
 	private JTextField txtNombreInscribirse;
@@ -1476,7 +1484,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			cbCatDef.setHorizontalAlignment(SwingConstants.LEFT);
-			cbCatDef.setBounds(777, 73, 178, 23);
+			cbCatDef.setBounds(766, 73, 189, 23);
 
 		}
 		return cbCatDef;
@@ -1647,7 +1655,7 @@ public class VentanaPrincipal extends JFrame {
 			pnListaInscritos.setLayout(null);
 			pnListaInscritos.setBounds(623, 11, 295, 297);
 			pnListaInscritos.add(getScrollPane_1_1());
-			pnListaInscritos.add(getButton());
+			pnListaInscritos.add(getBtAñadirAtleta());
 		}
 		return pnListaInscritos;
 	}
@@ -1661,19 +1669,19 @@ public class VentanaPrincipal extends JFrame {
 		return scrollPane_1;
 	}
 
-	private JButton getButton() {
-		if (button == null) {
-			button = new JButton("A\u00F1adir");
-			button.addActionListener(new ActionListener() {
+	private JButton getBtAñadirAtleta() {
+		if (btAñadirAtleta == null) {
+			btAñadirAtleta = new JButton("A\u00F1adir");
+			btAñadirAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					AnadirInscritoALista();
 					btnRealizarInscripcion.setEnabled(true);
 				}
 
 			});
-			button.setBounds(184, 263, 89, 23);
+			btAñadirAtleta.setBounds(184, 263, 89, 23);
 		}
-		return button;
+		return btAñadirAtleta;
 	}
 
 	private JLabel getLabel() {
@@ -1808,7 +1816,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 
 			});
-			btnRealizarInscripcion.setBounds(785, 319, 133, 23);
+			btnRealizarInscripcion.setBounds(759, 319, 159, 23);
 		}
 		return btnRealizarInscripcion;
 	}
@@ -1823,7 +1831,7 @@ public class VentanaPrincipal extends JFrame {
 					btnRealizarInscripcion.setEnabled(false);
 				}
 			});
-			btnSeleccionarOtroEvento.setBounds(612, 319, 163, 23);
+			btnSeleccionarOtroEvento.setBounds(560, 319, 189, 23);
 		}
 		return btnSeleccionarOtroEvento;
 	}
@@ -2108,6 +2116,8 @@ public class VentanaPrincipal extends JFrame {
 
 	String dniInscrito;
 	Evento eventoSeleccionado;
+	private JButton btAtrasOrganizador;
+	private JPanel pnSurOrganizador;
 	
 	private JPanel getPnPagar() {
 		if (pnPagar == null) {
@@ -2264,7 +2274,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 	private JLabel getLbInfor() {
 		if (lbInfor == null) {
-			lbInfor = new JLabel("Dispondr\u00E1 del plazo hasta antes del inicio de la competici\u00F3n");
+			lbInfor = new JLabel("Dispondr\u00E1 del plazo hasta antes del inicio de la competici\u00F3n.");
 			lbInfor.setFont(new Font("Tahoma", Font.PLAIN, 14));
 			lbInfor.setBounds(10, 66, 376, 26);
 		}
