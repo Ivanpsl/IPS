@@ -22,4 +22,10 @@ public class PlazoInscripcion {
 	public double getPrecio(){
 		return precio;
 	}
+	public String toString(){
+//		String miString = inicio.getDay()+"/"+inicio.getMonth()+1+"/"+inicio.getYear()+1900 + " - "+
+//				fin.getDay()+"/"+fin.getMonth()+1+"/"+fin.getYear()+1900+" -> "+precio+"€ ";
+		String miString = inicio.toString() + " - " + fin.toString() + " "+ precio + "€";
+		return miString;
+	}
 }

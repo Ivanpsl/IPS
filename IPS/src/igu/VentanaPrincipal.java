@@ -71,6 +71,7 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * 
 	 */
+	DefaultListModel<String> modeloCategoriasDefecto = new DefaultListModel<String>();
 	private static final long serialVersionUID = 1L;
 	private ModeloNoEditable modeloTabla;
 	private ArrayList<Evento> contenidoEventos; // ArrayList que se mostrara en
@@ -1029,6 +1030,7 @@ public class VentanaPrincipal extends JFrame {
 					// JAVIMENSAJE Mirar aqui a ver si el evento tiene todos los
 					// atributos que necesita la bd, si no, que los genere el
 					// gestor.
+					organizador.crearEvento(evento);//Esto deberia actualizarse a la base de datos.
 					g.añadirEvento(evento);
 				}
 			});
@@ -1480,11 +1482,10 @@ public class VentanaPrincipal extends JFrame {
 			cbCatDef = new JCheckBox("Usar categor\u00EDas por defecto");
 			cbCatDef.addItemListener(new ItemListener() {
 				public void itemStateChanged(ItemEvent arg0) {
-					if (cbCatDef.isSelected()) {
-						categoriasAlCrearEvento = new ArrayList<Categoria>();
-						GestorCategorias.cargarCategoriasPorDefecto(categoriasAlCrearEvento);
-					}else{
-						categoriasAlCrearEvento = new ArrayList<Categoria>();
+					if (getCbCatDef().isSelected()) {
+						cargarCategoriasDefectoLista();
+					} else {
+						cargarMisCategoriasAlModelo();
 					}
 				}
 			});
@@ -1499,7 +1500,7 @@ public class VentanaPrincipal extends JFrame {
 		if (scrollPaneCategorias == null) {
 			scrollPaneCategorias = new JScrollPane();
 			scrollPaneCategorias.setBounds(777, 115, 178, 130);
-			scrollPaneCategorias.setViewportView(getList());
+			scrollPaneCategorias.setViewportView(getListCategoriaOr());
 			// scrollPane.add(getList()); //Esto no se si estara del todo
 			// bien...
 		}
@@ -1524,38 +1525,29 @@ public class VentanaPrincipal extends JFrame {
 	public void añadirCategoriaAlCrearEvento(Categoria c) {
 		categoriasAlCrearEvento.add(c);
 	}
-
-	private JList getList() {
+	ArrayList<Categoria> catDef;
+	private JList<String> getListCategoriaOr() {
 		if (list == null) {
 			modeloListaCategorias = new DefaultListModel<String>();
 			categoriasAlCrearEvento = new ArrayList<Categoria>();
 			list = new JList<String>();
 			list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-		}
-		if (getCbCatDef().isSelected()) {
-			cargarCategoriasDefectoLista();
-		} else {
-			cargarMisCategoriasAlModelo();
-
+			catDef = new ArrayList<Categoria>();
 		}
 		return list;
 	}
-
 	private void cargarMisCategoriasAlModelo() {
-		if (!categoriasAlCrearEvento.isEmpty())
-			for (Categoria c : categoriasAlCrearEvento) {
-				modeloListaCategorias.addElement(c.toString());
-			}
+		getListCategoriaOr().setModel(modeloListaCategorias);
 	}
-
+	
 	private void cargarCategoriasDefectoLista() {
-		ArrayList<Categoria> catDef = new ArrayList<Categoria>();
-		GestorCategorias.cargarCaegorias(catDef);
-		for (Categoria c : catDef) {
-			modeloListaCategorias.addElement(c.toString());
+		if(catDef.isEmpty()){
+			catDef = GestorCategorias.getCategoriasDefecto();
 		}
-
+		for (Categoria c : catDef) {
+			modeloCategoriasDefecto.addElement(c.toString());
+		}
+		getListCategoriaOr().setModel(modeloCategoriasDefecto);
 	}
 
 	private JButton getBtAñadirCat() {
@@ -1582,7 +1574,7 @@ public class VentanaPrincipal extends JFrame {
 
 				public void actionPerformed(ActionEvent arg0) {
 					try {
-						String catString = getList().getSelectedValue().toString();
+						String catString = getListCategoriaOr().getSelectedValue().toString();
 						Categoria cat = null;
 						for (Categoria c : categoriasAlCrearEvento) {
 							if (c.toString().equals(catString))
@@ -1886,14 +1878,6 @@ public class VentanaPrincipal extends JFrame {
 		return scrollPaneFechasIns;
 	}
 
-	public void añadirPlazo(PlazoInscripcion plazo) {
-		this.plazosInscripcionNuevoEvento.add(plazo);
-	}
-
-	public void borrarPlazo(PlazoInscripcion plazo) {
-		this.plazosInscripcionNuevoEvento.remove(plazo);
-	}
-
 	// Datos necesarios para las fechas de inscripcion:
 	DefaultListModel<String> modeloListaFechasInscripcion = new DefaultListModel<String>();
 	ArrayList<PlazoInscripcion> plazosInscripcionNuevoEvento;
@@ -1907,7 +1891,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lbMes;
 	private JLabel lbAño;
 
-	private JList getListFechasInscrip() {
+	private JList<String> getListFechasInscrip() {
 		if (listFechasInscrip == null) {
 			plazosInscripcionNuevoEvento = new ArrayList<PlazoInscripcion>();
 
@@ -2285,4 +2269,49 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbInfor;
 	}
+	
+	// ACTUALIZAR LISTAS DE LA VENTANA ORGANIZADOR
+		public void añadirAlModeloListFechaInscripcionOr(String pl) {
+			// getListFechasInscrip().setModel(null);
+			modeloListaFechasInscripcion.addElement(pl.toString());
+			getListFechasInscrip().setModel(modeloListaFechasInscripcion);
+		}
+
+		public void actualizarModeloListaInscripciones() {
+			// getListFechasInscrip().setModel(null);
+			modeloListaFechasInscripcion.removeAllElements();
+			for (PlazoInscripcion plazo : plazosInscripcionNuevoEvento) {
+				modeloListaFechasInscripcion.addElement(plazo.toString());
+			}
+			getListFechasInscrip().setModel(modeloListaFechasInscripcion);
+			getScrollPaneFechasIns().add(getListFechasInscrip()); // Igual esta
+																	// linea sobra
+		}
+
+		public void añadirPlazo(PlazoInscripcion plazo) {
+			this.plazosInscripcionNuevoEvento.add(plazo);
+			añadirAlModeloListFechaInscripcionOr(plazo.toString());
+		}
+
+		public void borrarPlazo(PlazoInscripcion plazo) {
+			this.plazosInscripcionNuevoEvento.remove(plazo);
+		}
+
+		public void actualizarCategorias() {
+			// getListCategoriasOr().setModel(null);
+			modeloListaCategorias.removeAllElements();
+			for (Categoria c : categoriasAlCrearEvento) {
+				modeloListaCategorias.addElement(c.toString());
+			}
+			getListCategoriaOr().setModel(modeloListaCategorias);
+			getScrollPaneCategorias().add(getListCategoriaOr());
+		}
+
+		public void añadirAlModeloListaCategoriasOr(Categoria elem) {
+			// getListCategoriasOr().setModel(null);
+			modeloListaCategorias.addElement(elem.toString());
+			getListCategoriaOr().setModel(modeloListaCategorias);
+		}
+
+		// FIN ACTUALIZAR LISTAS ORGANIZADOR
 }
