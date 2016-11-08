@@ -160,7 +160,7 @@ public class VentanaPrincipal extends JFrame {
 					VentanaPrincipal frame = new VentanaPrincipal();
 					frame.setResizable(false);
 					frame.setVisible(true);
-			        
+
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -198,7 +198,7 @@ public class VentanaPrincipal extends JFrame {
 	private void AnadirInscritoALista() {
 		if (comprobarDatosInscribirse()) {
 			int sexo = 0;
-			boolean existe=false;
+			boolean existe = false;
 			if (txtSexoInscribirse.getText().toUpperCase().equals("MASCULINO")) {
 				sexo = 0;
 			}
@@ -211,7 +211,7 @@ public class VentanaPrincipal extends JFrame {
 
 			Atleta at = g.buscarAtletaPorDNI(dni);
 			if (at == null) {
-				at=new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), sexo);
+				at = new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), sexo);
 				atletasARegistrar.add(at);
 				JOptionPane.showMessageDialog(null, "Atleta no registrado. Sera registrado en la base de datos");
 
@@ -269,7 +269,7 @@ public class VentanaPrincipal extends JFrame {
 			txtDNIInscribirse.setText(dni);
 			txtNombreInscribirse.setText(txtNombreAtleta.getText());
 			txtFechaInscribirse.setText(txtFechaNacimiento.getText());
-			txtSexoInscribirse.setText(g.buscarAtletaPorDNI(dni).getSexo()==0? "masculino":"femenino");
+			txtSexoInscribirse.setText(g.buscarAtletaPorDNI(dni).getSexo() == 0 ? "masculino" : "femenino");
 		}
 	}
 
@@ -281,7 +281,7 @@ public class VentanaPrincipal extends JFrame {
 	 *            organizadores usuario: menus de usuarios
 	 */
 	private void cambiarPanelesPrincipales(String opcion) {
-		if (opcion.equals("organizador")){
+		if (opcion.equals("organizador")) {
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_Organizador");
 			mostrarTablaEventosOrganizador();
 		}
@@ -302,9 +302,9 @@ public class VentanaPrincipal extends JFrame {
 	private void cambiarCabeceraUsuario(int opcion) {
 		if (opcion == 0)
 			((CardLayout) pnCabecera.getLayout()).show(pnCabecera, "usuario_sinIdentificar");
-		if (opcion == 1){
+		if (opcion == 1) {
 			((CardLayout) pnCabecera.getLayout()).show(pnCabecera, "usuario_Identificado");
-		
+
 		}
 	}
 
@@ -325,7 +325,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		if (opcion == 1) {
 			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario, "pn_inscripcionesUsuario");
-	
+
 		}
 		if (opcion == 2) {
 			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario, "pn_pagosUsuario");
@@ -339,24 +339,23 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void mostrarTablaEventosOrganizador() {
 		ModeloNoEditable modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
-		ArrayList<Evento> eventosOrganizador = g.getEventos(); //g.getEventosOrganizador(organizador);
+		ArrayList<Evento> eventosOrganizador = g.getEventos(); // g.getEventosOrganizador(organizador);
 		for (Evento ev : eventosOrganizador) {
 			String[] fila = new String[6];
 			fila[0] = ev.getNombre();
 			fila[1] = ev.getTipo();
 			fila[2] = String.valueOf(ev.getDistancia());
-	if (!ev.getFinalizado()) {
-				if(ev.getUltimoPlazo()!=null){
+			if (!ev.getFinalizado()) {
+				if (ev.getUltimoPlazo() != null) {
 					fila[3] = "Inscripcion";
 					fila[4] = "ABIERTO";
 					fila[5] = String.valueOf(ev.getUltimoPlazo().getPrecio());
+				} else {
+					fila[3] = "Carrera";
+					fila[4] = "CERRADO";
+					fila[5] = "CERRADO";
 				}
-				else{
-					fila[3]="Carrera";
-					fila[4]="CERRADO";
-					fila[5]="CERRADO";
-				}
-				
+
 			} else {
 				if (ev.getFinalizado()) {
 					fila[3] = "Finalizada";
@@ -383,18 +382,17 @@ public class VentanaPrincipal extends JFrame {
 			fila[1] = ev.getTipo();
 			fila[2] = String.valueOf(ev.getDistancia());
 			if (!ev.getFinalizado()) {
-				
-				if(ev.getUltimoPlazo()!=null){
+
+				if (ev.getUltimoPlazo() != null) {
 					fila[3] = "Inscripcion";
 					fila[4] = "ABIERTO";
 					fila[5] = String.valueOf(ev.getUltimoPlazo().getPrecio());
+				} else {
+					fila[3] = "Carrera";
+					fila[4] = "CERRADO";
+					fila[5] = "CERRADO";
 				}
-				else{
-					fila[3]="Carrera";
-					fila[4]="CERRADO";
-					fila[5]="CERRADO";
-				}
-				
+
 			} else {
 				if (ev.getFinalizado()) {
 					fila[3] = "Finalizada";
@@ -413,10 +411,10 @@ public class VentanaPrincipal extends JFrame {
 	 * Metodo que reinicia los datos de la seleccion
 	 */
 	private void reiniciarDatosPulsados() {
-		
+
 		btnPasarAInscripcion.setEnabled(false);
 		btnResultadosEvento.setEnabled(false);
-		
+
 		eventoPulsado = null;
 		txEventoPulsadoNombre.setText("");
 		txEventoPulsadoPlazas.setText("");
@@ -437,13 +435,15 @@ public class VentanaPrincipal extends JFrame {
 		eventoPulsado = ev;
 		if (desc == 1) { // desc= 1 nos situa en la descripcion del panel de
 							// usuarios
-			
-			if (eventoPulsado.getFinalizado()){
-//				btnMostrarResultadosAtleta.setEnabled(true);
+
+			if (eventoPulsado.getFinalizado()) {
+				// btnMostrarResultadosAtleta.setEnabled(true);
 				btnPasarAInscripcion.setEnabled(false);
 			}
-			if(eventoPulsado.getPlazos()!=null && !eventoPulsado.getFinalizado())	btnPasarAInscripcion.setEnabled(true);
-			else btnPasarAInscripcion.setEnabled(false);
+			if (eventoPulsado.getPlazos() != null && !eventoPulsado.getFinalizado())
+				btnPasarAInscripcion.setEnabled(true);
+			else
+				btnPasarAInscripcion.setEnabled(false);
 			txEventoPulsadoNombre.setText(ev.getNombre());
 			txEventoPulsadoPlazas.setText(String.valueOf(ev.getPlazasDisponibles()));
 			ArrayList<Categoria> cat = ev.getCategorias();
@@ -461,11 +461,13 @@ public class VentanaPrincipal extends JFrame {
 			textAreaCategoriasAdmitidas.setText(sB.toString());
 			ArrayList<PlazoInscripcion> plazos = ev.getPlazos();
 			sB = new StringBuilder();
-			if(plazos!=null && plazos.size()>0)
+			if (plazos != null && plazos.size() > 0)
 				for (PlazoInscripcion p : plazos) {
-					sB.append(
-							"De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + " Precio: " + p.getPrecio() + "Â€ \n");
-				}else sB.append("PLAZOS CERRADOS");
+					sB.append("De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + " Precio: " + p.getPrecio()
+							+ "Â€ \n");
+				}
+			else
+				sB.append("PLAZOS CERRADOS");
 			textAreaPlazosInscripcionEventoUsuario.setText(sB.toString());
 		}
 	}
@@ -513,7 +515,7 @@ public class VentanaPrincipal extends JFrame {
 			break;
 		}
 	}
-	
+
 	private JButton getBtAtrasOrganizador() {
 		if (btAtrasOrganizador == null) {
 			btAtrasOrganizador = new JButton("Atr\u00E1s");
@@ -525,6 +527,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return btAtrasOrganizador;
 	}
+
 	private JPanel getPnSurOrganizador() {
 		if (pnSurOrganizador == null) {
 			pnSurOrganizador = new JPanel();
@@ -679,18 +682,19 @@ public class VentanaPrincipal extends JFrame {
 							cargarCabeceraAtleta();
 							cambiarCabeceraUsuario(1);
 							ArrayList<Evento> evParticipa = g.obtenerEventosParticipaPorDNI(dni);
-							if(evParticipa.size()>0){
-								boolean datos=false;
-								for(Evento ev : evParticipa)if(ev.getFinalizado()) datos=true;
-								if(datos){
+							if (evParticipa.size() > 0) {
+								boolean datos = false;
+								for (Evento ev : evParticipa)
+									if (ev.getFinalizado())
+										datos = true;
+								if (datos) {
 									btnMostrarResultadosAtleta.setText("Mostrar resultados");
 									btnMostrarResultadosAtleta.setEnabled(true);
-								}else{
+								} else {
 									btnMostrarResultadosAtleta.setEnabled(false);
 									btnMostrarResultadosAtleta.setText("Sin resultados almacenados");
 								}
-							}
-							else{
+							} else {
 								btnMostrarResultadosAtleta.setEnabled(false);
 								btnMostrarResultadosAtleta.setText("Sin resultados almacenados");
 							}
@@ -825,7 +829,7 @@ public class VentanaPrincipal extends JFrame {
 			btnMostrarResultadosAtleta.setEnabled(false);
 			btnMostrarResultadosAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					DialogResultadosAtleta dR = new DialogResultadosAtleta(g.getAtletaIdentificado(), g,vP);
+					DialogResultadosAtleta dR = new DialogResultadosAtleta(g.getAtletaIdentificado(), g, vP);
 				}
 			});
 		}
@@ -1030,7 +1034,8 @@ public class VentanaPrincipal extends JFrame {
 					// JAVIMENSAJE Mirar aqui a ver si el evento tiene todos los
 					// atributos que necesita la bd, si no, que los genere el
 					// gestor.
-					organizador.crearEvento(evento);//Esto deberia actualizarse a la base de datos.
+					organizador.crearEvento(evento);// Esto deberia actualizarse
+													// a la base de datos.
 					g.añadirEvento(evento);
 				}
 			});
@@ -1274,7 +1279,8 @@ public class VentanaPrincipal extends JFrame {
 			throw new IllegalArgumentException("La distancia no es un nÃºmero");
 		}
 		Date fechaComienzo = new Date(Calendar.getInstance().getTimeInMillis());
-		//Date fechaFinInscripciones = new Date(Calendar.getInstance().getTimeInMillis());
+		// Date fechaFinInscripciones = new
+		// Date(Calendar.getInstance().getTimeInMillis());
 		ArrayList<Categoria> categoriasParaEvento = new ArrayList<Categoria>();
 		int plazas = (int) getSpinnerPlazas().getValue();
 		// Obtener las categorias del elemento en cuestion
@@ -1282,8 +1288,7 @@ public class VentanaPrincipal extends JFrame {
 		ArrayList<PlazoInscripcion> plazosInscripcion = new ArrayList<PlazoInscripcion>();
 
 		// Si todo esta OK
-		g.crearEvento(nombre, tipo, distancia, fechaComienzo,  plazas, categoriasParaEvento,
-				plazosInscripcion);
+		g.crearEvento(nombre, tipo, distancia, fechaComienzo, plazas, categoriasParaEvento, plazosInscripcion);
 	}
 
 	// ---------------------------------- FIN metodos crear un evento
@@ -1525,7 +1530,9 @@ public class VentanaPrincipal extends JFrame {
 	public void añadirCategoriaAlCrearEvento(Categoria c) {
 		categoriasAlCrearEvento.add(c);
 	}
+
 	ArrayList<Categoria> catDef;
+
 	private JList<String> getListCategoriaOr() {
 		if (list == null) {
 			modeloListaCategorias = new DefaultListModel<String>();
@@ -1536,12 +1543,13 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return list;
 	}
+
 	private void cargarMisCategoriasAlModelo() {
 		getListCategoriaOr().setModel(modeloListaCategorias);
 	}
-	
+
 	private void cargarCategoriasDefectoLista() {
-		if(catDef.isEmpty()){
+		if (catDef.isEmpty()) {
 			catDef = GestorCategorias.getCategoriasDefecto();
 		}
 		for (Categoria c : catDef) {
@@ -1576,9 +1584,16 @@ public class VentanaPrincipal extends JFrame {
 					try {
 						String catString = getListCategoriaOr().getSelectedValue().toString();
 						Categoria cat = null;
-						for (Categoria c : categoriasAlCrearEvento) {
-							if (c.toString().equals(catString))
-								cat = c;
+						if (!getCbCatDef().isSelected()) {
+							for (Categoria c : categoriasAlCrearEvento) {
+								if (c.toString().equals(catString))
+									cat = c;
+							}
+						}else{
+							for (Categoria c : catDef) {
+								if (c.toString().equals(catString))
+									cat = c;
+							}
 						}
 						if (cat == null) {
 							JOptionPane.showMessageDialog(null, "No se encuantra la categorÃ­a");
@@ -1838,9 +1853,10 @@ public class VentanaPrincipal extends JFrame {
 			btnResultadosEvento = new JButton("Ver resultados");
 			btnResultadosEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					DialogInformacionDeEvento diE= new DialogInformacionDeEvento(vP, eventoPulsado);
+					DialogInformacionDeEvento diE = new DialogInformacionDeEvento(vP, eventoPulsado);
 					diE.mostrarClasificaciones();
-					diE.setVisible(true);;
+					diE.setVisible(true);
+					;
 				}
 			});
 			btnResultadosEvento.setEnabled(false);
@@ -2069,8 +2085,13 @@ public class VentanaPrincipal extends JFrame {
 		}
 		Evento evento = null;
 		if (puedoCrearEvento) {
-			evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas), miFechaComienzo,
-					categorias, plazos);
+			if (!getCbCatDef().isSelected()) {
+				evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas),
+						miFechaComienzo, categorias, plazos);
+			} else {
+				evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas),
+						miFechaComienzo, catDef, plazos);
+			}
 		}
 		return evento;
 	}
@@ -2086,7 +2107,7 @@ public class VentanaPrincipal extends JFrame {
 			throw new IllegalStateException("No ha encontrado una fecha mayo que 0 milis");
 		return fecha;
 	}
-	
+
 	private JPanel pnPagar;
 	private JLabel lbPagar;
 	private JRadioButton rdbtnTarjeta;
@@ -2107,7 +2128,7 @@ public class VentanaPrincipal extends JFrame {
 	Evento eventoSeleccionado;
 	private JButton btAtrasOrganizador;
 	private JPanel pnSurOrganizador;
-	
+
 	private JPanel getPnPagar() {
 		if (pnPagar == null) {
 			pnPagar = new JPanel();
@@ -2121,6 +2142,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return pnPagar;
 	}
+
 	private JLabel getLbPagar() {
 		if (lbPagar == null) {
 			lbPagar = new JLabel("Seleccione el m\u00E9todo de pago:");
@@ -2129,6 +2151,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbPagar;
 	}
+
 	private JRadioButton getRdbtnTarjeta() {
 		if (rdbtnTarjeta == null) {
 			rdbtnTarjeta = new JRadioButton("Tarjeta Cr\u00E9dito");
@@ -2139,6 +2162,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return rdbtnTarjeta;
 	}
+
 	private JRadioButton getRdbtnTransferencia() {
 		if (rdbtnTransferencia == null) {
 			rdbtnTransferencia = new JRadioButton("Transferencia");
@@ -2148,45 +2172,42 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return rdbtnTransferencia;
 	}
+
 	private JButton getBtnFinalizarPago() {
 		if (btnFinalizarPago == null) {
 			btnFinalizarPago = new JButton("Finalizar Pago");
 			btnFinalizarPago.setBounds(800, 323, 128, 23);
 			btnFinalizarPago.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					if (rdbtnTarjeta.isSelected())
-					{
-						if (comprobarDatosTarjeta())
-						{
+					if (rdbtnTarjeta.isSelected()) {
+						if (comprobarDatosTarjeta()) {
 							g.realizarPagoTarjeta(eventoSeleccionado.getId(), dniInscrito);
 							cambiarPanelesUsuario(0);
-						}
-						else
-							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta CrÃ©dito", JOptionPane.ERROR_MESSAGE);
-					}
-					else
-					{
+						} else
+							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta CrÃ©dito",
+									JOptionPane.ERROR_MESSAGE);
+					} else {
 						g.comprobarPagadosBanco(eventoSeleccionado.getId());
 						cambiarPanelesUsuario(0);
 					}
-						
+
 				}
 			});
 		}
 		return btnFinalizarPago;
 	}
-	
-	public boolean comprobarDatosTarjeta()
-	{
+
+	public boolean comprobarDatosTarjeta() {
 		if (getTxNumTarjeta().getText() != "" && getTxTituTarjeta().getText() != "")
 			return true;
 		return false;
 	}
-	
+
 	private JPanel getPnTarjeta() {
 		if (pnTarjeta == null) {
 			pnTarjeta = new JPanel();
-			pnTarjeta.setBorder(new TitledBorder(null, "Datos Tarjeta", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnTarjeta.setBorder(
+					new TitledBorder(null, "Datos Tarjeta", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnTarjeta.setBounds(163, 62, 448, 145);
 			pnTarjeta.setLayout(null);
 			pnTarjeta.add(getLbNumeroTarjeta());
@@ -2196,6 +2217,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return pnTarjeta;
 	}
+
 	private JLabel getLbNumeroTarjeta() {
 		if (lbNumeroTarjeta == null) {
 			lbNumeroTarjeta = new JLabel("N\u00FAmero:");
@@ -2204,6 +2226,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbNumeroTarjeta;
 	}
+
 	private JTextField getTxNumTarjeta() {
 		if (txNumTarjeta == null) {
 			txNumTarjeta = new JTextField();
@@ -2213,6 +2236,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return txNumTarjeta;
 	}
+
 	private JLabel getLbTitularTarjeta() {
 		if (lbTitularTarjeta == null) {
 			lbTitularTarjeta = new JLabel("Titular:");
@@ -2221,6 +2245,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbTitularTarjeta;
 	}
+
 	private JTextField getTxTituTarjeta() {
 		if (txTituTarjeta == null) {
 			txTituTarjeta = new JTextField();
@@ -2230,10 +2255,12 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return txTituTarjeta;
 	}
+
 	private JPanel getPnTransferencia() {
 		if (pnTransferencia == null) {
 			pnTransferencia = new JPanel();
-			pnTransferencia.setBorder(new TitledBorder(null, "Datos del Banco", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnTransferencia.setBorder(
+					new TitledBorder(null, "Datos del Banco", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 			pnTransferencia.setBounds(163, 219, 448, 103);
 			pnTransferencia.setLayout(null);
 			pnTransferencia.add(getLbNumeroBanco());
@@ -2242,6 +2269,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return pnTransferencia;
 	}
+
 	private JLabel getLbNumeroBanco() {
 		if (lbNumeroBanco == null) {
 			lbNumeroBanco = new JLabel("N\u00FAmero cuenta: ");
@@ -2250,6 +2278,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbNumeroBanco;
 	}
+
 	private JTextField getTxtEs() {
 		if (txtEs == null) {
 			txtEs = new JTextField();
@@ -2261,6 +2290,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return txtEs;
 	}
+
 	private JLabel getLbInfor() {
 		if (lbInfor == null) {
 			lbInfor = new JLabel("Dispondr\u00E1 del plazo hasta antes del inicio de la competici\u00F3n.");
@@ -2269,49 +2299,49 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return lbInfor;
 	}
-	
+
 	// ACTUALIZAR LISTAS DE LA VENTANA ORGANIZADOR
-		public void añadirAlModeloListFechaInscripcionOr(String pl) {
-			// getListFechasInscrip().setModel(null);
-			modeloListaFechasInscripcion.addElement(pl.toString());
-			getListFechasInscrip().setModel(modeloListaFechasInscripcion);
-		}
+	public void añadirAlModeloListFechaInscripcionOr(String pl) {
+		// getListFechasInscrip().setModel(null);
+		modeloListaFechasInscripcion.addElement(pl.toString());
+		getListFechasInscrip().setModel(modeloListaFechasInscripcion);
+	}
 
-		public void actualizarModeloListaInscripciones() {
-			// getListFechasInscrip().setModel(null);
-			modeloListaFechasInscripcion.removeAllElements();
-			for (PlazoInscripcion plazo : plazosInscripcionNuevoEvento) {
-				modeloListaFechasInscripcion.addElement(plazo.toString());
-			}
-			getListFechasInscrip().setModel(modeloListaFechasInscripcion);
-			getScrollPaneFechasIns().add(getListFechasInscrip()); // Igual esta
-																	// linea sobra
+	public void actualizarModeloListaInscripciones() {
+		// getListFechasInscrip().setModel(null);
+		modeloListaFechasInscripcion.removeAllElements();
+		for (PlazoInscripcion plazo : plazosInscripcionNuevoEvento) {
+			modeloListaFechasInscripcion.addElement(plazo.toString());
 		}
+		getListFechasInscrip().setModel(modeloListaFechasInscripcion);
+		getScrollPaneFechasIns().add(getListFechasInscrip()); // Igual esta
+																// linea sobra
+	}
 
-		public void añadirPlazo(PlazoInscripcion plazo) {
-			this.plazosInscripcionNuevoEvento.add(plazo);
-			añadirAlModeloListFechaInscripcionOr(plazo.toString());
+	public void añadirPlazo(PlazoInscripcion plazo) {
+		this.plazosInscripcionNuevoEvento.add(plazo);
+		añadirAlModeloListFechaInscripcionOr(plazo.toString());
+	}
+
+	public void borrarPlazo(PlazoInscripcion plazo) {
+		this.plazosInscripcionNuevoEvento.remove(plazo);
+	}
+
+	public void actualizarCategorias() {
+		// getListCategoriasOr().setModel(null);
+		modeloListaCategorias.removeAllElements();
+		for (Categoria c : categoriasAlCrearEvento) {
+			modeloListaCategorias.addElement(c.toString());
 		}
+		getListCategoriaOr().setModel(modeloListaCategorias);
+		getScrollPaneCategorias().add(getListCategoriaOr());
+	}
 
-		public void borrarPlazo(PlazoInscripcion plazo) {
-			this.plazosInscripcionNuevoEvento.remove(plazo);
-		}
+	public void añadirAlModeloListaCategoriasOr(Categoria elem) {
+		// getListCategoriasOr().setModel(null);
+		modeloListaCategorias.addElement(elem.toString());
+		getListCategoriaOr().setModel(modeloListaCategorias);
+	}
 
-		public void actualizarCategorias() {
-			// getListCategoriasOr().setModel(null);
-			modeloListaCategorias.removeAllElements();
-			for (Categoria c : categoriasAlCrearEvento) {
-				modeloListaCategorias.addElement(c.toString());
-			}
-			getListCategoriaOr().setModel(modeloListaCategorias);
-			getScrollPaneCategorias().add(getListCategoriaOr());
-		}
-
-		public void añadirAlModeloListaCategoriasOr(Categoria elem) {
-			// getListCategoriasOr().setModel(null);
-			modeloListaCategorias.addElement(elem.toString());
-			getListCategoriaOr().setModel(modeloListaCategorias);
-		}
-
-		// FIN ACTUALIZAR LISTAS ORGANIZADOR
+	// FIN ACTUALIZAR LISTAS ORGANIZADOR
 }
