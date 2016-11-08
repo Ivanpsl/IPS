@@ -197,6 +197,7 @@ public class VentanaPrincipal extends JFrame {
 	private void AnadirInscritoALista() {
 		if (comprobarDatosInscribirse()) {
 			int sexo = 0;
+			boolean existe=false;
 			if (txtSexoInscribirse.getText().toUpperCase().equals("MASCULINO")) {
 				sexo = 0;
 			}
@@ -209,8 +210,8 @@ public class VentanaPrincipal extends JFrame {
 
 			Atleta at = g.buscarAtletaPorDNI(dni);
 			if (at == null) {
-				atletasARegistrar
-						.add(new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), sexo));
+				at=new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), sexo);
+				atletasARegistrar.add(at);
 				JOptionPane.showMessageDialog(null, "Atleta no registrado. Sera registrado en la base de datos");
 
 			}

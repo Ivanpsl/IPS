@@ -26,6 +26,8 @@ public class crearEventosParaTest {
 		ArrayList<Categoria> defecto = new ArrayList<Categoria>();
 		Categoria categoria = new Categoria("SeniorI" ,18, 20, 1);
 		defecto.add(categoria);
+		categoria = new Categoria("seniorII" ,20, 50, 1);
+		defecto.add(categoria);
 		PlazoInscripcion p = new PlazoInscripcion(fecha, fin, 20.5);
 		ArrayList<PlazoInscripcion> pI = new ArrayList<PlazoInscripcion>();
 		pI.add(p);

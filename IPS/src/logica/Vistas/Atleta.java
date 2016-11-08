@@ -23,6 +23,7 @@ public class Atleta extends Usuario{
 		this.nombre = nombre;
 		this.fechaNacimiento=fecha;
 		this.sexo=sexo;
+		setEdad();
 	}
 	
 	public Atleta(String dni, String nombre, java.sql.Date fecha, int sexo){
@@ -32,6 +33,7 @@ public class Atleta extends Usuario{
 		this.fechaNacimiento=fecha.toString();
 		this.fechaNacimientoDate = fecha;
 		this.sexo=sexo;
+		setEdad();
 	}
 	/**
 	 * Constructor con usuario y contraseña por si acaso
@@ -49,6 +51,7 @@ public class Atleta extends Usuario{
 		this.fechaNacimiento=fecha.toString();
 		this.fechaNacimientoDate = fecha;
 		this.sexo=sexo;
+		setEdad();
 	}
 	public static int getSexotiInt(String sexo){
 		if(sexo.equals(Categoria.FEM)){
