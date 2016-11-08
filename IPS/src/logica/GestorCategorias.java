@@ -15,7 +15,7 @@ public class GestorCategorias {
 	// Categorias por defecto
 	static Categoria[] categoriasDef = {
 	new Categoria("Senior", 18, 35, Categoria.MASCULINO),
-	new Categoria("Senior", 18, 35, Categoria.MASCULINO)
+	new Categoria("Señora", 18, 35, Categoria.FEMENINO)
 	};
 
 	public GestorCategorias() {
@@ -44,6 +44,12 @@ public class GestorCategorias {
 //			categorias.addAll(misCat);
 //		}
 		//ordenarCategorias();
+	}
+	public static ArrayList<Categoria> getCategoriasDefecto(){
+		ArrayList<Categoria> list = new ArrayList<Categoria>();
+		for(Categoria c : categoriasDef)
+			list.add(c);
+		return list;
 	}
 
 	/**
