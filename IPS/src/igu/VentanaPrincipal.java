@@ -127,7 +127,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel pnDescripcionEventoOrganizador;
 	private JPanel pnInfoOrganizador;
 	private JPanel pnAccionesOrg;
-	private JButton btA�adirEventoOr;
+	private JButton btAñadirEventoOr;
 	private JButton btEditarEventoOr;
 	private JLabel lbNombreOr;
 	private JTextPane textPane;
@@ -274,7 +274,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	/**
-	 * Metodo usado para navegar por las pestañas principales
+	 * Metodo usado para navegar por las pestaÃ±as principales
 	 * 
 	 * @param opcion
 	 *            : inicio: pantalla de seleccion de modo organizador: menus de
@@ -464,7 +464,7 @@ public class VentanaPrincipal extends JFrame {
 			if (plazos != null && plazos.size() > 0)
 				for (PlazoInscripcion p : plazos) {
 					sB.append("De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + " Precio: " + p.getPrecio()
-							+ " \n");
+							+ "Â \n");
 				}
 			else
 				sB.append("PLAZOS CERRADOS");
@@ -925,23 +925,23 @@ public class VentanaPrincipal extends JFrame {
 		if (pnAccionesOrg == null) {
 			pnAccionesOrg = new JPanel();
 			pnAccionesOrg.setLayout(new GridLayout(2, 1, 0, 0));
-			pnAccionesOrg.add(getBtA�adirEventoOr());
+			pnAccionesOrg.add(getBtAñadirEventoOr());
 			pnAccionesOrg.add(getBtEditarEventoOr());
 		}
 		return pnAccionesOrg;
 	}
 
-	private JButton getBtA�adirEventoOr() {
-		if (btA�adirEventoOr == null) {
-			btA�adirEventoOr = new JButton("A\u00F1adir evento");
-			btA�adirEventoOr.addActionListener(new ActionListener() {
+	private JButton getBtAñadirEventoOr() {
+		if (btAñadirEventoOr == null) {
+			btAñadirEventoOr = new JButton("A\u00F1adir evento");
+			btAñadirEventoOr.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					cambiarPanelesOrganizador("crear");
 				}
 			});
-			btA�adirEventoOr.setToolTipText("Crear un nuevo evento");
+			btAñadirEventoOr.setToolTipText("Crear un nuevo evento");
 		}
-		return btA�adirEventoOr;
+		return btAñadirEventoOr;
 	}
 
 	private JButton getBtEditarEventoOr() {
@@ -1036,7 +1036,7 @@ public class VentanaPrincipal extends JFrame {
 					// gestor.
 					organizador.crearEvento(evento);// Esto deberia actualizarse
 													// a la base de datos.
-					g.a�adirEvento(evento);
+					g.añadirEvento(evento);
 				}
 			});
 		}
@@ -1075,7 +1075,7 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getLblCategorasDelEvento());
 			pnContenidoCreacionEvento.add(getCbCatDef());
 			pnContenidoCreacionEvento.add(getScrollPaneCategorias());
-			pnContenidoCreacionEvento.add(getBtA�adirCat());
+			pnContenidoCreacionEvento.add(getBtAñadirCat());
 
 			pnContenidoCreacionEvento.add(getBtEditarCategoria());
 			pnContenidoCreacionEvento.add(getScrollPaneFechasIns());
@@ -1089,10 +1089,10 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getLblFechaComienzoEvento());
 			pnContenidoCreacionEvento.add(getCbDia());
 			pnContenidoCreacionEvento.add(getCbMes());
-			pnContenidoCreacionEvento.add(getCbA�o());
+			pnContenidoCreacionEvento.add(getCbAño());
 			pnContenidoCreacionEvento.add(getLblDa());
 			pnContenidoCreacionEvento.add(getLbMes());
-			pnContenidoCreacionEvento.add(getLbA�o());
+			pnContenidoCreacionEvento.add(getLbAño());
 		}
 		return pnContenidoCreacionEvento;
 	}
@@ -1147,7 +1147,7 @@ public class VentanaPrincipal extends JFrame {
 																		// pone
 																		// si se
 																		// quiere
-																		// añadir
+																		// aÃ±adir
 																		// uno
 																		// propio.
 			cbTipoEventos = new JComboBox();
@@ -1222,7 +1222,7 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel pnInscribirse;
 	private JPanel pnListaInscritos;
 	private JScrollPane scrollPane_1;
-	private JButton btA�adirAtleta;
+	private JButton btAñadirAtleta;
 	private JLabel label;
 	private JTextField txtDNIInscribirse;
 	private JTextField txtNombreInscribirse;
@@ -1263,7 +1263,7 @@ public class VentanaPrincipal extends JFrame {
 		return tfTipoEvetno;
 	}
 
-	// ----------------------------------- Métodos para crear un evento
+	// ----------------------------------- MÃ©todos para crear un evento
 
 	/**
 	 * LO QUE DEBERIA SER
@@ -1276,7 +1276,7 @@ public class VentanaPrincipal extends JFrame {
 		if (Comprobaciones.esString(Stdistancia)) {
 			distancia = Integer.parseInt(Stdistancia);
 		} else {
-			throw new IllegalArgumentException("La distancia no es un número");
+			throw new IllegalArgumentException("La distancia no es un nÃºmero");
 		}
 		Date fechaComienzo = new Date(Calendar.getInstance().getTimeInMillis());
 		// Date fechaFinInscripciones = new
@@ -1515,7 +1515,7 @@ public class VentanaPrincipal extends JFrame {
 
 	private DefaultListModel<String> modeloListaCategorias = null;
 	ArrayList<Categoria> categoriasAlCrearEvento;
-	private JButton btA�adirCat;
+	private JButton btAñadirCat;
 	private JButton btEditarCategoria;
 	private JButton btnResultadosEvento;
 	private JPanel panel_4;
@@ -1527,8 +1527,9 @@ public class VentanaPrincipal extends JFrame {
 		return categoriasAlCrearEvento;
 	}
 
-	public void a�adirCategoriaAlCrearEvento(Categoria c) {
+	public void añadirCategoriaAlCrearEvento(Categoria c) {
 		categoriasAlCrearEvento.add(c);
+		añadirAlModeloListaCategoriasOr(c);
 	}
 
 	ArrayList<Categoria> catDef;
@@ -1558,20 +1559,20 @@ public class VentanaPrincipal extends JFrame {
 		getListCategoriaOr().setModel(modeloCategoriasDefecto);
 	}
 
-	private JButton getBtA�adirCat() {
+	private JButton getBtAñadirCat() {
 
-		if (btA�adirCat == null) {
-			btA�adirCat = new JButton("A\u00F1adir ");
-			btA�adirCat.addActionListener(new ActionListener() {
+		if (btAñadirCat == null) {
+			btAñadirCat = new JButton("A\u00F1adir ");
+			btAñadirCat.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this);
 					vcc.setVisible(true);
 				}
 			});
-			btA�adirCat.setToolTipText("A\u00F1ade una categoria al evento");
-			btA�adirCat.setBounds(777, 256, 89, 23);
+			btAñadirCat.setToolTipText("A\u00F1ade una categoria al evento");
+			btAñadirCat.setBounds(777, 256, 89, 23);
 		}
-		return btA�adirCat;
+		return btAñadirCat;
 
 	}
 
@@ -1596,7 +1597,7 @@ public class VentanaPrincipal extends JFrame {
 							}
 						}
 						if (cat == null) {
-							JOptionPane.showMessageDialog(null, "No se encuantra la categoría");
+							JOptionPane.showMessageDialog(null, "No se encuantra la categorÃ­a");
 						} else {
 							categoriasAlCrearEvento.remove(cat);
 							VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this, cat);
@@ -1667,7 +1668,7 @@ public class VentanaPrincipal extends JFrame {
 			pnListaInscritos.setLayout(null);
 			pnListaInscritos.setBounds(623, 11, 295, 297);
 			pnListaInscritos.add(getScrollPane_1_1());
-			pnListaInscritos.add(getBtA�adirAtleta());
+			pnListaInscritos.add(getBtAñadirAtleta());
 		}
 		return pnListaInscritos;
 	}
@@ -1681,19 +1682,19 @@ public class VentanaPrincipal extends JFrame {
 		return scrollPane_1;
 	}
 
-	private JButton getBtA�adirAtleta() {
-		if (btA�adirAtleta == null) {
-			btA�adirAtleta = new JButton("A\u00F1adir");
-			btA�adirAtleta.addActionListener(new ActionListener() {
+	private JButton getBtAñadirAtleta() {
+		if (btAñadirAtleta == null) {
+			btAñadirAtleta = new JButton("A\u00F1adir");
+			btAñadirAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					btnRealizarInscripcion.setEnabled(true);
 					AnadirInscritoALista();
 				}
 
 			});
-			btA�adirAtleta.setBounds(184, 263, 89, 23);
+			btAñadirAtleta.setBounds(184, 263, 89, 23);
 		}
-		return btA�adirAtleta;
+		return btAñadirAtleta;
 	}
 
 	private JLabel getLabel() {
@@ -1902,10 +1903,10 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblFechaComienzoEvento;
 	private JComboBox<Integer> cbDia;
 	private JComboBox<String> cbMes;
-	private JComboBox<Integer> cbA�o;
+	private JComboBox<Integer> cbAño;
 	private JLabel lblDa;
 	private JLabel lbMes;
-	private JLabel lbA�o;
+	private JLabel lbAño;
 
 	private JList<String> getListFechasInscrip() {
 		if (listFechasInscrip == null) {
@@ -1996,19 +1997,19 @@ public class VentanaPrincipal extends JFrame {
 		return cbMes;
 	}
 
-	private JComboBox getCbA�o() {
-		if (cbA�o == null) {
-			cbA�o = new JComboBox();
-			Integer[] a�os = new Integer[10];
-			for (int i = 0; i < a�os.length; i++) {
-				a�os[i] = 2000 + i + 16; // Que la fecha empiece este año 2016
+	private JComboBox getCbAño() {
+		if (cbAño == null) {
+			cbAño = new JComboBox();
+			Integer[] años = new Integer[10];
+			for (int i = 0; i < años.length; i++) {
+				años[i] = 2000 + i + 16; // Que la fecha empiece este aÃ±o 2016
 
 			}
-			DefaultComboBoxModel<Integer> modelo = new DefaultComboBoxModel<Integer>(a�os);
-			cbA�o.setModel(modelo);
-			cbA�o.setBounds(360, 272, 56, 20);
+			DefaultComboBoxModel<Integer> modelo = new DefaultComboBoxModel<Integer>(años);
+			cbAño.setModel(modelo);
+			cbAño.setBounds(360, 272, 56, 20);
 		}
-		return cbA�o;
+		return cbAño;
 	}
 
 	private JLabel getLblDa() {
@@ -2029,13 +2030,13 @@ public class VentanaPrincipal extends JFrame {
 		return lbMes;
 	}
 
-	private JLabel getLbA�o() {
-		if (lbA�o == null) {
-			lbA�o = new JLabel("a\u00F1o");
-			lbA�o.setHorizontalAlignment(SwingConstants.CENTER);
-			lbA�o.setBounds(360, 246, 63, 14);
+	private JLabel getLbAño() {
+		if (lbAño == null) {
+			lbAño = new JLabel("a\u00F1o");
+			lbAño.setHorizontalAlignment(SwingConstants.CENTER);
+			lbAño.setBounds(360, 246, 63, 14);
 		}
-		return lbA�o;
+		return lbAño;
 	}
 
 	// Crear el evento
@@ -2052,29 +2053,29 @@ public class VentanaPrincipal extends JFrame {
 			return null;
 		}
 		if (!(Comprobaciones.esNumero(distancia) && Comprobaciones.esNumero(plazas))) {
-			JOptionPane.showMessageDialog(null, "El numero de plazas y la distancia han de ser números");
+			JOptionPane.showMessageDialog(null, "El numero de plazas y la distancia han de ser nÃºmeros");
 			return null;
 		}
 		ArrayList<PlazoInscripcion> plazos = plazosInscripcionNuevoEvento;
 		ArrayList<Categoria> categorias = categoriasAlCrearEvento;
 		if (plazos == null || plazos.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No se han establecido plazos de inscripción.");
+			JOptionPane.showMessageDialog(null, "No se han establecido plazos de inscripciÃ³n.");
 			return null;
 		}
 		if (categorias == null || categorias.isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No se han establecido las categorías del evento.");
+			JOptionPane.showMessageDialog(null, "No se han establecido las categorÃ­as del evento.");
 			return null;
 		}
 		// Fecha
 		int dia = Integer.parseInt(getCbDia().getSelectedItem().toString());
 		String mes = getCbMes().getSelectedItem().toString();
-		int a�o = Integer.parseInt(getCbA�o().getSelectedItem().toString());
+		int año = Integer.parseInt(getCbAño().getSelectedItem().toString());
 		Date miFechaComienzo = null;
 		try {
-			miFechaComienzo = new Date(a�o - 1900, ConversorFechas.getNumeroMes(mes), dia);
+			miFechaComienzo = new Date(año - 1900, ConversorFechas.getNumeroMes(mes), dia);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
-					"La fecha no se ha creado correctamente (Puede ser fallo en el código línea 1896)");
+					"La fecha no se ha creado correctamente (Puede ser fallo en el cÃ³digo lÃ­nea 1896)");
 			return null;
 		}
 
@@ -2184,7 +2185,7 @@ public class VentanaPrincipal extends JFrame {
 							g.realizarPagoTarjeta(eventoSeleccionado.getId(), dniInscrito);
 							cambiarPanelesUsuario(0);
 						} else
-							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Crédito",
+							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta CrÃ©dito",
 									JOptionPane.ERROR_MESSAGE);
 					} else {
 						g.comprobarPagadosBanco(eventoSeleccionado.getId());
@@ -2301,7 +2302,7 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	// ACTUALIZAR LISTAS DE LA VENTANA ORGANIZADOR
-	public void a�adirAlModeloListFechaInscripcionOr(String pl) {
+	public void añadirAlModeloListFechaInscripcionOr(String pl) {
 		// getListFechasInscrip().setModel(null);
 		modeloListaFechasInscripcion.addElement(pl.toString());
 		getListFechasInscrip().setModel(modeloListaFechasInscripcion);
@@ -2318,9 +2319,9 @@ public class VentanaPrincipal extends JFrame {
 																// linea sobra
 	}
 
-	public void a�adirPlazo(PlazoInscripcion plazo) {
+	public void añadirPlazo(PlazoInscripcion plazo) {
 		this.plazosInscripcionNuevoEvento.add(plazo);
-		a�adirAlModeloListFechaInscripcionOr(plazo.toString());
+		añadirAlModeloListFechaInscripcionOr(plazo.toString());
 	}
 
 	public void borrarPlazo(PlazoInscripcion plazo) {
@@ -2337,7 +2338,7 @@ public class VentanaPrincipal extends JFrame {
 		getScrollPaneCategorias().add(getListCategoriaOr());
 	}
 
-	public void a�adirAlModeloListaCategoriasOr(Categoria elem) {
+	public void añadirAlModeloListaCategoriasOr(Categoria elem) {
 		// getListCategoriasOr().setModel(null);
 		modeloListaCategorias.addElement(elem.toString());
 		getListCategoriaOr().setModel(modeloListaCategorias);
