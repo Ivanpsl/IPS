@@ -228,18 +228,21 @@ public class Gestor {
 		}
 	}
 	
-	public void realizarPagoTarjeta(int idEvento, String dni)
+	public void realizarPagoTarjeta(int idEvento, ArrayList<String> dni)
 	{
 		
 		ArrayList<Inscripcion> inscritos = eventos.get(idEvento).getInscritosEvento();
 		
 		for (Inscripcion i : inscritos)
     	{
-    		if (i.getAtleta().getDNI().toUpperCase().equals(dni.toUpperCase()))
-    		{
-    			i.setEstado(2);
-    			bd.actualizarEstadoPago(i, 2);
-    		}
+			for(int j = 0; j < dni.size(); j++)
+			{
+	    		if (i.getAtleta().getDNI().toUpperCase().equals(dni.get(j).toUpperCase()))
+	    		{
+	    			i.setEstado(2);
+	    			bd.actualizarEstadoPago(i, 2);
+	    		}
+			}
     	}
 	}
 	
@@ -348,6 +351,8 @@ public class Gestor {
 	 * @param id: id del evento que finaliza
 	 */
 	public void finalizarEvento(int id){
+		if (!obtenerEventoPorId(id).getFinalizado())
+			comprobarPagadosBanco(id, obtenerEventoPorId(id).getUltimoPlazo().getPrecio());
 		asignarDorsales(id);
 		gF.obtenerResultadosEvento(obtenerEventoPorId(id),bd);
 		eventos.get(id).setFinalizado();

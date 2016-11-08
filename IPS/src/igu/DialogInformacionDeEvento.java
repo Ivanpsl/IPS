@@ -1,6 +1,7 @@
 package igu;
 
 import java.awt.BorderLayout;
+import java.awt.CardLayout;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
@@ -51,7 +52,6 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JLabel lbNombreEvento;
 	private JLabel lblNewLabel;
 	private JTextField txtEstado;
-	private JTabbedPane tabbedPane;
 	private JPanel pnInscripciones;
 	private JPanel pnResultados;
 	private Evento ev;
@@ -70,6 +70,9 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JLabel lblSeleccionarCategoriaA;
 	private JTable table;
 	private JComboBox<String> cmBoxCategoria;
+	private JPanel cardEventos;
+	private JButton btnInscripciones;
+	private JButton btnResultado;
 	/**
 	 * Launch the application.
 	 */
@@ -87,6 +90,7 @@ public class DialogInformacionDeEvento extends JDialog {
 	 * Create the dialog.
 	 */
 	public DialogInformacionDeEvento(VentanaPrincipal vp, Evento ev) {
+		setResizable(false);
 		setTitle("Gestor Eventos: Ficha de evento");
 		setModal(true);
 		setType(Type.UTILITY);
@@ -113,6 +117,7 @@ public class DialogInformacionDeEvento extends JDialog {
 			}
 			{
 				txtTipo = new JTextField();
+				txtTipo.setEditable(false);
 				txtTipo.setBounds(170, 74, 86, 22);
 				panel.add(txtTipo);
 				txtTipo.setColumns(10);
@@ -124,13 +129,15 @@ public class DialogInformacionDeEvento extends JDialog {
 			panel.add(getLbNombreEvento());
 			panel.add(getLblNewLabel());
 			panel.add(getTxtEstado());
+			panel.add(getBtnInscripciones());
+			panel.add(getBtnResultado());
 		}
 		{
 			JPanel panel = new JPanel();
 			panel.setBounds(0, 155, 892, 412);
 			contentPanel.add(panel);
 			panel.setLayout(new BorderLayout(0, 0));
-			panel.add(getTabbedPane());
+			panel.add(getCardEventos(), BorderLayout.NORTH);
 		}
 		{
 			JPanel buttonPane = new JPanel();
@@ -150,22 +157,21 @@ public class DialogInformacionDeEvento extends JDialog {
 		rellenarInformacion();
 	}
 	
-	public void mostrarClasificaciones(){
-		tabbedPane.setSelectedIndex(tabbedPane.indexOfTab("Resultados"));
-	}
+
 	
 	private void rellenarInformacion(){
 		if(ev.getFinalizado()){
-			activarDescativarPaneles(true, true);
 			txtEstado.setText("FINALIZADO");
 			rellenarComboBox();
 			rellenarTabla();
+			btnResultado.setEnabled(true);
 		}
 		else
 			{
-			activarDescativarPaneles(true, false);
+			
 			if(ev.getPlazos().size()==0) txtEstado.setText("CERRADO");
 			else txtEstado.setText("INSCRIPCION");
+			btnResultado.setEnabled(false);
 		}
 		lbNombreEvento.setText(ev.getNombre());
 		txtDistancia.setText(""+ev.getDistancia()+ "km");
@@ -178,68 +184,84 @@ public class DialogInformacionDeEvento extends JDialog {
 	}
 	
 	private void rellenarTabla(){
+	
 		for(Clasificacion cl : ev.getClasificaciones()){
-			if(cmBoxCategoria.getSelectedItem().equals(cl.getCategoria())){
-			ModeloNoEditable modeloTablaOrg = new ModeloNoEditable(cabecera, 0);
-			ArrayList<Inscripcion> inscritosQueFinalizaron=new ArrayList<Inscripcion>();
-			ArrayList<Inscripcion> inscritosQueNoFinalizaron = new ArrayList<Inscripcion>();
-			for(Inscripcion ins: cl.getCorredores()){
-				if(ins.getResultado()>0) inscritosQueFinalizaron.add(ins);
-				else inscritosQueNoFinalizaron.add(ins);
-			}
-			
-			for (int i=1; i<inscritosQueFinalizaron.size();i++ ) {
-				String[] fila = new String[4];
-				fila[0] = ""+i;
-				fila[1] = ""+inscritosQueFinalizaron.get(i).getDorsal();
-				fila[3] = inscritosQueFinalizaron.get(i).getAtleta().getNombre();
-				fila[4] = ""+inscritosQueFinalizaron.get(i).getTiempoSegundos() + "seg.";
-			
-				modeloTablaOrg.addRow(fila);
-			}
-			for (int i=1; i<inscritosQueFinalizaron.size();i++ ) {
-				String[] fila = new String[4];
-				fila[0] = "--";
-				fila[1] = ""+inscritosQueNoFinalizaron.get(i).getDorsal();
-				fila[3] = inscritosQueNoFinalizaron.get(i).getAtleta().getNombre();
-				if(inscritosQueNoFinalizaron.get(i).getTiempoSegundos()<0)fila[4] ="NO_PRESENTADO";
-				else fila[4] = "ABANDONO";
-				modeloTablaOrg.addRow(fila);
-			}
-			table.getTableHeader().setReorderingAllowed(false);
-			table.setModel(modeloTabla);
+			ModeloNoEditable modeloTabla = new ModeloNoEditable(cabecera, 0);
+				if(cmBoxCategoria.getSelectedItem().equals(cl.getCategoria())){
+					ArrayList<Inscripcion> inscritosQueFinalizaron=new ArrayList<Inscripcion>();
+					ArrayList<Inscripcion> inscritosQueNoFinalizaron = new ArrayList<Inscripcion>();
+					for(Inscripcion ins: cl.getCorredores()){
+						if(ins.getResultado()>0 && ins.getDorsal()>-1) inscritosQueFinalizaron.add(ins);
+						else inscritosQueNoFinalizaron.add(ins);
+					}
+				
+				for (int i=1; i<inscritosQueFinalizaron.size();i++ ) {
+					String[] fila = new String[4];
+					fila[0] = ""+i;
+					fila[1] = ""+inscritosQueFinalizaron.get(i).getDorsal();
+					fila[2] = inscritosQueFinalizaron.get(i).getAtleta().getNombre();
+					fila[3] = ""+inscritosQueFinalizaron.get(i).getTiempoSegundos() + "seg.";
+				
+					modeloTabla.addRow(fila);
+				}
+				for (int i=0; i<inscritosQueNoFinalizaron.size();i++ ) {
+					String[] fila = new String[4];
+					fila[0] = "--";
+					if(inscritosQueNoFinalizaron.get(i).getDorsal()==-1){
+						fila[1] = "SIN PAGAR";
+						fila[2]= "SIN PAGAR";
+						fila[3]= "SIN PAGAR";
+					}else{
+						fila[1] = ""+inscritosQueNoFinalizaron.get(i).getDorsal();
+						fila[2] = inscritosQueNoFinalizaron.get(i).getAtleta().getNombre();
+						if(inscritosQueNoFinalizaron.get(i).getTiempoSegundos()<0)fila[3] ="NO_PRESENTADO";
+						else fila[3] = "ABANDONO";
+						
+					}
+						modeloTabla.addRow(fila);
+					
+				}
+				table.getTableHeader().setReorderingAllowed(false);
+				table.setModel(modeloTabla);
 			}
 		}
 	}
 	
 	private void rellenarComboBox(){
+		cmBoxCategoria.addItem("Absoluta");
 		for(Categoria c: ev.getCategorias()){
 			cmBoxCategoria.addItem(c.getNombre());
-		}
+		}rellenarTabla();
 		
 	}
 	private void rellenarCategorias(){
 		for(Categoria cat : ev.getCategorias())
-			areaCategorias.append(cat.getNombre() +" Edades: "+ cat.getEdadMinima()+"-"+ cat.getEdadMaxima());
+			areaCategorias.append(cat.getNombre() +" Edades: "+ cat.getEdadMinima()+"-"+ cat.getEdadMaxima()+ "\n");
 	}
 	private void rellenarPlazos(){
-		for(PlazoInscripcion plazo : ev.getPlazos()){
-			areaPlazos.append("De " + plazo.getFechaInicio().toString()+ " a " + plazo.getFechaFin().toString()+"  Precio: " +plazo.getPrecio() + "€\n");
-		}
+		if(ev.getPlazos()!=null && ev.getPlazos().size()>0){
+			for(PlazoInscripcion plazo : ev.getPlazos()){
+				areaPlazos.append("De " + plazo.getFechaInicio().toString()+ " a " + plazo.getFechaFin().toString()+"  Precio: " +plazo.getPrecio() + "€\n");
+			}
+		}else areaPlazos.append("SIN PLAZOS");
 	}
 	private void rellenarInscritos(){
 		ArrayList<Inscripcion> atletas = ev.getInscritosEvento();
  		for(Inscripcion inscripcion: atletas){
- 			areaInscritos.append(inscripcion.getAtleta().toString());
+ 			areaInscritos.append(inscripcion.getAtleta().toString()+ "\n");
  		}
 	}
 	
 	
-	private void activarDescativarPaneles(boolean general, boolean resultados){
-		int n = tabbedPane.indexOfTab("General");// This line returns one as expected
-		tabbedPane.getTabComponentAt(n).setEnabled(general);
-		int n2 = tabbedPane.indexOfTab("Resultados");
-		tabbedPane.getTabComponentAt(n2).setEnabled(resultados);
+	public void cambiarPanel(int opcion){
+		if (opcion == 0) {
+			((CardLayout) cardEventos.getLayout()).show(cardEventos, "pn_inscripciones");
+	
+		}
+		if (opcion == 2) {
+			((CardLayout)cardEventos.getLayout()).show(cardEventos, "pn_resultados");
+		}
+
 	}
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
@@ -251,6 +273,7 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JTextField getTxtDistancia() {
 		if (txtDistancia == null) {
 			txtDistancia = new JTextField();
+			txtDistancia.setEditable(false);
 			txtDistancia.setBounds(170, 103, 56, 22);
 			txtDistancia.setColumns(10);
 		}
@@ -266,6 +289,7 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JTextField getTxtFechaCarrera() {
 		if (txtFechaCarrera == null) {
 			txtFechaCarrera = new JTextField();
+			txtFechaCarrera.setEditable(false);
 			txtFechaCarrera.setBounds(507, 74, 86, 22);
 			txtFechaCarrera.setColumns(10);
 		}
@@ -289,18 +313,11 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JTextField getTxtEstado() {
 		if (txtEstado == null) {
 			txtEstado = new JTextField();
+			txtEstado.setEditable(false);
 			txtEstado.setBounds(507, 103, 86, 22);
 			txtEstado.setColumns(10);
 		}
 		return txtEstado;
-	}
-	private JTabbedPane getTabbedPane() {
-		if (tabbedPane == null) {
-			tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-			tabbedPane.addTab("General", null, getPnInscripciones(), null);
-			tabbedPane.addTab("Resultados", null, getPnResultados(), null);
-		}
-		return tabbedPane;
 	}
 	private JPanel getPnInscripciones() {
 		if (pnInscripciones == null) {
@@ -324,6 +341,7 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JTextArea getAreaPlazos() {
 		if (areaPlazos == null) {
 			areaPlazos = new JTextArea();
+			areaPlazos.setEditable(false);
 		}
 		return areaPlazos;
 	}
@@ -348,6 +366,7 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JTextArea getAreaInscritos() {
 		if (areaInscritos == null) {
 			areaInscritos = new JTextArea();
+			areaInscritos.setEditable(false);
 		}
 		return areaInscritos;
 	}
@@ -383,6 +402,7 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JTextArea getAreaCategorias() {
 		if (areaCategorias == null) {
 			areaCategorias = new JTextArea();
+			areaCategorias.setEditable(false);
 		}
 		return areaCategorias;
 	}
@@ -423,7 +443,52 @@ public class DialogInformacionDeEvento extends JDialog {
 	private JComboBox<String> getCmBoxCategoria() {
 		if (cmBoxCategoria == null) {
 			cmBoxCategoria = new JComboBox();
+			cmBoxCategoria.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					rellenarTabla();
+				}
+			});
 		}
 		return cmBoxCategoria;
+	}
+	private JPanel getCardEventos() {
+		if (cardEventos == null) {
+			cardEventos = new JPanel();
+			cardEventos.setLayout(new CardLayout(0, 0));
+			cardEventos.add(getPnInscripciones(), "pn_inscripciones");
+			cardEventos.add(getPnResultados(), "pn_resultados");
+		}
+		return cardEventos;
+	}
+	private JButton getBtnInscripciones() {
+		if (btnInscripciones == null) {
+			btnInscripciones = new JButton("Inscripciones");
+			btnInscripciones.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					cambiarPanel(0);
+				}
+			});
+			btnInscripciones.setBounds(617, 116, 123, 25);
+		}
+		return btnInscripciones;
+	}
+	private JButton getBtnResultado() {
+		if (btnResultado == null) {
+			btnResultado = new JButton("Resultados");
+			btnResultado.setEnabled(false);
+			btnResultado.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					cambiarPanel(2);
+				}
+			});
+			btnResultado.setBounds(757, 116, 109, 25);
+		}
+		return btnResultado;
+	}
+
+
+
+	public void mostrarClasificaciones() {
+		cambiarPanel(2);
 	}
 }

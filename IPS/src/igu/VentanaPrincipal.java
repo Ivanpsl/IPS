@@ -207,7 +207,7 @@ public class VentanaPrincipal extends JFrame {
 			}
 
 			String dni = txtDNIInscribirse.getText();
-			dniInscrito = txtDNIInscribirse.getText();
+			dniInscrito.add(txtDNIInscribirse.getText());
 
 			Atleta at = g.buscarAtletaPorDNI(dni);
 			if (at == null) {
@@ -439,6 +439,8 @@ public class VentanaPrincipal extends JFrame {
 
 			if (eventoPulsado.getFinalizado()) {
 				// btnMostrarResultadosAtleta.setEnabled(true);
+				if (eventoPulsado.getClasificaciones() != null && eventoPulsado.getClasificaciones().size() > 0)
+					btnResultadosEvento.setEnabled(true);
 				btnPasarAInscripcion.setEnabled(false);
 			}
 			if (eventoPulsado.getPlazos() != null && !eventoPulsado.getFinalizado())
@@ -737,7 +739,9 @@ public class VentanaPrincipal extends JFrame {
 					int fila = tbEventosSeleccion.getSelectedRow();
 					pulsarEvento(contenidoEventos.get(fila), 1);
 					eventoSeleccionado = contenidoEventos.get(fila);
-					precioEvento = contenidoEventos.get(fila).getUltimoPlazo().getPrecio();
+					if(!eventoSeleccionado.getFinalizado())
+						precioEvento = contenidoEventos.get(fila).getUltimoPlazo().getPrecio();
+					precioTotal = 0;
 				}
 			});
 		}
@@ -1440,6 +1444,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextArea getTextAreaPlazosInscripcionEventoUsuario() {
 		if (textAreaPlazosInscripcionEventoUsuario == null) {
 			textAreaPlazosInscripcionEventoUsuario = new JTextArea();
+			textAreaPlazosInscripcionEventoUsuario.setEditable(false);
 			textAreaPlazosInscripcionEventoUsuario.setLineWrap(true);
 			textAreaPlazosInscripcionEventoUsuario.setWrapStyleWord(true);
 		}
@@ -1690,6 +1695,7 @@ public class VentanaPrincipal extends JFrame {
 			btAñadirAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					btnRealizarInscripcion.setEnabled(true);
+					dniInscrito = new ArrayList<String>();
 					AnadirInscritoALista();
 				}
 
@@ -1858,9 +1864,8 @@ public class VentanaPrincipal extends JFrame {
 			btnResultadosEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					DialogInformacionDeEvento diE = new DialogInformacionDeEvento(vP, eventoPulsado);
-					diE.mostrarClasificaciones();
+					//diE.mostrarClasificaciones();
 					diE.setVisible(true);
-					;
 				}
 			});
 			btnResultadosEvento.setEnabled(false);
@@ -2128,7 +2133,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lbInfor;
 	private final ButtonGroup btGroupPagos = new ButtonGroup();
 
-	String dniInscrito;
+	ArrayList<String> dniInscrito;
 	Evento eventoSeleccionado;
 	double precioEvento;
 	double precioTotal;
@@ -2198,7 +2203,7 @@ public class VentanaPrincipal extends JFrame {
 							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Credito",
 									JOptionPane.ERROR_MESSAGE);
 					} else {
-						g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioTotal);
+						g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento);
 						cambiarPanelesUsuario(0);
 					}
 

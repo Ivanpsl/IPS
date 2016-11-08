@@ -40,6 +40,7 @@ public class DialogResultadosAtleta extends JDialog {
 	 * 
 	 */
 	public DialogResultadosAtleta(Atleta atleta, Gestor g, VentanaPrincipal vP) {
+		setTitle("Gestor eventos: resultados de atleta");
 		setModal(true);
 		this.atleta=atleta;
 		this.g=g;
@@ -94,8 +95,10 @@ public class DialogResultadosAtleta extends JDialog {
 	private Clasificacion obtenerCategoriaPerteneciente(Inscripcion ins){
 			for(Clasificacion c: 
 				g.obtenerEventoPorId(ins.getIdEvento()).getClasificaciones()){
+				if(c.getCategoria()!=null && ins.getCategoria()!=null){
 				if(ins.getCategoria().equals(c.getCategoria()))
 					return c;
+				}
 			}return null;
 	}
 	
@@ -103,9 +106,10 @@ public class DialogResultadosAtleta extends JDialog {
 	public void generarCuadros(){
 		Clasificacion pertenece;
 		for(Inscripcion ins: inscripciones){
-			pertenece=obtenerCategoriaPerteneciente(ins);
-			if(pertenece!=null)
+			if(obtenerCategoriaPerteneciente(ins)!=null){
+				pertenece=obtenerCategoriaPerteneciente(ins);
 				pnContenedor.add(new panelCuadroResultadosAtletaEvento(ins, g.obtenerEventoPorId(ins.getIdEvento()),gC.obtenerPosicionAbsoluta(ins, g.obtenerEventoPorId(ins.getIdEvento())) , gC.obtenerPosicion(ins,pertenece)));
+			}
 		}
 	}
 }
