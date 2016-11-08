@@ -66,7 +66,7 @@ public class Main {
 			break;
 		case "mostrarClasificacion":
 			try {
-				g.comprobarPagadosBanco(Integer.parseInt(cachos[1]));
+				g.comprobarPagadosBanco(Integer.parseInt(cachos[1]), 20);
 				g.asignarDorsales(Integer.parseInt(cachos[1]));
 				g.finalizarEvento(Integer.parseInt(cachos[1]));
 				mostrarClasificacion(Integer.parseInt(cachos[1]));

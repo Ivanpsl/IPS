@@ -197,21 +197,9 @@ public class Gestor {
 	 */
 	public void mostrarNumeroCuenta(Inscripcion ins)
 	{
-		System.out.println("A continuación se mostrará donde realizar la transferencia: \n");
-		
-		try {
-			BufferedReader file = new BufferedReader(new FileReader("ficheros/banco.txt"));
-			String line = file.readLine();
-			System.out.println("Número de cuenta: " + line);
-			System.out.println("Se ha actualizado su estado y ahora consta como Pendiente de Pago.");
-			ins.setEstado(1);
-			bd.actualizarEstadoPago(ins, 1);
-			file.close();
-		}
-		catch (Exception e)
-		{
-			System.err.println("No se ha podido facilitar el número de cuenta. " + e.getMessage());
-		}
+		System.out.println("Se ha actualizado su estado y ahora consta como Pendiente de Pago.");
+		ins.setEstado(1);
+		bd.actualizarEstadoPago(ins, 1);
 	}
 	
 	/**
@@ -259,7 +247,7 @@ public class Gestor {
 	 * Método que verifica los DNI del txt para saber que atletas han pagado.
 	 * @throws IOException 
 	 */
-	public void comprobarPagadosBanco(int idEvento)
+	public void comprobarPagadosBanco(int idEvento, double precioEvento)
 	{
 		try {
 			BufferedReader fichero = new BufferedReader(new FileReader("ficheros/banco.txt"));
@@ -270,7 +258,7 @@ public class Gestor {
 			
 			while (fichero.ready()) {
 				String linea = fichero.readLine();
-		    	String[] trozos = linea.split("@");
+		    	String[] trozos = linea.split(";");
 		    	
 		    	String dni = trozos[0];
 		    	
@@ -283,13 +271,12 @@ public class Gestor {
 				
 		        java.sql.Date fecha = new java.sql.Date(parsed.getTime());
 		        
-		        int dinero = Integer.parseInt(trozos[2]);
-		        // if (dinero >= eventos.get(idEvento).getPrecio())
+		        double dinero = Double.parseDouble(trozos[2]);
 		    	
 		    	for (Inscripcion i : inscritos)
 		    	{
 		    		if (i.getAtleta().getDNI().toUpperCase().equals(dni) 
-		    				&& fecha.before(eventos.get(idEvento).getFechaCompeticion()))
+		    				&& fecha.before(eventos.get(idEvento).getFechaCompeticion()) && dinero >= precioEvento)
 		    		{
 		    			i.setEstado(2);
 		    			bd.actualizarEstadoPago(i, 2);
