@@ -281,9 +281,10 @@ public class VentanaPrincipal extends JFrame {
 	 *            organizadores usuario: menus de usuarios
 	 */
 	private void cambiarPanelesPrincipales(String opcion) {
-		if (opcion.equals("organizador"))
+		if (opcion.equals("organizador")){
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_Organizador");
-		mostrarTablaEventosOrganizador();
+			mostrarTablaEventosOrganizador();
+		}
 		if (opcion.equals("usuario")) {
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_usuario");
 			mostrarTablaEventosUsuario();
@@ -324,6 +325,7 @@ public class VentanaPrincipal extends JFrame {
 		}
 		if (opcion == 1) {
 			((CardLayout) pnCardUsuario.getLayout()).show(pnCardUsuario, "pn_inscripcionesUsuario");
+	
 		}
 
 	}
@@ -334,23 +336,30 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void mostrarTablaEventosOrganizador() {
 		ModeloNoEditable modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
-		ArrayList<Evento> eventosOrganizador = g.getEventosOrganizador(organizador);
+		ArrayList<Evento> eventosOrganizador = g.getEventos(); //g.getEventosOrganizador(organizador);
 		for (Evento ev : eventosOrganizador) {
 			String[] fila = new String[6];
 			fila[0] = ev.getNombre();
 			fila[1] = ev.getTipo();
-			fila[3] = String.valueOf(ev.getDistancia());
-			if (!ev.getFinalizado()) {
-				fila[4] = "Inscripcion";
-				fila[5] = "ABIERTO";
-				fila[6] = String.valueOf(ev.getUltimoPlazo().getPrecio());
+			fila[2] = String.valueOf(ev.getDistancia());
+	if (!ev.getFinalizado()) {
+				if(ev.getUltimoPlazo()!=null){
+					fila[3] = "Inscripcion";
+					fila[4] = "ABIERTO";
+					fila[5] = String.valueOf(ev.getUltimoPlazo().getPrecio());
+				}
+				else{
+					fila[3]="Carrera";
+					fila[4]="CERRADO";
+					fila[5]="CERRADO";
+				}
+				
 			} else {
 				if (ev.getFinalizado()) {
-					fila[4] = "Finalizada";
-				} else
-					fila[4] = "Corriendo";
-				fila[5] = "CERRADO";
-				fila[6] = "CERRADO";
+					fila[3] = "Finalizada";
+					fila[4] = "CERRADO";
+					fila[5] = "CERRADO";
+				}
 			}
 			modeloTablaOrg.addRow(fila);
 		}
@@ -369,18 +378,26 @@ public class VentanaPrincipal extends JFrame {
 			String[] fila = new String[6];
 			fila[0] = ev.getNombre();
 			fila[1] = ev.getTipo();
-			fila[3] = String.valueOf(ev.getDistancia());
+			fila[2] = String.valueOf(ev.getDistancia());
 			if (!ev.getFinalizado()) {
-				fila[4] = "Inscripcion";
-				fila[5] = "ABIERTO";
-				fila[6] = String.valueOf(ev.getUltimoPlazo().getPrecio());
+				
+				if(ev.getUltimoPlazo()!=null){
+					fila[3] = "Inscripcion";
+					fila[4] = "ABIERTO";
+					fila[5] = String.valueOf(ev.getUltimoPlazo().getPrecio());
+				}
+				else{
+					fila[3]="Carrera";
+					fila[4]="CERRADO";
+					fila[5]="CERRADO";
+				}
+				
 			} else {
 				if (ev.getFinalizado()) {
-					fila[4] = "Finalizada";
-				} else
-					fila[4] = "Corriendo";
-				fila[5] = "CERRADO";
-				fila[6] = "CERRADO";
+					fila[3] = "Finalizada";
+					fila[4] = "CERRADO";
+					fila[5] = "CERRADO";
+				}
 			}
 			modeloTabla.addRow(fila);
 		}
@@ -396,7 +413,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		btnPasarAInscripcion.setEnabled(false);
 		btnResultadosEvento.setEnabled(false);
-
+		
 		eventoPulsado = null;
 		txEventoPulsadoNombre.setText("");
 		txEventoPulsadoPlazas.setText("");
@@ -417,9 +434,13 @@ public class VentanaPrincipal extends JFrame {
 		eventoPulsado = ev;
 		if (desc == 1) { // desc= 1 nos situa en la descripcion del panel de
 							// usuarios
-			btnPasarAInscripcion.setEnabled(true);
-			if (eventoPulsado.getFinalizado())
-				btnMostrarResultadosAtleta.setEnabled(true);
+			
+			if (eventoPulsado.getFinalizado()){
+//				btnMostrarResultadosAtleta.setEnabled(true);
+				btnPasarAInscripcion.setEnabled(false);
+			}
+			if(eventoPulsado.getPlazos()!=null && !eventoPulsado.getFinalizado())	btnPasarAInscripcion.setEnabled(true);
+			else btnPasarAInscripcion.setEnabled(false);
 			txEventoPulsadoNombre.setText(ev.getNombre());
 			txEventoPulsadoPlazas.setText(String.valueOf(ev.getPlazasDisponibles()));
 			ArrayList<Categoria> cat = ev.getCategorias();
@@ -437,10 +458,11 @@ public class VentanaPrincipal extends JFrame {
 			textAreaCategoriasAdmitidas.setText(sB.toString());
 			ArrayList<PlazoInscripcion> plazos = ev.getPlazos();
 			sB = new StringBuilder();
-			for (PlazoInscripcion p : plazos) {
-				sB.append(
-						"De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + " Precio: " + p.getPrecio() + "€ \n");
-			}
+			if(plazos!=null && plazos.size()>0)
+				for (PlazoInscripcion p : plazos) {
+					sB.append(
+							"De: " + p.getFechaInicio() + " a: " + p.getFechaFin() + " Precio: " + p.getPrecio() + "€ \n");
+				}else sB.append("PLAZOS CERRADOS");
 			textAreaPlazosInscripcionEventoUsuario.setText(sB.toString());
 		}
 	}
@@ -632,6 +654,22 @@ public class VentanaPrincipal extends JFrame {
 						if (g.identificarAtletaPorDNI(dni)) {
 							cargarCabeceraAtleta();
 							cambiarCabeceraUsuario(1);
+							ArrayList<Evento> evParticipa = g.obtenerEventosParticipaPorDNI(dni);
+							if(evParticipa.size()>0){
+								boolean datos=false;
+								for(Evento ev : evParticipa)if(ev.getFinalizado()) datos=true;
+								if(datos){
+									btnMostrarResultadosAtleta.setText("Mostrar resultados");
+									btnMostrarResultadosAtleta.setEnabled(true);
+								}else{
+									btnMostrarResultadosAtleta.setEnabled(false);
+									btnMostrarResultadosAtleta.setText("Sin resultados almacenados");
+								}
+							}
+							else{
+								btnMostrarResultadosAtleta.setEnabled(false);
+								btnMostrarResultadosAtleta.setText("Sin resultados almacenados");
+							}
 						} else
 							JOptionPane.showInternalMessageDialog(pnPrincipal, "Atleta no identificado",
 									"Error: Atleta no registrado", JOptionPane.ERROR_MESSAGE);
@@ -663,6 +701,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTable getTbEventosSeleccion() {
 		if (tbEventosSeleccion == null) {
 			tbEventosSeleccion = new JTable();
+			tbEventosSeleccion.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tbEventosSeleccion.addMouseListener(new MouseAdapter() {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
@@ -758,6 +797,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnMostrarResultadosAtleta() {
 		if (btnMostrarResultadosAtleta == null) {
 			btnMostrarResultadosAtleta = new JButton("Mostrar resultados");
+			btnMostrarResultadosAtleta.setEnabled(false);
 			btnMostrarResultadosAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					DialogResultadosAtleta dR = new DialogResultadosAtleta(g.getAtletaIdentificado(), g,vP);
@@ -1207,7 +1247,7 @@ public class VentanaPrincipal extends JFrame {
 			throw new IllegalArgumentException("La distancia no es un número");
 		}
 		Date fechaComienzo = new Date(Calendar.getInstance().getTimeInMillis());
-		Date fechaFinInscripciones = new Date(Calendar.getInstance().getTimeInMillis());
+		//Date fechaFinInscripciones = new Date(Calendar.getInstance().getTimeInMillis());
 		ArrayList<Categoria> categoriasParaEvento = new ArrayList<Categoria>();
 		int plazas = (int) getSpinnerPlazas().getValue();
 		// Obtener las categorias del elemento en cuestion
@@ -1215,7 +1255,7 @@ public class VentanaPrincipal extends JFrame {
 		ArrayList<PlazoInscripcion> plazosInscripcion = new ArrayList<PlazoInscripcion>();
 
 		// Si todo esta OK
-		g.crearEvento(nombre, tipo, distancia, fechaComienzo, fechaFinInscripciones, plazas, categoriasParaEvento,
+		g.crearEvento(nombre, tipo, distancia, fechaComienzo,  plazas, categoriasParaEvento,
 				plazosInscripcion);
 	}
 

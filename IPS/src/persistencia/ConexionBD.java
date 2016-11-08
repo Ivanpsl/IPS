@@ -78,6 +78,7 @@ public class ConexionBD {
 					boolean fin;
 					if(finalizado==0) fin=false;
 					else fin=true;
+					System.out.println("Decodificando categorias y plazos");
 					ArrayList<PlazoInscripcion> plazos = Asignador.decodificaPlazos(bdPlazos);
 					ArrayList<Categoria> categorias = Asignador.decodificarCategorias(bdCategorias);
 					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos,ConversorFechas.convertFechaJavaSQL(fecha_comienzo)));

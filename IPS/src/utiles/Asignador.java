@@ -70,9 +70,11 @@ public class Asignador {
 		ArrayList<Categoria> arrayCategorias = new ArrayList<Categoria>();
 		String[] trozos = stringCategoria.split("@");
 		for (String string : trozos) {
+			if(string!="" && string!=" "){
 			String[] tr = string.split("%");
 			arrayCategorias.add(new Categoria(tr[0], Integer.parseInt(tr[1]),
 					Integer.parseInt(tr[2]), Integer.parseInt(tr[3])));
+			}
 		}
 		return arrayCategorias;
 	}
@@ -90,13 +92,14 @@ public class Asignador {
 			SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd");
 			String[] trozos = stringPlazos.split("@");
 			for (String string : trozos) {
-				String[] tr = string.split("%");
-
-				plazos.add(new PlazoInscripcion(
-						ConversorFechas
-								.convertFechaJavaSQL(format.parse(tr[0])),
-						ConversorFechas.convertFechaJavaSQL(format.parse(tr[1])),
-						Double.parseDouble(tr[2])));
+				if(string!="" && string!=" "){
+					String[] tr = string.split("%");
+					plazos.add(new PlazoInscripcion(
+							ConversorFechas
+									.convertFechaJavaSQL(format.parse(tr[0])),
+							ConversorFechas.convertFechaJavaSQL(format.parse(tr[1])),
+							Double.parseDouble(tr[2])));
+				}
 			}
 			return plazos;
 		} catch (NumberFormatException e) {
@@ -105,22 +108,23 @@ public class Asignador {
 			e.printStackTrace();
 			return null;
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println("[COD] Imposible decodificar fecha vacia");
+			//e.printStackTrace();
 			return null;
 		}
 	}
 	public static String codificarPlazos(ArrayList<PlazoInscripcion> plazos){
 		StringBuilder sb = new StringBuilder();
 		for(PlazoInscripcion plazo: plazos){
-			sb.append("@"+plazo.getFechaInicio()+"%"+plazo.getFechaFin()+"%"+plazo.getPrecio());
+			sb.append(plazo.getFechaInicio()+"%"+plazo.getFechaFin()+"%"+plazo.getPrecio()+"@");
 		}return sb.toString();
 		
 	}
 	public static String codificarCategorias(ArrayList<Categoria> categorias){
 		StringBuilder sb = new StringBuilder();
 		for(Categoria categoria: categorias){
-			sb.append("@"+categoria.getNombre()+"%"+categoria.getEdadMinima()+"%"+categoria.getEdadMaxima()+"%"+categoria.getSexo());
+			sb.append(categoria.getNombre()+"%"+categoria.getEdadMinima()+"%"+categoria.getEdadMaxima()+"%"+categoria.getSexo()+
+					"@");
 		}return sb.toString();
 	}
 	

@@ -16,11 +16,9 @@ public class Main {
 	static Gestor g;
 	static boolean ejecucion = true;
 
-//	public static void main(String[] args) throws IOException, ParseException {
-//		g = new Gestor();
-//
-//		mostrarComandosDisponibles();
-//	}
+//public static void main(String[] args) throws IOException, ParseException {
+//		g = new Gestor()
+//		}
 
 	private static void mostrarComandosDisponibles() {
 		System.out

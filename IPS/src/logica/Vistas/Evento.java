@@ -55,6 +55,7 @@ public class Evento {
 		this.categoriasDelEvento=categoriasDelEvento;
 		this.plazosDeInscripcion=plazos;
 		this.fechaComienzo=fechaComienzo;
+		
 		//Tipos de eventos
 		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
 	}
@@ -188,11 +189,15 @@ public class Evento {
 	
 	public boolean comprobarFechasInscripcion(Date fechaActual){
 		boolean cambio=false;
-		for(PlazoInscripcion plazo: plazosDeInscripcion){
-			if(fechaActual.before(plazo.getFechaFin())){
-				plazosDeInscripcion.remove(plazo);
-				cambio=true;
+		ArrayList<PlazoInscripcion> arrayFinal = new ArrayList<PlazoInscripcion>();
+		if(plazosDeInscripcion!=null && plazosDeInscripcion.size()>0){
+			for(PlazoInscripcion plazo: plazosDeInscripcion){
+				if(fechaActual.after(plazo.getFechaFin())){
+					cambio=true;
+				}else arrayFinal.add(plazo);
 			}
+			plazosDeInscripcion=arrayFinal;
+			if(plazosDeInscripcion.size()==0);
 		}
 		return cambio;
 	}
@@ -207,7 +212,7 @@ public class Evento {
 	}
 
 	public PlazoInscripcion getUltimoPlazo(){
-		if(!finalizado)
+		if(!finalizado && plazosDeInscripcion!=null && plazosDeInscripcion.size()>0)
 			return plazosDeInscripcion.get(0);
 		return null;	
 	}
