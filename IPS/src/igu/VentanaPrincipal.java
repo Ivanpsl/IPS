@@ -29,6 +29,7 @@ import java.util.List;
 import java.awt.event.ActionEvent;
 
 import javax.swing.border.TitledBorder;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
@@ -45,6 +46,7 @@ import utiles.ConversorFechas;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
+import javax.swing.JFileChooser;
 import javax.swing.JTextField;
 import javax.swing.JTextPane;
 import javax.swing.SpinnerModel;
@@ -63,6 +65,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ItemEvent;
+import java.io.File;
 
 import javax.swing.JRadioButton;
 
@@ -149,6 +152,8 @@ public class VentanaPrincipal extends JFrame {
 	private JSpinner spinnerPlazas;
 	List<Atleta> atletasAInscribir = new ArrayList<Atleta>();
 	List<Atleta> atletasARegistrar = new ArrayList<Atleta>();
+	 
+	JFileChooser selector;
 
 	/**
 	 * Launch the application.
@@ -158,6 +163,7 @@ public class VentanaPrincipal extends JFrame {
 			public void run() {
 				try {
 					VentanaPrincipal frame = new VentanaPrincipal();
+					frame.setLocationRelativeTo(null);
 					frame.setResizable(false);
 					frame.setVisible(true);
 
@@ -189,20 +195,23 @@ public class VentanaPrincipal extends JFrame {
 
 	private boolean comprobarDatosInscribirse() {
 		if (txtDNIInscribirse.getText().equals("") || !g.comprobarFecha(txtFechaInscribirse.getText())
-				|| txtSexoInscribirse.getText().equals("") || txtNombreInscribirse.getText().equals("")) {
+				 || txtNombreInscribirse.getText().equals("")) {
 			return false;
 		}
 		return true;
 	}
 
 	private void AnadirInscritoALista() {
+		
 		if (comprobarDatosInscribirse()) {
+		
+		
 			int sexo = 0;
 			boolean existe = false;
-			if (txtSexoInscribirse.getText().toUpperCase().equals("MASCULINO")) {
+			if (rdbtnMasculino.isSelected()) {
 				sexo = 0;
 			}
-			if (txtSexoInscribirse.getText().toUpperCase().equals("FEMENINO")) {
+			if (rdbtnFemenino.isSelected()) {
 				sexo = 1;
 			}
 
@@ -214,7 +223,7 @@ public class VentanaPrincipal extends JFrame {
 				at = new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), sexo);
 				atletasARegistrar.add(at);
 				JOptionPane.showMessageDialog(null, "Atleta no registrado. Sera registrado en la base de datos");
-				precioTotal = precioTotal + precioEvento;
+				//precioTotal = precioTotal + precioEvento;
 			}
 
 			if (!modeloLista.contains(dni)) {
@@ -231,11 +240,12 @@ public class VentanaPrincipal extends JFrame {
 			txtDNIInscribirse.setText("");
 			txtNombreInscribirse.setText("");
 			txtFechaInscribirse.setText("");
-			txtSexoInscribirse.setText("");
+			
 		} else {
 			JOptionPane.showMessageDialog(null, "Rellene bien todos los campos");
 			btnRealizarInscripcion.setEnabled(false);
 		}
+		
 
 	}
 
@@ -248,7 +258,8 @@ public class VentanaPrincipal extends JFrame {
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
-		txtSexoInscribirse.setText("");
+		rdbtnFemenino.setSelected(false);
+		rdbtnMasculino.setSelected(false);
 
 		atletasARegistrar.clear();
 		atletasAInscribir.clear();
@@ -259,7 +270,8 @@ public class VentanaPrincipal extends JFrame {
 		txtDNIInscribirse.setText("");
 		txtNombreInscribirse.setText("");
 		txtFechaInscribirse.setText("");
-		txtSexoInscribirse.setText("");
+		rdbtnFemenino.setSelected(false);
+		rdbtnMasculino.setSelected(false);
 		modeloLista.removeAllElements();
 		listInscribirse.setModel(modeloLista);
 		atletasARegistrar.clear();
@@ -272,8 +284,70 @@ public class VentanaPrincipal extends JFrame {
 			txtDNIInscribirse.setText(dni);
 			txtNombreInscribirse.setText(txtNombreAtleta.getText());
 			txtFechaInscribirse.setText(txtFechaNacimiento.getText());
-			txtSexoInscribirse.setText(g.buscarAtletaPorDNI(dni).getSexo() == 0 ? "masculino" : "femenino");
+			rdbtnMasculino.setSelected(g.buscarAtletaPorDNI(dni).getSexo() == 0 ? true : false);
+			rdbtnFemenino.setSelected(g.buscarAtletaPorDNI(dni).getSexo() == 0 ? false : true);
 		}
+	}
+	
+	private void cargarFichero() {
+		int respuesta = getSelector().showOpenDialog(null);
+		if(respuesta==JFileChooser.APPROVE_OPTION){
+			
+			List<Atleta> atletasFichero = g.leerFicheroInscribirAtletas(selector.getSelectedFile());
+			
+			String dni="";
+			for (int i = 0; i < atletasFichero.size(); i++) {
+				dni =atletasFichero.get(i).getDNI();
+				Atleta at = g.buscarAtletaPorDNI(dni);
+				if (at == null) {
+					atletasARegistrar.add(atletasFichero.get(i));
+					
+					//precioTotal = precioTotal + precioEvento;
+				}
+				if (!modeloLista.contains(dni)) {
+					if (!g.existeAtletaEnEvento(g.getEventoSeleccionado().getId(), dni)) {
+						atletasAInscribir.add(at);
+						modeloLista.addElement(dni);
+						precioTotal = precioTotal + precioEvento;
+					} else {
+						JOptionPane.showMessageDialog(null, "Dni ya inscrito en el evento");
+					}
+				} else {
+					JOptionPane.showMessageDialog(null, "El dni ya esta en la lista");
+				}
+			}
+	
+		}
+		
+	}
+	
+	public JFileChooser getSelector() {
+		if(selector==null){
+			selector= new JFileChooser();
+			selector.setMultiSelectionEnabled(false);
+			//Para filtrar los archivos que queremos seleccionar
+			selector.setFileFilter(new FileNameExtensionFilter("Archivos texto", "txt"));
+			
+			
+			//String directorio= System.getProperty("user.dir"); 
+			//fija en el directorio de ejecucion del programa
+			//selector.setCurrentDirectory(new File(directorio));
+			
+			
+			//Fijar donde quiero que busque los mp3
+			String directorio= System.getProperty("user.home");
+			//String directorio= System.getProperty("Users.home")+"/Desktop/Musica";
+			selector.setCurrentDirectory(new File(directorio));
+			
+		}
+		return selector;
+	}
+	
+	
+	
+
+	public void setSelector(JFileChooser selector) {
+		this.selector = selector;
 	}
 
 	/**
@@ -1249,7 +1323,6 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel label_2;
 	private JLabel lblFechaNacimientoddmmyyyy;
 	private JLabel label_4;
-	private JTextField txtSexoInscribirse;
 	private JButton btnUsuarioActual;
 	private JList<String> listInscribirse;
 	private JButton btnRealizarInscripcion;
@@ -1677,10 +1750,12 @@ public class VentanaPrincipal extends JFrame {
 			pnInscribirse.add(getLabel_2());
 			pnInscribirse.add(getLblFechaNacimientoddmmyyyy());
 			pnInscribirse.add(getLabel_4());
-			pnInscribirse.add(getTxtSexoInscribirse());
 			pnInscribirse.add(getBtnUsuarioActual());
 			pnInscribirse.add(getBtnRealizarInscripcion());
 			pnInscribirse.add(getBtnSeleccionarOtroEvento());
+			pnInscribirse.add(getBtnCargarFichero());
+			pnInscribirse.add(getRdbtnMasculino());
+			pnInscribirse.add(getRdbtnFemenino());
 		}
 		return pnInscribirse;
 	}
@@ -1803,24 +1878,6 @@ public class VentanaPrincipal extends JFrame {
 		return label_4;
 	}
 
-	private JTextField getTxtSexoInscribirse() {
-		if (txtSexoInscribirse == null) {
-			txtSexoInscribirse = new JTextField();
-			txtSexoInscribirse.addKeyListener(new KeyAdapter() {
-				@Override
-				public void keyTyped(KeyEvent e) {
-					char c = e.getKeyChar();
-					if (!Character.isAlphabetic(c)) {
-						e.consume();
-					}
-				}
-			});
-			txtSexoInscribirse.setColumns(10);
-			txtSexoInscribirse.setBounds(342, 206, 133, 20);
-		}
-		return txtSexoInscribirse;
-	}
-
 	private JButton getBtnUsuarioActual() {
 		if (btnUsuarioActual == null) {
 			btnUsuarioActual = new JButton("Usuario actual");
@@ -1829,7 +1886,7 @@ public class VentanaPrincipal extends JFrame {
 					autorrellenar();
 				}
 			});
-			btnUsuarioActual.setBounds(124, 300, 118, 23);
+			btnUsuarioActual.setBounds(124, 319, 118, 23);
 		}
 		return btnUsuarioActual;
 	}
@@ -2160,6 +2217,10 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel pnSurOrganizador;
 	private JLabel lbPrecioTotal;
 	private JTextField txPrecioTotal;
+	private JButton btnCargarFichero;
+	private JRadioButton rdbtnMasculino;
+	private JRadioButton rdbtnFemenino;
+	private final ButtonGroup buttonGroup = new ButtonGroup();
 
 	private JPanel getPnPagar() {
 		if (pnPagar == null) {
@@ -2394,5 +2455,35 @@ public class VentanaPrincipal extends JFrame {
 			txPrecioTotal.setColumns(10);
 		}
 		return txPrecioTotal;
+	}
+	private JButton getBtnCargarFichero() {
+		if (btnCargarFichero == null) {
+			btnCargarFichero = new JButton("Cargar fichero");
+			btnCargarFichero.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					cargarFichero();
+				}
+
+
+			});
+			btnCargarFichero.setBounds(341, 319, 118, 23);
+		}
+		return btnCargarFichero;
+	}
+	private JRadioButton getRdbtnMasculino() {
+		if (rdbtnMasculino == null) {
+			rdbtnMasculino = new JRadioButton("masculino");
+			buttonGroup.add(rdbtnMasculino);
+			rdbtnMasculino.setBounds(223, 206, 80, 23);
+		}
+		return rdbtnMasculino;
+	}
+	private JRadioButton getRdbtnFemenino() {
+		if (rdbtnFemenino == null) {
+			rdbtnFemenino = new JRadioButton("femenino");
+			buttonGroup.add(rdbtnFemenino);
+			rdbtnFemenino.setBounds(317, 206, 88, 23);
+		}
+		return rdbtnFemenino;
 	}
 }

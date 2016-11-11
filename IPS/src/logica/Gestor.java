@@ -1,6 +1,7 @@
 package logica;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -37,6 +38,7 @@ public class Gestor {
 	
 	private ConexionBD bd = new ConexionBD();
 	private GestorFicheros gF = new GestorFicheros();
+	private BufferedReader reader;
 	
 	
 	public Gestor(){
@@ -469,6 +471,29 @@ public class Gestor {
 			registrarAtleta(atletasARegistrar.get(i).getDNI(), atletasARegistrar.get(i).getNombre(), atletasARegistrar.get(i).getFechaNacimiento()
 					, atletasARegistrar.get(i).getSexo(), eventoSeleccionado);
 		}
+		
+	}
+	
+	
+	public List<Atleta> leerFicheroInscribirAtletas(File fichero){
+		List<Atleta> atletasFichero = new ArrayList<Atleta>();
+		try {
+			reader = new BufferedReader(new FileReader(fichero));
+			
+			
+			
+			while(reader.ready()){
+				String[] trozos= reader.readLine().split(";");
+				if(!trozos[0].equals("")&& !trozos[1].equals("")&& comprobarFecha(trozos[2]) && (trozos[3].equals("masculino") || trozos[3].equals("femenino"))){
+					atletasFichero.add(new Atleta(trozos[0], trozos[1], trozos[2], trozos[3].equals("masculino")? 0:1));
+				}
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return atletasFichero;
 		
 	}
 	
