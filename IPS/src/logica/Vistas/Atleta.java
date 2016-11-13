@@ -100,7 +100,7 @@ public class Atleta extends Usuario{
 	}
 	public String toString(){
 		StringBuilder sB= new StringBuilder();
-		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Sexo(0-masc, 1-fem): " + getSexo());
+		sB.append("DNI: "+getDNI()+" Nombre: "+getNombre()+" Sexo: " + (getSexo()==0 ? "masculino":"femenino"));
 		return sB.toString();
 	}
 

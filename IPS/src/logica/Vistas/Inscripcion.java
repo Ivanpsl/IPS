@@ -52,9 +52,11 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	public void calcularCategoria(){
 		List<Categoria> categ = evento.getCategorias();
 		for (int i = 0; i < categ.size(); i++) {
-			if(categ.get(i).getEdadMinima()>= atleta.getEdad() && categ.get(i).getEdadMaxima()>= atleta.getEdad()){
-				this.categoria= categ.get(i);
-				this.categoriaStr=categ.get(i).getNombre();
+			if(categ.get(i)!=null){
+				if(categ.get(i).getEdadMinima()<= atleta.getEdad() && categ.get(i).getEdadMaxima()>= atleta.getEdad() && categ.get(i).getSexo()==atleta.getSexo()){
+					this.categoria= categ.get(i);
+					this.categoriaStr=categ.get(i).getNombre();
+				}
 			}
 		}
 	  }
@@ -135,7 +137,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		else estado="Pagado";
 		StringBuilder sB= new StringBuilder();
 		sB.append("Datos atleta: " + getAtleta().toString() + "\n");
-		sB.append("\tEstado: " + estado + ". Dorsal: " + dorsal + ". F.Inscripción: " + getFechaInscripcion());
+		sB.append("\tEstado: " + estado + ". Categoria: "+ getCategoria()+ ". Dorsal: " + dorsal + ". F.Inscripción: " + getFechaInscripcion());
 		return sB.toString();
 	}
 

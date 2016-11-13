@@ -187,8 +187,11 @@ public class Gestor {
 			Inscripcion ins = new Inscripcion(atl, fechaActual,evento);
 			System.out.println("Se ha inscrito correctamente. Detalles:");
 			System.out.println(ins.toString());
+			System.out.println();
 			evento.añadirInscrito(ins);
+			System.out.println("Mostrando numero de cuenta");
 			mostrarNumeroCuenta(ins);
+			System.out.println();
 			bd.añadirInscrito(atl, ins);
 		}
 	}
