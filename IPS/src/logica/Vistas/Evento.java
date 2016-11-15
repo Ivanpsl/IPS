@@ -30,7 +30,7 @@ public class Evento {
 	//double precio;
 	double distancia;
 	boolean finalizado = false;
-	
+	int idOrganizador;
 
 	Date fechaFinInscripcion;
 	Date fechaComienzo;
@@ -39,7 +39,7 @@ public class Evento {
 	
 	public Evento(int id, String name, String type, 
 			double distancia, int plazasTotales, boolean finalizado,ArrayList<Categoria> categoriasDelEvento,
-			ArrayList<PlazoInscripcion> plazos,Date fechaComienzo) {
+			ArrayList<PlazoInscripcion> plazos,Date fechaComienzo, int idOrganizador) {
 		
 		this.inscripciones = new ArrayList<Inscripcion>();
 		this.id=id;
@@ -55,7 +55,7 @@ public class Evento {
 		this.categoriasDelEvento=categoriasDelEvento;
 		this.plazosDeInscripcion=plazos;
 		this.fechaComienzo=fechaComienzo;
-		
+		this.idOrganizador=idOrganizador;
 		//Tipos de eventos
 		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
 	}

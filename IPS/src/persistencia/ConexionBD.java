@@ -74,14 +74,14 @@ public class ConexionBD {
 					String bdPlazos = rs.getString("EV_PLAZOS_INS");
 					String bdCategorias = rs.getString("EV_CATEGORIAS");
 					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
-					
+					int idOrganizador = 0;//rs.getInt("EV_ID_ORGANIZADOR");
 					boolean fin;
 					if(finalizado==0) fin=false;
 					else fin=true;
 					System.out.println("Decodificando categorias y plazos");
 					ArrayList<PlazoInscripcion> plazos = Asignador.decodificaPlazos(bdPlazos);
 					ArrayList<Categoria> categorias = Asignador.decodificarCategorias(bdCategorias);
-					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos,ConversorFechas.convertFechaJavaSQL(fecha_comienzo)));
+					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos,ConversorFechas.convertFechaJavaSQL(fecha_comienzo),idOrganizador));
 				}
 				System.out.println("Datos de eventos cargados");
 				rs.close();
@@ -123,7 +123,6 @@ public class ConexionBD {
 					if(Asignador.asignarAEvento(g, inscripcion, id))
 						System.out.println("Inscripcion asignada a evento correctamente   -----> " + inscripcion.toString());
 				}
-
 				rs3.close();
 				st.close();
 				System.out.println("Datos de inscripciones cargados");

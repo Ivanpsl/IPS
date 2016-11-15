@@ -27,6 +27,11 @@ import java.awt.event.ActionEvent;
 
 public class DialogResultadosAtleta extends JDialog {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private final JPanel contentPanel = new JPanel();
 	JPanel pnContenedor;
 	Gestor g;

@@ -331,13 +331,13 @@ public class Gestor {
 	 * @param plazasTotales
 	 */
 	public void crearEvento(String nombre, String tipo, double distancia, Date fecha_comienzo, int plazasTotales
-			,ArrayList<Categoria> categoriasDelEvento, ArrayList<PlazoInscripcion>  plazos){
+			,ArrayList<Categoria> categoriasDelEvento, ArrayList<PlazoInscripcion>  plazos, int idOrganizador){
 		//Los fallos de argumento que los controle la interfaz para que no se detenga la ejecución. 
 //		if(!Comprobaciones.esString(nombre) || !Comprobaciones.esString(tipo) ||  fecha_comienzo == null || categoriasDelEvento == null || plazos == null)
 //			throw new IllegalArgumentException();
 //		
 		//Si todo esta bien se crea el evento y se añade
-		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos,fecha_comienzo);
+		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos,fecha_comienzo,idOrganizador);
 		eventos.add(nuevoEvento);
 		bd.añadirEventoABD(nuevoEvento);
 	}
@@ -360,7 +360,7 @@ public class Gestor {
 	 * @param id: id del evento que finaliza
 	 */
 	public void finalizarEvento(int id){
-		if (!obtenerEventoPorId(id).getFinalizado())
+		if ( obtenerEventoPorId(id)!=null && !obtenerEventoPorId(id).getFinalizado())
 			comprobarPagadosBanco(id, obtenerEventoPorId(id).getUltimoPlazo().getPrecio());
 		asignarDorsales(id);
 		gF.obtenerResultadosEvento(obtenerEventoPorId(id),bd);

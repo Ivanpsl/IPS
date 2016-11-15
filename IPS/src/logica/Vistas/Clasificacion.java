@@ -18,7 +18,5 @@ public class Clasificacion {
 
 	public ArrayList<Inscripcion> getCorredores() {
 		return corredores;
-	}
-	
+	}	
 }
-

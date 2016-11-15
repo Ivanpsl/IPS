@@ -181,7 +181,7 @@ public class VentanaPrincipal extends JFrame {
 		setTitle("Gestor de Eventos");
 		vP = this;
 		g = new Gestor();
-		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER");
+		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER",0);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1020, 512);
 		pnPrincipal = new JPanel();
@@ -1418,7 +1418,7 @@ public class VentanaPrincipal extends JFrame {
 		ArrayList<PlazoInscripcion> plazosInscripcion = new ArrayList<PlazoInscripcion>();
 
 		// Si todo esta OK
-		g.crearEvento(nombre, tipo, distancia, fechaComienzo, plazas, categoriasParaEvento, plazosInscripcion);
+		g.crearEvento(nombre, tipo, distancia, fechaComienzo, plazas, categoriasParaEvento, plazosInscripcion,organizador.getId());
 	}
 
 	// ---------------------------------- FIN metodos crear un evento
