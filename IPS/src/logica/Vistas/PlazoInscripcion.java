@@ -28,4 +28,12 @@ public class PlazoInscripcion {
 		String miString = inicio.toString() + " - " + fin.toString() + " "+ precio + "€";
 		return miString;
 	}
+	public int compareTo(PlazoInscripcion pl2){
+		if(inicio.getTime() > pl2.getFechaFin().getTime())
+			return 1;
+		else if(fin.getTime() < pl2.getFechaInicio().getTime())
+			return -1;
+		else 
+			return 0;
+	}
 }
