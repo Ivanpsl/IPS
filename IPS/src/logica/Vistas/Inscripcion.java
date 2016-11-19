@@ -1,6 +1,7 @@
 package logica.Vistas;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import utiles.ConversorFechas;
@@ -26,6 +27,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	private Date fechaInscripcion;
 	private Date fechaLimite;
 	private int tiempo_segundos;
+	ArrayList<Integer> tiemposPorEtapas; //Incluye el tiempo final, que estara en la ultima posicion
 	
 	/**
 	 * Constructor de Inscripcion e
@@ -46,7 +48,8 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		this.tiempo_segundos=10000;
 		this.dorsal=-1;
 		calcularCategoria();
-	
+		
+		tiemposPorEtapas = new ArrayList<Integer>();
 	}
 	
 	public void calcularCategoria(){
@@ -159,5 +162,20 @@ public class Inscripcion implements Comparable<Inscripcion> {
 				return 1;
 			return 0;
 		}
+	}
+
+	public ArrayList<Integer> getTiemposPorEtapas() {
+		return tiemposPorEtapas;
+	}
+
+	public void setTiemposPorEtapas(ArrayList<Integer> tiemposPorEtapas) {
+		this.tiemposPorEtapas = tiemposPorEtapas;
+	}
+	/**
+	 * Añade un nuevo tiempo de etapa en segundos
+	 * @param seg
+	 */
+	public void añadirTiempoDeEtapa(int seg){
+		this.tiemposPorEtapas.add(seg);
 	}
 }
