@@ -168,17 +168,18 @@ public class Evento {
 	 * @param dorsal: Dorsal del corredor
 	 * @param tiempo: tiempo en segudos que ha tardado en completar la carrera
 	 */
-	public void asignarTiemposDorsal(int dorsal, int tiempo,ConexionBD bd){
+	public void asignarTiemposDorsal(int dorsal, ArrayList<Integer> tiempos,ConexionBD bd){
 		boolean encontrado=false;
 		for(Inscripcion p : inscripciones){
 			if(p.getDorsal()==dorsal){
-				p.setTiempoSegundos(tiempo);
-				bd.asignarTiempo(p, tiempo);
+				p.setTiempoSegundos(tiempos.get(tiempos.get(tiempos.size()-1)));
+				p.setTiemposPorEtapas(tiempos);
+				bd.asignarTiempo(p, tiempos);
 				encontrado=true;
 			}
 		}
 		if(!encontrado)
-			System.err.println("Participante con dorsal " + dorsal +" y con un tiempo de " + tiempo + "seg. no ha sido encontrado" );
+			System.err.println("Participante con dorsal " + dorsal +" y con un tiempo de " + tiempos + "seg. no ha sido encontrado" );
 	}
 	/***
 	 * Metodo generarClasificacion que genera las clasificaciones de la carrera y sera llamado al final de la competicion
@@ -230,5 +231,8 @@ public class Evento {
 	}
 	public void setId(int id){
 		this.id=id;
+	}
+	public int getIdOrganizador(){
+		return idOrganizador;
 	}
 }

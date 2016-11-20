@@ -11,6 +11,7 @@ import java.util.Date;
 
 import utiles.Asignador;
 import utiles.ConversorFechas;
+import utiles.Decodificador;
 import logica.Gestor;
 import logica.Vistas.Atleta;
 import logica.Vistas.Categoria;
@@ -74,13 +75,13 @@ public class ConexionBD {
 					String bdPlazos = rs.getString("EV_PLAZOS_INS");
 					String bdCategorias = rs.getString("EV_CATEGORIAS");
 					Date fecha_comienzo =rs.getDate("EV_FECHA_COMIENZO");
-					int idOrganizador = 0;//rs.getInt("EV_ID_ORGANIZADOR");
+					int idOrganizador = rs.getInt("EV_ID_ORGANIZADOR");
 					boolean fin;
 					if(finalizado==0) fin=false;
 					else fin=true;
 					System.out.println("Decodificando categorias y plazos");
-					ArrayList<PlazoInscripcion> plazos = Asignador.decodificaPlazos(bdPlazos);
-					ArrayList<Categoria> categorias = Asignador.decodificarCategorias(bdCategorias);
+					ArrayList<PlazoInscripcion> plazos = Decodificador.decodificaPlazos(bdPlazos);
+					ArrayList<Categoria> categorias = Decodificador.decodificarCategorias(bdCategorias);
 					g.getEventos().add(new Evento(id, nombre, tipo, distancia,plazas,fin,categorias,plazos,ConversorFechas.convertFechaJavaSQL(fecha_comienzo),idOrganizador));
 				}
 				System.out.println("Datos de eventos cargados");
@@ -113,10 +114,12 @@ public class ConexionBD {
 					int id = rs3.getInt("EV_ID");
 					int estado =rs3.getInt("INS_ESTADO");
 					Date fecha_ins =rs3.getDate("INS_FECHA_INS");
-					int segundos = rs3.getInt("INS_RESULTADO_SEG");
 					int dorsal = rs3.getInt("INS_DORSAL");
 					String categoria = rs3.getString("INS_CATEGORIA");
-					Inscripcion inscripcion = new Inscripcion(id,dorsal, fecha_ins, estado, segundos, categoria);
+					String segundos = rs3.getString("INS_RESULTADOS_SEG");
+					ArrayList<Integer> tiempos = Decodificador.decodificarResultado(segundos);
+					Inscripcion inscripcion = new Inscripcion(id,dorsal, fecha_ins, estado, tiempos.get(tiempos.size()-1), categoria);
+					inscripcion.setTiemposPorEtapas(tiempos);
 					if(Asignador.asignarAtleta(g, inscripcion, dni))
 						System.out.println("Inscripcion asignada a atleta correctamente." 
 								+ "  ---> " + inscripcion.toString());
@@ -127,6 +130,7 @@ public class ConexionBD {
 				st.close();
 				System.out.println("Datos de inscripciones cargados");
 				con.close();
+				
 				return true;
 			} catch (SQLException e) {
 				System.err.println("Error al cargar datos de la BD.");
@@ -141,16 +145,17 @@ public class ConexionBD {
 			System.err.println("No es posible añadir eventos a ninguna BD." );
 		else{
 			try {
-				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?,?)");
+				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?,?,?)");
 				int id= ev.getId();
 				String nombre = ev.getNombre();
 				String tipo= ev.getTipo();
 				double distancia = ev.getDistancia();
 				int plazasTotales= ev.getPlazasTotales();
 				int fin;
-				String categorias = Asignador.codificarCategorias(ev.getCategorias());
-				String plazos = Asignador.codificarPlazos(ev.getPlazos());
+				String categorias = Decodificador.codificarCategorias(ev.getCategorias());
+				String plazos = Decodificador.codificarPlazos(ev.getPlazos());
 				Date fechaCompeticion= ev.getFechaCompeticion();
+				int idOrganizador= ev.getIdOrganizador();
 				if(ev.getFinalizado()) fin =1;
 				else fin=0;
 				
@@ -163,6 +168,7 @@ public class ConexionBD {
 				st.setString(7, categorias);
 				st.setString(8,plazos );
 				st.setDate(9, (java.sql.Date) fechaCompeticion);
+				st.setInt(10, idOrganizador);
 				st.executeUpdate();
 				st.close();
 				con.close();
@@ -228,6 +234,9 @@ public class ConexionBD {
 		}
 	}
 	
+	
+
+	
 	public void asignarDorsal(Inscripcion inscripcion, int dorsal){
 		Connection con =conectar();
 		if(con==null)
@@ -250,7 +259,7 @@ public class ConexionBD {
 			}
 		}
 	}
-	public void asignarTiempo(Inscripcion inscripcion, int tiempo){
+	public void asignarTiempo(Inscripcion inscripcion, ArrayList<Integer> tiempos){
 		Connection con =conectar();
 		if(con==null)
 			System.err.println("No es posible encontrar ninguna BD." );
@@ -258,12 +267,12 @@ public class ConexionBD {
 			try {
 				
 				PreparedStatement st;
-				st = con.prepareStatement("UPDATE INSCRIPCION SET INS_RESULTADO_SEG=? WHERE AT_DNI=?");
-				st.setInt(1,tiempo);
+				st = con.prepareStatement("UPDATE INSCRIPCION SET INS_RESULTADOS_SEG=? WHERE AT_DNI=?");
+				st.setString(1,Decodificador.codificarResultados(tiempos));
 				st.setString(2, inscripcion.getAtleta().getDNI());
 				int res = st.executeUpdate();
 				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \t");
-				System.out.println("Inscripcion  [" + inscripcion.toString() + "] Actualizada con tiempo " + tiempo);
+				System.out.println("Inscripcion  [" + inscripcion.toString() + "] Actualizada con tiempos " + tiempos);
 				st.close();
 				con.close();
 			} catch (SQLException e) {
@@ -347,7 +356,7 @@ public class ConexionBD {
 				
 				PreparedStatement st;
 				st = con.prepareStatement("UPDATE EVENTOS SET EV_PLAZOS_INS=? WHERE EV_ID=?");
-				st.setString(1, Asignador.codificarPlazos(ev.getPlazos()));
+				st.setString(1, Decodificador.codificarPlazos(ev.getPlazos()));
 				st.setInt(2,ev.getId());
 				int res = st.executeUpdate();
 				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \n\t");
@@ -360,6 +369,8 @@ public class ConexionBD {
 			}
 		}
 	}
+	
+	
 	
 	public void resetearDatosBD(){
 		Connection con =conectar();

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import logica.Gestor;
 import logica.Vistas.Evento;
@@ -56,7 +57,9 @@ public class GestorFicheros {
 
 				linea = fichero.readLine();
 				String[] trozos = linea.split("-");
-				ev.asignarTiemposDorsal(Integer.parseInt(trozos[0]), Integer.parseInt(trozos[1]), bd);
+				ArrayList<Integer> resultados = new ArrayList<Integer>();
+				resultados.add(Integer.parseInt(trozos[1]));
+				ev.asignarTiemposDorsal(Integer.parseInt(trozos[0]),resultados, bd);
 			}
 			fichero.close();
 			System.out.println(
