@@ -1010,7 +1010,17 @@ public class VentanaPrincipal extends JFrame {
 
 	private JScrollPane getPnScrollOrganizador() {
 		if (pnScrollOrganizador == null) {
+			eventoPulsado = null;
 			pnScrollOrganizador = new JScrollPane();
+			pnScrollOrganizador.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent arg0) {
+					int fila = tablaEventosDelOrganizador.getSelectedRow();
+					eventoPulsado = organizador.getMisEventos().get(fila);
+					if(eventoPulsado.comprobarFinalizado())
+						getBtEditarEventoOr().setEnabled(true);
+				}
+			});
 			pnScrollOrganizador.setViewportView(getTablaEventosDelOrganizador());
 		}
 		return pnScrollOrganizador;
@@ -1065,23 +1075,35 @@ public class VentanaPrincipal extends JFrame {
 
 	private JButton getBtEditarEventoOr() {
 		if (btEditarEventoOr == null) {
+			
 			btEditarEventoOr = new JButton("A\u00F1adir resultados");
 			btEditarEventoOr.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					// Obtener el evento
-					int row = tablaEventosDelOrganizador.getSelectedRow();
-					int col = tablaEventosDelOrganizador.getSelectedColumn();
-
-					String data = tablaEventosDelOrganizador.getValueAt(row, col).toString();
-					Evento e = null;
-					for (Evento ev : organizador.getMisEventos()) {
-						if (ev.getNombre().equals(data)) {
-							e = ev;
-							break;
-						}
-					}
+//					// Obtener el evento
+//					int row = tablaEventosDelOrganizador.getSelectedRow();
+//					int col = tablaEventosDelOrganizador.getSelectedColumn();
+//					
+//					String data;
+//					try{
+//						data = tablaEventosDelOrganizador.getValueAt(row, col).toString();
+//					}catch(ArrayIndexOutOfBoundsException nullE){
+//						JOptionPane.showMessageDialog(null, "No se ha seleccionado nada en la tabla", "Error",JOptionPane.ERROR_MESSAGE);
+//						return;
+//					}
+//					for (Evento ev : organizador.getMisEventos()) {
+//						if (ev.getNombre().equals(data)) {
+//							e = ev;
+//							break;
+//						}
+//					}
+//					if(!e.comprobarFinalizado()){
+//							JOptionPane.showMessageDialog(null, "El evento aún no ha finalizado", "Error", JOptionPane.ERROR_MESSAGE);
+//					}
 					//
-
+					if(eventoPulsado == null || !organizador.getMisEventos().contains(eventoPulsado)){
+						JOptionPane.showMessageDialog(null, "Vuelve a seleccionar el evento.", "Error", JOptionPane.ERROR_MESSAGE);
+						return;
+					}
 					boolean salioBien = false;
 
 					JFileChooser chooser = new JFileChooser();
@@ -1134,7 +1156,7 @@ public class VentanaPrincipal extends JFrame {
 						}
 
 						try {
-							GestorFicheros.cargarClasificacionDeEvento(e, f);
+							GestorFicheros.cargarClasificacionDeEvento(eventoPulsado, f);
 							salioBien = true;
 						} catch (Exception e1) {
 							JOptionPane.showMessageDialog(null,
@@ -1151,6 +1173,7 @@ public class VentanaPrincipal extends JFrame {
 					}
 				}
 			});
+			btEditarCategoria.setEnabled(false);
 			btEditarEventoOr.setToolTipText("Edita el evento seleccionado.");
 			btEditarEventoOr.setMnemonic('E');
 		}

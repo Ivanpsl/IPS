@@ -2,8 +2,7 @@ package logica.Vistas;
 
 import java.sql.Date;
 import java.util.ArrayList;
-
-
+import java.util.Calendar;
 
 import logica.GestorClasificaciones;
 import persistencia.ConexionBD;
@@ -234,5 +233,13 @@ public class Evento {
 	}
 	public int getIdOrganizador(){
 		return idOrganizador;
+	}
+	public boolean comprobarFinalizado(){
+		long actual = Calendar.getInstance().getTimeInMillis();
+		if(this.fechaComienzo.getTime() <= actual){
+			this.finalizado = true;
+			return finalizado;
+		}
+		return false;
 	}
 }

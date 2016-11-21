@@ -39,7 +39,7 @@ public class crearEventosParaTest {
 		pI.add(p);
 		for(int i=0; i<24; i++){
 			fin.setYear(fin.getYear()+(i-2));
-			g.crearEvento("Evento"+i, "Maraton"+i, 45-(i%2)/1.0, inicio, i+10,defecto , pI);
+			//g.crearEvento("Evento"+i, "Maraton"+i, 45-(i%2)/1.0, inicio, i+10,defecto , pI);
 		
 		}
 		
