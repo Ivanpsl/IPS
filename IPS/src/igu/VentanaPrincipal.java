@@ -1155,7 +1155,7 @@ public class VentanaPrincipal extends JFrame {
 						}
 
 						try {
-							GestorFicheros.cargarClasificacionDeEvento(eventoPulsado, f);
+							g.cargarTiemposDesdeFichero(eventoPulsado, f);
 							salioBien = true;
 						} catch (Exception e1) {
 							JOptionPane.showMessageDialog(null,
