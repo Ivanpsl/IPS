@@ -2444,6 +2444,8 @@ public class VentanaPrincipal extends JFrame {
 						if (comprobarDatosTarjeta()) {
 							g.realizarPagoTarjeta(eventoSeleccionado.getId(), dniInscrito);
 							cambiarPanelesUsuario(0);
+							getTxNumTarjeta().setText("");
+							getTxTituTarjeta().setText("");
 						} else
 							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Credito",
 									JOptionPane.ERROR_MESSAGE);
@@ -2523,8 +2525,9 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
 					char c = arg0.getKeyChar();
-					if (!Character.isAlphabetic(c) || !Character.isWhitespace(c)) {
-						arg0.consume();
+					if (!Character.isLetter(c)) {
+						if (!Character.isWhitespace(c))
+							arg0.consume();
 					}
 				}
 			});

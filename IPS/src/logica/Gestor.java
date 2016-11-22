@@ -186,7 +186,6 @@ public class Gestor {
 		if(!repetido && evento.getPlazasDisponibles()>0 ){
 			Inscripcion ins = new Inscripcion(atl, fechaActual,evento);
 			System.out.println("Se ha inscrito correctamente. Detalles:");
-			//System.out.println(ins.toString());
 			System.out.println();
 			evento.añadirInscrito(ins);
 			mostrarEstado(ins);
@@ -245,7 +244,6 @@ public class Gestor {
 	    		{
 	    			i.setEstado(2);
 	    			bd.actualizarEstadoPago(i, 2);
-	    			System.out.println(i.toString());
 	    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
 	    		}
 			}
@@ -289,7 +287,6 @@ public class Gestor {
 		    		{
 		    			i.setEstado(2);
 		    			bd.actualizarEstadoPago(i, 2);
-		    			System.out.println(i.toString());
 		    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
 		    		}
 		    	}
