@@ -223,7 +223,6 @@ public class VentanaPrincipal extends JFrame {
 			String dni = txtDNIInscribirse.getText();
 
 			if (!modeloListaInscribirse.contains(dni)) {
-				dniInscrito.add(dni);
 				Atleta at = g.buscarAtletaPorDNI(dni);
 				if (at == null) {
 					at = new Atleta(dni, txtNombreInscribirse.getText(), txtFechaInscribirse.getText(), sexo);
@@ -260,12 +259,11 @@ public class VentanaPrincipal extends JFrame {
 		g.inscribirLote(atletasAInscribir);
 		modeloListaInscribirse.removeAllElements();
 		listInscribirse.setModel(modeloListaInscribirse);
-
-		txtDNIInscribirse.setText("");
-		txtNombreInscribirse.setText("");
-		txtFechaInscribirse.setText("");
-		rdbtnFemenino.setSelected(false);
-		rdbtnMasculino.setSelected(false);
+		
+		for (Atleta a : atletasARegistrar)
+		{
+			dniInscrito.add(a.getDNI());
+		}
 
 		borrarDatos();
 		System.out.println("INSCRIPCION FINALIZADA \n");
@@ -280,6 +278,7 @@ public class VentanaPrincipal extends JFrame {
 		rdbtnMasculino.setSelected(false);
 		modeloListaInscribirse.clear();
 		listInscribirse.setModel(modeloListaInscribirse);
+		
 		atletasARegistrar = new ArrayList<Atleta>();
 		atletasAInscribir = new ArrayList<Atleta>();
 		btnEliminarInscribirse.setEnabled(false);
@@ -1922,7 +1921,6 @@ public class VentanaPrincipal extends JFrame {
 			btAñadirAtleta.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					btnRealizarInscripcion.setEnabled(true);
-					dniInscrito = new ArrayList<String>();
 					AnadirInscritoALista();
 				}
 
@@ -2446,7 +2444,7 @@ public class VentanaPrincipal extends JFrame {
 							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Credito",
 									JOptionPane.ERROR_MESSAGE);
 					} else {
-						g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento);
+						g.comprobarPagadosBanco(eventoSeleccionado.getId(), dniInscrito, precioEvento);
 						cambiarPanelesUsuario(0);
 					}
 
