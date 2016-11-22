@@ -189,7 +189,6 @@ public class Gestor {
 			System.out.println(ins.toString());
 			System.out.println();
 			evento.añadirInscrito(ins);
-			System.out.println("Mostrando numero de cuenta");
 			mostrarNumeroCuenta(ins);
 			System.out.println();
 			bd.añadirInscrito(atl, ins);
@@ -246,6 +245,8 @@ public class Gestor {
 	    		{
 	    			i.setEstado(2);
 	    			bd.actualizarEstadoPago(i, 2);
+	    			System.out.println(i.toString());
+	    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
 	    		}
 			}
     	}
@@ -288,6 +289,8 @@ public class Gestor {
 		    		{
 		    			i.setEstado(2);
 		    			bd.actualizarEstadoPago(i, 2);
+		    			System.out.println(i.toString());
+		    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
 		    		}
 		    	}
 		    }
@@ -360,13 +363,14 @@ public class Gestor {
 	 * @param id: id del evento que finaliza
 	 */
 	public void finalizarEvento(int id){
-		if ( obtenerEventoPorId(id)!=null && !obtenerEventoPorId(id).getFinalizado())
-			comprobarPagadosBanco(id, obtenerEventoPorId(id).getUltimoPlazo().getPrecio());
+//		if ( obtenerEventoPorId(id)!=null && !obtenerEventoPorId(id).getFinalizado())
+//			comprobarPagadosBanco(id,obtenerEventoPorId(id).getUltimoPlazo().getPrecio());
 		asignarDorsales(id);
 		gF.obtenerResultadosEvento(obtenerEventoPorId(id),bd);
 		eventos.get(id).setFinalizado();
 		bd.marcarComoFinalizado(obtenerEventoPorId(id));
 	}
+
 
 	
 	public void listarEventosAbiertos() {

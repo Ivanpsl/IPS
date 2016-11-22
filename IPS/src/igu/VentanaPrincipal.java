@@ -262,7 +262,7 @@ public class VentanaPrincipal extends JFrame {
 		
 		for (Atleta a : atletasARegistrar)
 		{
-			dniInscrito.add(a.getDNI());
+			
 		}
 
 		borrarDatos();
@@ -2332,10 +2332,10 @@ public class VentanaPrincipal extends JFrame {
 		if (puedoCrearEvento) {
 			if (!getCbCatDef().isSelected()) {
 				evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas),
-						miFechaComienzo, categorias, plazos);
+						miFechaComienzo, categorias, plazos, organizador.getId());
 			} else {
 				evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas),
-						miFechaComienzo, catDef, plazos);
+						miFechaComienzo, catDef, plazos, organizador.getId());
 			}
 		}
 		return evento;
@@ -2444,7 +2444,7 @@ public class VentanaPrincipal extends JFrame {
 							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Credito",
 									JOptionPane.ERROR_MESSAGE);
 					} else {
-						g.comprobarPagadosBanco(eventoSeleccionado.getId(), dniInscrito, precioEvento);
+						g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento);
 						cambiarPanelesUsuario(0);
 					}
 
