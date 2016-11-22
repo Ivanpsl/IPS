@@ -185,6 +185,7 @@ public class VentanaPrincipal extends JFrame {
 		vP = this;
 		g = new Gestor();
 		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER", 0);
+		g.asignarEventosAOrganizador(organizador);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1020, 512);
 		pnPrincipal = new JPanel();
@@ -260,9 +261,11 @@ public class VentanaPrincipal extends JFrame {
 		modeloListaInscribirse.removeAllElements();
 		listInscribirse.setModel(modeloListaInscribirse);
 		
+		dniInscrito = new ArrayList<String>();
+		
 		for (Atleta a : atletasARegistrar)
 		{
-			
+			dniInscrito.add(a.getDNI());
 		}
 
 		borrarDatos();
@@ -444,11 +447,12 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	// TABLA JAVI
+	ModeloNoEditable modeloTablaOrg;
 	/**
 	 * Para cargar la tabla de los eventos que ha creado el organizador.
 	 */
 	private void mostrarTablaEventosOrganizador() {
-		ModeloNoEditable modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
+		 modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
 		// ArrayList<Evento> eventosOrganizador = g.getEventos(); //
 		// g.getEventosOrganizador(organizador);
 		ArrayList<Evento> eventosOrganizador = organizador.getMisEventos();
@@ -1172,7 +1176,7 @@ public class VentanaPrincipal extends JFrame {
 					}
 				}
 			});
-			btEditarCategoria.setEnabled(false);
+			getBtEditarCategoria().setEnabled(false);
 			btEditarEventoOr.setToolTipText("Edita el evento seleccionado.");
 			btEditarEventoOr.setMnemonic('E');
 		}
@@ -2440,6 +2444,8 @@ public class VentanaPrincipal extends JFrame {
 						if (comprobarDatosTarjeta()) {
 							g.realizarPagoTarjeta(eventoSeleccionado.getId(), dniInscrito);
 							cambiarPanelesUsuario(0);
+							getTxNumTarjeta().setText("");
+							getTxTituTarjeta().setText("");
 						} else
 							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Credito",
 									JOptionPane.ERROR_MESSAGE);
@@ -2519,8 +2525,9 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void keyTyped(KeyEvent arg0) {
 					char c = arg0.getKeyChar();
-					if (!Character.isAlphabetic(c) || !Character.isWhitespace(c)) {
-						arg0.consume();
+					if (!Character.isLetter(c)) {
+						if (!Character.isWhitespace(c))
+							arg0.consume();
 					}
 				}
 			});

@@ -186,10 +186,9 @@ public class Gestor {
 		if(!repetido && evento.getPlazasDisponibles()>0 ){
 			Inscripcion ins = new Inscripcion(atl, fechaActual,evento);
 			System.out.println("Se ha inscrito correctamente. Detalles:");
-			System.out.println(ins.toString());
 			System.out.println();
 			evento.añadirInscrito(ins);
-			mostrarNumeroCuenta(ins);
+			mostrarEstado(ins);
 			System.out.println();
 			bd.añadirInscrito(atl, ins);
 		}
@@ -199,7 +198,7 @@ public class Gestor {
 	 * Pasar el número de cuenta al usuario para que pueda pagar, viene en un txt antes de los que han pagado.
 	 * @throws IOException
 	 */
-	public void mostrarNumeroCuenta(Inscripcion ins)
+	public void mostrarEstado(Inscripcion ins)
 	{
 		System.out.println("Se ha actualizado su estado y ahora consta como Pendiente de Pago.");
 		ins.setEstado(1);
@@ -245,7 +244,6 @@ public class Gestor {
 	    		{
 	    			i.setEstado(2);
 	    			bd.actualizarEstadoPago(i, 2);
-	    			System.out.println(i.toString());
 	    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
 	    		}
 			}
@@ -289,7 +287,6 @@ public class Gestor {
 		    		{
 		    			i.setEstado(2);
 		    			bd.actualizarEstadoPago(i, 2);
-		    			System.out.println(i.toString());
 		    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
 		    		}
 		    	}
@@ -509,6 +506,13 @@ public class Gestor {
 	
 	public void cargarTiemposDesdeFichero(Evento e, FileReader fich) throws NumberFormatException, IOException{
 		GestorFicheros.cargarClasificacionDeEvento(e, fich, this);
+	}
+	public void asignarEventosAOrganizador(Organizador or){
+		for(Evento e : eventos){
+			if(e.getIdOrganizador() == or.getId()){
+				or.crearEvento(e);
+			}
+		}
 	}
 	
 }
