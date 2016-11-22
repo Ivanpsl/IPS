@@ -261,9 +261,11 @@ public class VentanaPrincipal extends JFrame {
 		modeloListaInscribirse.removeAllElements();
 		listInscribirse.setModel(modeloListaInscribirse);
 		
+		dniInscrito = new ArrayList<String>();
+		
 		for (Atleta a : atletasARegistrar)
 		{
-			
+			dniInscrito.add(a.getDNI());
 		}
 
 		borrarDatos();
