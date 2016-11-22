@@ -60,7 +60,7 @@ public class Evento {
 	}
 	public Evento(String name, String type, 
 			double distancia, int plazasTotales, Date fechaComienzo,ArrayList<Categoria> categoriasDelEvento,
-			ArrayList<PlazoInscripcion> plazos) {
+			ArrayList<PlazoInscripcion> plazos, int idOrganizador) {
 		
 		this.inscripciones = new ArrayList<Inscripcion>();
 		this.nombre = name;
@@ -74,7 +74,7 @@ public class Evento {
 		this.fechaComienzo = fechaComienzo;
 		this.categoriasDelEvento=categoriasDelEvento;
 		this.plazosDeInscripcion=plazos;
-		
+		this.idOrganizador=idOrganizador;
 		//Tipos de eventos
 		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
 	}
