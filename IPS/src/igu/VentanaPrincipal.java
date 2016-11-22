@@ -185,6 +185,7 @@ public class VentanaPrincipal extends JFrame {
 		vP = this;
 		g = new Gestor();
 		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER", 0);
+		g.asignarEventosAOrganizador(organizador);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1020, 512);
 		pnPrincipal = new JPanel();
@@ -444,11 +445,12 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	// TABLA JAVI
+	ModeloNoEditable modeloTablaOrg;
 	/**
 	 * Para cargar la tabla de los eventos que ha creado el organizador.
 	 */
 	private void mostrarTablaEventosOrganizador() {
-		ModeloNoEditable modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
+		 modeloTablaOrg = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
 		// ArrayList<Evento> eventosOrganizador = g.getEventos(); //
 		// g.getEventosOrganizador(organizador);
 		ArrayList<Evento> eventosOrganizador = organizador.getMisEventos();
@@ -1172,7 +1174,7 @@ public class VentanaPrincipal extends JFrame {
 					}
 				}
 			});
-			btEditarCategoria.setEnabled(false);
+			getBtEditarCategoria().setEnabled(false);
 			btEditarEventoOr.setToolTipText("Edita el evento seleccionado.");
 			btEditarEventoOr.setMnemonic('E');
 		}

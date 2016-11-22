@@ -510,5 +510,12 @@ public class Gestor {
 	public void cargarTiemposDesdeFichero(Evento e, FileReader fich) throws NumberFormatException, IOException{
 		GestorFicheros.cargarClasificacionDeEvento(e, fich, this);
 	}
+	public void asignarEventosAOrganizador(Organizador or){
+		for(Evento e : eventos){
+			if(e.getIdOrganizador() == or.getId()){
+				or.crearEvento(e);
+			}
+		}
+	}
 	
 }
