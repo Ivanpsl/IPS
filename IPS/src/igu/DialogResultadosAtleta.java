@@ -91,7 +91,7 @@ public class DialogResultadosAtleta extends JDialog {
 			pnInformacion.setLayout(new BorderLayout(0, 0));
 			{
 				JPanel pnInformacionEvento = new JPanel();
-				pnInformacionEvento.setBorder(new TitledBorder(null, "Evento:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				pnInformacionEvento.setBorder(new TitledBorder(null, " Evento:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 				pnInformacion.add(pnInformacionEvento, BorderLayout.NORTH);
 				pnInformacionEvento.setLayout(new BorderLayout(0, 0));
 				{
