@@ -499,5 +499,12 @@ public class Gestor {
 		return atletasFichero;
 		
 	}
+	public void asignarTiemposAEvento(int dorsal, ArrayList<Integer> tiempos, Evento evento){
+		evento.asignarTiemposDorsal(dorsal, tiempos, this.bd);
+	}
+	
+	public void cargarTiemposDesdeFichero(Evento e, FileReader fich) throws NumberFormatException, IOException{
+		GestorFicheros.cargarClasificacionDeEvento(e, fich, this);
+	}
 	
 }

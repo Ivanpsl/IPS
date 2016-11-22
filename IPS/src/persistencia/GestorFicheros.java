@@ -83,7 +83,7 @@ public class GestorFicheros {
 	 * @throws NumberFormatException 
 	 * @throws IOException 
 	 */
-	public static void cargarClasificacionDeEvento(Evento e,FileReader fich) throws NumberFormatException, IOException{
+	public static void cargarClasificacionDeEvento(Evento e,FileReader fich, Gestor g) throws NumberFormatException, IOException{
 		
 		
 		//FileReader fich = null;
@@ -105,25 +105,27 @@ public class GestorFicheros {
 			int dorsal = Integer.parseInt(cacho[1]);
 			String tiempos = cacho[2];
 			if(e.getId() == idEvento){ //Si pertenece a este evento, se añadira la clasificacion
-				for(Inscripcion i : e.getInscritosEvento()){
-					if(i.getDorsal() == dorsal){
-						separarYAñadirTiempos(tiempos, i);
-					}
-				}
+//					if(i.getDorsal() == dorsal){
+//						separarYAñadirTiempos(tiempos, i);
+//						
+//					}
+					ArrayList<Integer> tiemposList = separarYAñadirTiempos(tiempos);
+					g.asignarTiemposAEvento(dorsal, tiemposList, e);
+				
 			}
 			
 		}
 		
-		
-		
 		br.close();
 	}
 	
-	private static void separarYAñadirTiempos(String tiempos, Inscripcion i){
+	private static ArrayList<Integer> separarYAñadirTiempos(String tiempos){
 		String[] times = tiempos.split("@");
+		ArrayList<Integer> tiemposList = new ArrayList<Integer>();
 		for(String s : times){
 			int tiempoEtapa = Integer.parseInt(s);
-			i.añadirTiempoDeEtapa(tiempoEtapa);
+			tiemposList.add(tiempoEtapa);
 		}
+		return tiemposList;
 	}
 }

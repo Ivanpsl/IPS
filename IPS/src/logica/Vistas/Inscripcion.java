@@ -170,6 +170,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 
 	public void setTiemposPorEtapas(ArrayList<Integer> tiemposPorEtapas) {
 		this.tiemposPorEtapas = tiemposPorEtapas;
+		this.tiempo_segundos = tiemposPorEtapas.get(tiemposPorEtapas.size()-1);
 	}
 	/**
 	 * Añade un nuevo tiempo de etapa en segundos
