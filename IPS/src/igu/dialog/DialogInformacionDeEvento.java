@@ -1,4 +1,7 @@
-package igu;
+package igu.dialog;
+
+import igu.ModeloNoEditable;
+import igu.VentanaPrincipal;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;

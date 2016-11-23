@@ -1,5 +1,6 @@
-package igu;
+package igu.dialog;
 
+import igu.VentanaPrincipal;
 import igu.paneles.panelCuadroResultadosAtletaEvento;
 
 import java.awt.BorderLayout;
@@ -22,14 +23,20 @@ import logica.Vistas.Inscripcion;
 import javax.swing.JScrollPane;
 
 import oracle.net.aso.e;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
 import javax.swing.BoxLayout;
 import javax.swing.JList;
+
 import java.awt.GridLayout;
+
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
+
 import java.awt.Color;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 

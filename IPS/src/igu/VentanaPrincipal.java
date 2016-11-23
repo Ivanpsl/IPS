@@ -1,5 +1,9 @@
 package igu;
 
+import igu.dialog.DialogInformacionDeEvento;
+import igu.dialog.DialogResultadosAtleta;
+import igu.paneles.panelFiltros;
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -72,6 +76,8 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import javax.swing.JRadioButton;
+import javax.swing.UIManager;
+import javax.swing.BoxLayout;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -88,7 +94,8 @@ public class VentanaPrincipal extends JFrame {
 	// private ArrayList<Evento> eventosTabla; //lo usaremos en un futuro para
 	// realizad filtrados
 	private Evento eventoPulsado;
-
+	
+	private panelFiltros pF;
 	Organizador organizador;
 	private JPanel pnPrincipal;
 	private JPanel pnInicio;
@@ -186,8 +193,9 @@ public class VentanaPrincipal extends JFrame {
 		g = new Gestor();
 		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER", 0);
 		g.asignarEventosAOrganizador(organizador);
+		pF=new panelFiltros(vP,g);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1020, 512);
+		setBounds(100, 100, 1134, 581);
 		pnPrincipal = new JPanel();
 		pnPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(pnPrincipal);
@@ -400,7 +408,9 @@ public class VentanaPrincipal extends JFrame {
 		}
 		if (opcion.equals("usuario")) {
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_usuario");
+			pF.rellenarComboBox();
 			mostrarTablaEventosUsuario();
+			
 		}
 		if (opcion.equals("inicio"))
 			((CardLayout) pnPrincipal.getLayout()).show(pnPrincipal, "pn_inicio");
@@ -501,7 +511,10 @@ public class VentanaPrincipal extends JFrame {
 
 				if (ev.getUltimoPlazo() != null) {
 					fila[3] = "Inscripcion";
-					fila[4] = "ABIERTO";
+					if(ev.getPlazasDisponibles()==0)
+						fila[4] = "LLENO";
+					else
+						fila[4] = "ABIERTO";
 					fila[5] = String.valueOf(ev.getUltimoPlazo().getPrecio());
 				} else {
 					fila[3] = "Carrera";
@@ -749,7 +762,7 @@ public class VentanaPrincipal extends JFrame {
 			pnSelecEventosUsuario.setLayout(new BorderLayout(0, 0));
 			pnSelecEventosUsuario.add(getPnTabla(), BorderLayout.CENTER);
 			pnSelecEventosUsuario.add(getPanel_4_1(), BorderLayout.SOUTH);
-			pnSelecEventosUsuario.add(getPanel_4(), BorderLayout.EAST);
+			pnSelecEventosUsuario.add(getPnEventoSeleccionado(), BorderLayout.EAST);
 		}
 		return pnSelecEventosUsuario;
 	}
@@ -830,9 +843,10 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnTabla() {
 		if (pnTabla == null) {
 			pnTabla = new JPanel();
-			pnTabla.setBorder(new TitledBorder(null, "Tabla", TitledBorder.LEADING, TitledBorder.TOP, null, null));
+			pnTabla.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Eventos disponibles: ", TitledBorder.LEADING, TitledBorder.ABOVE_TOP, null, new Color(0, 0, 0)));
 			pnTabla.setLayout(new BorderLayout(0, 0));
 			pnTabla.add(getScrollPane());
+			pnTabla.add(getPanel_4_5(), BorderLayout.NORTH);
 		}
 		return pnTabla;
 	}
@@ -1748,7 +1762,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btAñadirCat;
 	private JButton btEditarCategoria;
 	private JButton btnResultadosEvento;
-	private JPanel panel_4;
+	private JPanel pnEventoSeleccionado;
 	private JLabel lblPlazosDeInscripcin;
 	private JScrollPane scrollPaneFechasIns;
 	private JList<String> listFechasInscrip;
@@ -2110,16 +2124,16 @@ public class VentanaPrincipal extends JFrame {
 		return btnResultadosEvento;
 	}
 
-	private JPanel getPanel_4() {
-		if (panel_4 == null) {
-			panel_4 = new JPanel();
-			panel_4.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING, TitledBorder.TOP,
+	private JPanel getPnEventoSeleccionado() {
+		if (pnEventoSeleccionado == null) {
+			pnEventoSeleccionado = new JPanel();
+			pnEventoSeleccionado.setBorder(new TitledBorder(null, "Evento seleccionado: ", TitledBorder.LEADING, TitledBorder.TOP,
 					null, null));
-			panel_4.setLayout(new BorderLayout(0, 0));
-			panel_4.add(getPnInfoEvPulsado());
-			panel_4.add(getBtnResultadosEvento(), BorderLayout.SOUTH);
+			pnEventoSeleccionado.setLayout(new BorderLayout(0, 0));
+			pnEventoSeleccionado.add(getPnInfoEvPulsado());
+			pnEventoSeleccionado.add(getBtnResultadosEvento(), BorderLayout.SOUTH);
 		}
-		return panel_4;
+		return pnEventoSeleccionado;
 	}
 
 	private JLabel getLblPlazosDeInscripcin() {
@@ -2387,6 +2401,7 @@ public class VentanaPrincipal extends JFrame {
 	private JRadioButton rdbtnFemenino;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnEliminarInscribirse;
+	private JPanel pnDFiltros;
 
 	private JPanel getPnPagar() {
 		if (pnPagar == null) {
@@ -2690,5 +2705,14 @@ public class VentanaPrincipal extends JFrame {
 			btnEliminarInscribirse.setBounds(184, 263, 89, 23);
 		}
 		return btnEliminarInscribirse;
+	}
+	private JPanel getPanel_4_5() {
+		if (pnDFiltros == null) {
+			pnDFiltros = new JPanel();
+			pnDFiltros.setLayout(new BorderLayout(0, 0));
+			pnDFiltros.add(pF);
+		}
+		
+		return pnDFiltros;
 	}
 }

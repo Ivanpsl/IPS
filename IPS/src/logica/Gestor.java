@@ -515,4 +515,14 @@ public class Gestor {
 		}
 	}
 	
+	/**
+	 * Metodo que devuelve una lista de string con los tipos de eventos encontrados
+	 * @return ArrayList<String> tipos de eventos
+	 */
+	public ArrayList<String> obtenerTipos(){
+		ArrayList<String> tipos= new ArrayList<String>();
+		for(Evento e: eventos)
+			tipos.add(e.getTipo());
+		return tipos;
+	}
 }
