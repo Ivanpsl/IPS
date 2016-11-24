@@ -17,6 +17,7 @@ public class Atleta extends Usuario{
 	int sexo;
 	int edad;
 	
+
 	public Atleta(String dni, String nombre, String fecha, int sexo){
 		super(nombre, "");
 		this.DNI = dni;

@@ -67,6 +67,7 @@ public class VentanaCreaCategoria extends JDialog {
 		contentPanel.add(getTfedadMinima());
 		contentPanel.add(getLblHasta());
 		contentPanel.add(getTfEdadMaxima());
+		this.setLocationRelativeTo(null);
 	}
 
 	/**

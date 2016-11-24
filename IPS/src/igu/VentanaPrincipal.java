@@ -393,6 +393,45 @@ public class VentanaPrincipal extends JFrame {
 	public void setSelector(JFileChooser selector) {
 		this.selector = selector;
 	}
+	
+	private void editarCategoria() {
+		if(!modeloCategoriasDefecto.isEmpty()){
+			if (!getCbCatDef().isSelected()) {
+
+				VentanaEditarCategorias vec = new VentanaEditarCategorias(this, categoriasAlCrearEvento);
+				vec.setVisible(true);
+			} else {
+
+				VentanaEditarCategorias vec = new VentanaEditarCategorias(this, catDef);
+				vec.setVisible(true);
+			}
+
+		}else{
+			JOptionPane.showMessageDialog(null, "No hay categorias");
+		}
+		
+	}
+	
+	public void editarCategoriasAlCrearEvento(ArrayList<Categoria> cat){
+		this.categoriasAlCrearEvento=cat;
+		cbCatDef.setSelected(false);
+		cargarMisCategoriasAlModelo();
+	}
+	
+	public String comprobarCategorias(ArrayList<Categoria> cat) {
+		return GestorCategorias.comprobarCategorias(cat);
+		
+	}
+	
+	private void cargarMisCategoriasAlModelo() {
+		modeloListaCategorias.clear();
+		getListCategoriaOr().setModel(modeloListaCategorias);
+		
+		for (Categoria c : categoriasAlCrearEvento) {
+			modeloListaCategorias.addElement(c.toString());
+		}
+		getListCategoriaOr().setModel(modeloListaCategorias);
+	}
 
 	/**
 	 * Metodo usado para navegar por las pestaÃƒÂ±as principales
@@ -1190,7 +1229,6 @@ public class VentanaPrincipal extends JFrame {
 					}
 				}
 			});
-			getBtEditarCategoria().setEnabled(false);
 			btEditarEventoOr.setToolTipText("Edita el evento seleccionado.");
 			btEditarEventoOr.setMnemonic('E');
 		}
@@ -1718,6 +1756,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel getLblCategorasDelEvento() {
 		if (lblCategorasDelEvento == null) {
 			lblCategorasDelEvento = new JLabel("Categor\u00EDas del evento: ");
+			lblCategorasDelEvento.setFont(new Font("Tahoma", Font.PLAIN, 12));
 			lblCategorasDelEvento.setHorizontalAlignment(SwingConstants.CENTER);
 			lblCategorasDelEvento.setBounds(777, 40, 178, 14);
 		}
@@ -1739,7 +1778,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			cbCatDef.setHorizontalAlignment(SwingConstants.LEFT);
-			cbCatDef.setBounds(766, 73, 189, 23);
+			cbCatDef.setBounds(777, 75, 189, 23);
 
 		}
 		return cbCatDef;
@@ -1748,7 +1787,7 @@ public class VentanaPrincipal extends JFrame {
 	private JScrollPane getScrollPaneCategorias() {
 		if (scrollPaneCategorias == null) {
 			scrollPaneCategorias = new JScrollPane();
-			scrollPaneCategorias.setBounds(777, 115, 178, 130);
+			scrollPaneCategorias.setBounds(777, 115, 258, 225);
 			scrollPaneCategorias.setViewportView(getListCategoriaOr());
 			// scrollPane.add(getList()); //Esto no se si estara del todo
 			// bien...
@@ -1789,9 +1828,7 @@ public class VentanaPrincipal extends JFrame {
 		return list;
 	}
 
-	private void cargarMisCategoriasAlModelo() {
-		getListCategoriaOr().setModel(modeloListaCategorias);
-	}
+
 
 	private void cargarCategoriasDefectoLista() {
 		if (catDef.isEmpty()) {
@@ -1816,7 +1853,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			btAñadirCat.setToolTipText("A\u00F1ade una categoria al evento");
-			btAñadirCat.setBounds(777, 256, 89, 23);
+			btAñadirCat.setBounds(857, 351, 89, 23);
 		}
 		return btAñadirCat;
 
@@ -1828,35 +1865,14 @@ public class VentanaPrincipal extends JFrame {
 			btEditarCategoria.addActionListener(new ActionListener() {
 
 				public void actionPerformed(ActionEvent arg0) {
-					try {
-						String catString = getListCategoriaOr().getSelectedValue().toString();
-						Categoria cat = null;
-						if (!getCbCatDef().isSelected()) {
-							for (Categoria c : categoriasAlCrearEvento) {
-								if (c.toString().equals(catString))
-									cat = c;
-							}
-						} else {
-							for (Categoria c : catDef) {
-								if (c.toString().equals(catString))
-									cat = c;
-							}
-						}
-						if (cat == null) {
-							JOptionPane.showMessageDialog(null, "No se encuantra la categorÃƒÂ­a");
-						} else {
-							categoriasAlCrearEvento.remove(cat);
-							VentanaCreaCategoria vcc = new VentanaCreaCategoria(VentanaPrincipal.this, cat);
-							vcc.setVisible(true);
-						}
-					} catch (Exception e) {
-						System.err.println("Ha cascado al editar probablemente por la lista");
-					}
+					editarCategoria();
 
 				}
+
+
 			});
 			btEditarCategoria.setToolTipText("Editar categoria seleccionada");
-			btEditarCategoria.setBounds(866, 256, 89, 23);
+			btEditarCategoria.setBounds(946, 351, 89, 23);
 		}
 		return btEditarCategoria;
 
@@ -2715,4 +2731,6 @@ public class VentanaPrincipal extends JFrame {
 		
 		return pnDFiltros;
 	}
+
+
 }

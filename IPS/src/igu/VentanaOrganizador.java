@@ -47,6 +47,7 @@ public class VentanaOrganizador extends JFrame {
 	public VentanaOrganizador(Gestor g, Organizador user) {
 		this.gestor = g;
 		this.organizador = user;
+		this.setLocationRelativeTo(null);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);

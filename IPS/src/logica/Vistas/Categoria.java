@@ -56,7 +56,7 @@ public class Categoria{
 	}
 	
 	public String toString(){
-		String s = nombre + " "+ sexo + " de "+ edadMinima +" a "+edadMaxima+" años.";
+		String s = nombre + " "+ (sexo==0 ? " Masculino":" Femenino") + " de "+ edadMinima +" a "+edadMaxima+" años.";
 		return s;
 	}
 

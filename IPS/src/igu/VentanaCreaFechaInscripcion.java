@@ -76,6 +76,7 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 		this.vp = v;
 		this.plazoActual = plazo;
 		this.plazoAnterior = plazo;
+		this.setLocationRelativeTo(null);
 		
 		fechaActual = ConversorFechas.getFechaActual();
 		

@@ -1,9 +1,10 @@
 package logica;
 
-import java.nio.channels.IllegalSelectorException;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import logica.Vistas.Atleta;
 import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
 
@@ -14,8 +15,33 @@ public class GestorCategorias {
 
 	// Categorias por defecto
 	static Categoria[] categoriasDef = {
-	new Categoria("Senior", 18, 35, Categoria.MASCULINO),
-	new Categoria("Señora", 18, 35, Categoria.FEMENINO)
+	
+		new Categoria("Senior", 18, 35, Categoria.MASCULINO),
+		new Categoria("VeteranoA", 36, 40, Categoria.MASCULINO),
+		new Categoria("VeteranoB", 41, 45, Categoria.MASCULINO),
+		new Categoria("VeteranoC", 46, 50, Categoria.MASCULINO),
+		new Categoria("VeteranoD", 51, 55, Categoria.MASCULINO),
+		new Categoria("VeteranoE", 56, 60, Categoria.MASCULINO),
+		new Categoria("VeteranoF", 61, 65, Categoria.MASCULINO),
+		new Categoria("VeteranoG", 66, 70, Categoria.MASCULINO),
+		new Categoria("VeteranoH", 71, 75, Categoria.MASCULINO),
+		new Categoria("VeteranoI", 76, 80, Categoria.MASCULINO),
+		new Categoria("VeteranoJ", 81, 85, Categoria.MASCULINO),
+		new Categoria("VeteranoK", 86, 90, Categoria.MASCULINO),
+		
+		new Categoria("Senior", 18, 35, Categoria.FEMENINO),
+		new Categoria("VeteranoA", 36, 40, Categoria.FEMENINO),	
+		new Categoria("VeteranoB", 41, 45, Categoria.FEMENINO),	
+		new Categoria("VeteranoC", 46, 50, Categoria.FEMENINO),	
+		new Categoria("VeteranoD", 51, 55, Categoria.FEMENINO),	
+		new Categoria("VeteranoE", 56, 60, Categoria.FEMENINO),	
+		new Categoria("VeteranoF", 61, 65, Categoria.FEMENINO),	
+		new Categoria("VeteranoG", 66, 70, Categoria.FEMENINO),	
+		new Categoria("VeteranoH", 71, 75, Categoria.FEMENINO),	
+		new Categoria("VeteranoI", 76, 80, Categoria.FEMENINO),
+		new Categoria("VeteranoJ", 81, 85, Categoria.FEMENINO),	
+		new Categoria("VeteranoK", 86, 90, Categoria.FEMENINO)
+	
 	};
 
 	public GestorCategorias() {
@@ -59,17 +85,41 @@ public class GestorCategorias {
 	 * @param cats
 	 * @return Array de eMinima,eMaxima
 	 */
-	private int[] getEdadMaxMinCategorias(ArrayList<Categoria> cats) {
+	private static int[] getEdadMaxMinCategorias(ArrayList<Categoria> cats, int sexo) {
 		int edadMax = 0;
 		int edadMin = 999999;
 		for (Categoria cat : cats) {
-			if (edadMax < cat.getEdadMaxima())
-				edadMax = cat.getEdadMaxima();
-			if (edadMin > cat.getEdadMinima()) {
-				edadMin = cat.getEdadMinima();
+			if(cat.getSexo()==sexo){
+				if (edadMax < cat.getEdadMaxima())
+					edadMax = cat.getEdadMaxima();
+				if (edadMin > cat.getEdadMinima()) {
+					edadMin = cat.getEdadMinima();
+				}
 			}
 		}
 		int[] edades = { edadMin, edadMax };
+		return edades;
+	}
+	
+	public static int[] getPosEdadMaxMinCategorias(ArrayList<Categoria> cats, int sexo) {
+		int edadMax = 0;
+		int edadMin = 999999;
+		int max =0;
+		int min=0;
+		for (int i=0;i<cats.size();i++) {
+			if(cats.get(i).getSexo()==sexo){
+				if (edadMax < cats.get(i).getEdadMaxima()){
+					edadMax = cats.get(i).getEdadMaxima();
+					max=i;
+				}
+					
+				if (edadMin > cats.get(i).getEdadMinima()) {
+					edadMin = cats.get(i).getEdadMinima();
+					min=i;
+				}
+			}
+		}
+		int[] edades = { min, max };
 		return edades;
 	}
 	
@@ -107,36 +157,170 @@ public class GestorCategorias {
 			}
 		});
 	}
-	private boolean dentroDeRango(Categoria cat, int edad){
-		if(cat.getEdadMinima()<= edad && cat.getEdadMaxima()>= edad){
-			return true;
-		}
-		return false;
-	}
+
 	
-	/**
-	 * Si este metodo falla igual es por el compare to de la categoria.
-	 * @param categoriasPrueba
-	 * @return
-	 */
-	public boolean comprobarCategoriasCorrectas(ArrayList<Categoria> categoriasPrueba){
-		int edades[] = getEdadMaxMinCategorias(categoriasPrueba);
-		int edadActual = edades[0];
+
+	private static boolean comprobarRangoCategorias(ArrayList<Categoria> cat) {
+		//COMPROBAMOS SOLO LAS FEMENINAS
+		int edades[] = getEdadMaxMinCategorias(cat,Atleta.FEMENINO);
+		int edadMin = edades[0];
 		int edadMaxima = edades[1];
-		int pointer = 0;
-		for (edadActual = edades[0]; edadActual < edadMaxima; edadActual++){
-			if(dentroDeRango(categoriasPrueba.get(pointer), edadActual)){
-				//Todo va bien
-			}else{ //Si no esta dentro del rango pasa a comprobar a la categoria siguiente
-				if(pointer < categoriasPrueba.size()){
-					pointer++;
-					edadActual--;//Para que en la siguiente iteraccion vuelva a comrpobar la misma edad
-				}else{//Si ya no quedan categorias en las que probar, es que hay algo mal
+		Categoria categoria;
+		for (int i = edadMin; i <= edadMaxima; i++) {
+			categoria=null;
+			for (int j = 0; j < cat.size(); j++) {
+				if(cat.get(j).getEdadMinima()<=i && cat.get(j).getEdadMaxima()>=i && cat.get(j).getSexo()==Atleta.FEMENINO){
+					categoria=cat.get(j);
+				}
+			}
+			if(categoria==null){
+				return false;
+			}
+		}
+		// COMPROBAMOS SOLO LAS MASCULINAS
+		edades = getEdadMaxMinCategorias(cat,Atleta.MASCULINO);
+		edadMin = edades[0];
+		edadMaxima = edades[1];
+		
+		for (int i = edadMin; i <= edadMaxima; i++) {
+			categoria=null;
+			for (int j = 0; j < cat.size(); j++) {
+				if(cat.get(j).getEdadMinima()<=i && cat.get(j).getEdadMaxima()>=i && cat.get(j).getSexo()==Atleta.MASCULINO){
+					categoria=cat.get(j);
+				}
+			}
+			if(categoria==null){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private static  boolean comprobarSolapadosCategoria(ArrayList<Categoria> cat) {
+		int maxima;
+		int minima;
+		//COMPROBAMOS LAS EDADES QUE NO ESTEN SOLAPADAS femeninas
+		
+		boolean repetido = false;
+		for (int i = 0; i < cat.size(); i++) {
+			if(cat.get(i).getSexo()==Atleta.FEMENINO){
+				minima = cat.get(i).getEdadMinima();
+				maxima=cat.get(i).getEdadMaxima();
+				repetido = false;
+				for (int j = 0; j < cat.size(); j++) {
+					if(cat.get(j).getSexo()==Atleta.FEMENINO){
+						if(i!=j){
+							if(cat.get(j).getEdadMinima()>= minima && cat.get(j).getEdadMinima()<= maxima ){
+								repetido = true;
+							}
+							if(cat.get(j).getEdadMaxima()>= minima && cat.get(j).getEdadMaxima()<= maxima ){
+								repetido = true;
+							}
+						}
+						
+					}
+				}
+				if(repetido){
+					return false;
+				}
+			}
+		}
+		
+		
+		//COMPROBAMOS LAS EDADES QUE NO ESTEN SOLAPADAS MASCULINAS
+		
+		
+		for (int i = 0; i < cat.size(); i++) {
+			if(cat.get(i).getSexo()==Atleta.MASCULINO){
+				minima = cat.get(i).getEdadMinima();
+				maxima=cat.get(i).getEdadMaxima();
+				repetido = false;
+				for (int j = 0; j < cat.size(); j++) {
+					
+					if(cat.get(j).getSexo()==Atleta.MASCULINO){
+						if(i!=j){
+							if(cat.get(j).getEdadMinima()>= minima && cat.get(j).getEdadMinima()<= maxima ){
+								repetido = true;
+							}
+							if(cat.get(j).getEdadMaxima()>= minima && cat.get(j).getEdadMaxima()<= maxima ){
+								repetido = true;
+							}
+						}
+					}
+				}
+				if(repetido){
 					return false;
 				}
 			}
 		}
 		return true;
+	}
+	
+	private static  boolean comprobarNombreRepetidoCategoria(ArrayList<Categoria> cat) {
+		String nombre;
+		//COMPROBAMOS LAS EDADES QUE NO ESTEN SOLAPADAS femeninas
+		
+		boolean repetido = false;
+		for (int i = 0; i < cat.size(); i++) {
+			if(cat.get(i).getSexo()==Atleta.FEMENINO){
+				nombre = cat.get(i).getNombre();
+				repetido = false;
+				for (int j = 0; j < cat.size(); j++) {
+					if(cat.get(j).getSexo()==Atleta.FEMENINO){
+						if(i!=j){
+							if(cat.get(j).getNombre().equals(nombre) ){
+								repetido = true;
+							}
+							
+						}
+						
+					}
+				}
+				if(repetido){
+					return false;
+				}
+			}
+		}
+		
+		
+		//COMPROBAMOS LAS EDADES QUE NO ESTEN SOLAPADAS MASCULINAS
+		for (int i = 0; i < cat.size(); i++) {
+			if(cat.get(i).getSexo()==Atleta.MASCULINO){
+				nombre = cat.get(i).getNombre();
+				repetido = false;
+				for (int j = 0; j < cat.size(); j++) {
+					if(cat.get(j).getSexo()==Atleta.MASCULINO){
+						if(i!=j){
+							if(cat.get(j).getNombre().equals(nombre) ){
+								repetido = true;
+							}
+							
+						}
+						
+					}
+				}
+				if(repetido){
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+
+	public static String comprobarCategorias(ArrayList<Categoria> cat) {
+		if(!comprobarRangoCategorias(cat) && !comprobarSolapadosCategoria(cat)&&!comprobarNombreRepetidoCategoria(cat)){
+			return "todos";
+		}
+		if(!comprobarRangoCategorias(cat)){
+			return "rango";
+		}
+		if(!comprobarSolapadosCategoria(cat)){
+			return "solapados";
+		}
+		if(!comprobarNombreRepetidoCategoria(cat)){
+			return "repetido";
+		}
+		return "ok";
 		
 	}
 }

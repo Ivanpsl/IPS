@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import logica.GestorCategorias;
 import utiles.ConversorFechas;
 
 public class Inscripcion implements Comparable<Inscripcion> {
@@ -19,7 +20,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	
 	private int dorsal; //-1 sin asignar
 	private Atleta atleta; //Necesario para relacionar el atleta con sus inscripciones
-	private Categoria categoria;
+	public Categoria categoria;
 	private String categoriaStr; 
 	private Evento evento;
 	private int estado;
@@ -53,12 +54,41 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	}
 	
 	public void calcularCategoria(){
-		List<Categoria> categ = evento.getCategorias();
+		ArrayList<Categoria> categ = evento.getCategorias();
+		int[] posiciones = GestorCategorias.getPosEdadMaxMinCategorias(categ, Atleta.FEMENINO);
+		int posMin=posiciones[0];
+		int posMax=posiciones[1];
 		for (int i = 0; i < categ.size(); i++) {
 			if(categ.get(i)!=null){
-				if(categ.get(i).getEdadMinima()<= atleta.getEdad() && categ.get(i).getEdadMaxima()>= atleta.getEdad() && categ.get(i).getSexo()==atleta.getSexo()){
-					this.categoria= categ.get(i);
-					this.categoriaStr=categ.get(i).getNombre();
+				if(categ.get(i).getSexo()==Atleta.FEMENINO && atleta.getSexo()==Atleta.FEMENINO){
+					if(categ.get(i).getEdadMinima()<= atleta.getEdad() && categ.get(i).getEdadMaxima()>= atleta.getEdad()){
+						this.categoria= categ.get(i);
+						this.categoriaStr=categ.get(i).getNombre();
+					}else if(atleta.getEdad() > categ.get(posMax).getEdadMaxima()){
+						this.categoria=categ.get(posMax);
+					}else if(atleta.getEdad() < categ.get(posMin).getEdadMinima()){
+						this.categoria=categ.get(posMin);
+					}
+				}
+			}
+		}
+		
+		//LO MISMO PARA EL MASCULINO
+		
+		posiciones = GestorCategorias.getPosEdadMaxMinCategorias(categ, Atleta.MASCULINO);
+		posMin=posiciones[0];
+		posMax=posiciones[1];
+		for (int i = 0; i < categ.size(); i++) {
+			if(categ.get(i)!=null){
+				if(categ.get(i).getSexo()==Atleta.MASCULINO && atleta.getSexo()==Atleta.MASCULINO){
+					if(categ.get(i).getEdadMinima()<= atleta.getEdad() && categ.get(i).getEdadMaxima()>= atleta.getEdad()){
+						this.categoria= categ.get(i);
+						this.categoriaStr=categ.get(i).getNombre();
+					}else if(atleta.getEdad() > categ.get(posMax).getEdadMaxima()){
+						this.categoria=categ.get(posMax);
+					}else if(atleta.getEdad() < categ.get(posMin).getEdadMinima()){
+						this.categoria=categ.get(posMin);
+					}
 				}
 			}
 		}
