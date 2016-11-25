@@ -62,7 +62,8 @@ public class Gestor {
 		java.util.Date fechaActualJava = new java.util.Date();
 		Date fecha = new java.sql.Date(fechaActualJava.getTime());
 		for(Evento ev: eventos){
-			if(ev.getFechaCompeticion().before(fecha))finalizarEvento(ev.getId());
+			if(ev.getFechaCompeticion().before(fecha))
+				finalizarEvento(ev.getId());
 		}
 	}
 	/**

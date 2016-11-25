@@ -194,7 +194,7 @@ public class Evento {
 		ArrayList<PlazoInscripcion> arrayFinal = new ArrayList<PlazoInscripcion>();
 		if(plazosDeInscripcion!=null && plazosDeInscripcion.size()>0){
 			for(PlazoInscripcion plazo: plazosDeInscripcion){
-				if(fechaActual.after(plazo.getFechaFin())){
+				if(fechaActual.before(plazo.getFechaFin())){
 					cambio=true;
 				}else arrayFinal.add(plazo);
 			}
