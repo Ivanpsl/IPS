@@ -35,6 +35,7 @@ public class Evento {
 
 	Date fechaFinInscripcion;
 	Date fechaComienzo;
+	int numeroEtapas;
 
 	//De momento se considera una unica fecha de cada tipo. 
 	
@@ -62,7 +63,7 @@ public class Evento {
 	}
 	public Evento(String name, String type, 
 			double distancia, int plazasTotales, Date fechaComienzo,ArrayList<Categoria> categoriasDelEvento,
-			ArrayList<PlazoInscripcion> plazos, int idOrganizador) {
+			ArrayList<PlazoInscripcion> plazos, int idOrganizador, int nEtapas) {
 		
 		this.inscripciones = new ArrayList<Inscripcion>();
 		this.nombre = name;
@@ -77,6 +78,7 @@ public class Evento {
 		this.categoriasDelEvento=categoriasDelEvento;
 		this.plazosDeInscripcion=plazos;
 		this.idOrganizador=idOrganizador;
+		this.numeroEtapas = nEtapas;
 		//Tipos de eventos
 		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
 	}
@@ -246,6 +248,6 @@ public class Evento {
 	}
 	
 	public int getNumeroEtapas(){
-		return 1;
+		return numeroEtapas;
 	}
 }

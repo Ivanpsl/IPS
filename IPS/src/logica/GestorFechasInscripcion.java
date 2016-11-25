@@ -12,6 +12,8 @@ import logica.Vistas.PlazoInscripcion;
  *
  */
 public class GestorFechasInscripcion {
+	public static PlazoInscripcion plazoQueFalla1 = null;
+	public static PlazoInscripcion plazoQueFalla2 = null;
 	/**
 	 * Lo que comprueba es si en la lista de los plazos de inscripcion que se le pasa como parametro al metodo
 	 * existe algun plazo que tenga una de las dos fechas dentro del rango de otra. De ser asi, los plazos estarían mal
@@ -24,10 +26,18 @@ public class GestorFechasInscripcion {
 		for(PlazoInscripcion pl1 : lista){
 			for(PlazoInscripcion pl2 : lista){
 				if(!pl1.equals(pl2)){
-					if(pl1.getFechaInicio().getTime() <= pl2.getFechaInicio().getTime() && pl1.getFechaFin().getTime() >= pl2.getFechaInicio().getTime())
+					if(pl1.getFechaInicio().getTime() <= pl2.getFechaInicio().getTime() && pl1.getFechaFin().getTime() >= pl2.getFechaInicio().getTime()){
+						plazoQueFalla1 = pl1;
+						plazoQueFalla2 = pl2;
 						return false;
-					else if(pl1.getFechaInicio().getTime() <= pl2.getFechaFin().getTime() && pl1.getFechaFin().getTime() >= pl2.getFechaFin().getTime())
+					}
+						
+					else if(pl1.getFechaInicio().getTime() <= pl2.getFechaFin().getTime() && pl1.getFechaFin().getTime() >= pl2.getFechaFin().getTime()){
+						plazoQueFalla1 = pl1;
+						plazoQueFalla2 = pl2;
 						return false;
+					}
+						
 				}
 			}
 		}

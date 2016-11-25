@@ -113,6 +113,24 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 		
 		crearModelosComboBox();
 		asignarModelosCombo();
+		
+		//Asignar los valores del plazo a los elementos.
+		asignarValores(plazo);
+	}
+	@SuppressWarnings("deprecation")
+	private void asignarValores(PlazoInscripcion p){
+		int precio = (int) p.getPrecio();
+		Date fechaIn = p.getFechaInicio();
+		Date fechaFin = p.getFechaFin();
+		int indexAñosIn = (fechaIn.getYear())-117; 
+		int indexAñosFin = (fechaFin.getYear())-117;
+		getCbDiaIn().setSelectedIndex(fechaIn.getDay()-1);
+		getCbMesIn().setSelectedIndex(fechaIn.getMonth());
+		getCbAñoIn().setSelectedIndex(indexAñosIn);
+		getCbDiaFin().setSelectedIndex(fechaFin.getDay()-1);
+		getCbMesFin().setSelectedIndex(fechaFin.getMonth());
+		getCbAñoFin().setSelectedIndex(indexAñosFin);
+		getSpPrecio().setValue(precio);
 	}
 	
 	/**

@@ -6,11 +6,12 @@ import java.sql.Date;
 public class Comprobaciones {
 	public static boolean esString(String cadena){
 		char[] cad = cadena.toCharArray();
+		boolean res = true;
 		for(char c : cad){
-			if(!Character.isLetter(c))
-				return false;
+			if(!Character.isLetter(c) && !(c == ' '))
+				res = false;
 		}
-		return true;
+		return res;
 	}
 	/**
 	 * Comprueba que sea un objeto java.sql.Date 

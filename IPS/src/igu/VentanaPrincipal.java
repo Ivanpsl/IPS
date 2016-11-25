@@ -39,6 +39,7 @@ import javax.swing.JTable;
 
 import logica.Gestor;
 import logica.GestorCategorias;
+import logica.GestorFechasInscripcion;
 import logica.Vistas.Atleta;
 import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
@@ -78,6 +79,8 @@ import java.io.IOException;
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
 import javax.swing.BoxLayout;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -1077,17 +1080,17 @@ public class VentanaPrincipal extends JFrame {
 		if (pnScrollOrganizador == null) {
 			eventoPulsado = null;
 			pnScrollOrganizador = new JScrollPane();
-			pnScrollOrganizador.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseClicked(MouseEvent arg0) {
-					int fila = tablaEventosDelOrganizador.getSelectedRow();
-					if(organizador.getMisEventos().size()>0){
-						eventoPulsado = organizador.getMisEventos().get(fila);
-						if(eventoPulsado.comprobarFinalizado())
-							getBtEditarEventoOr().setEnabled(true);
-					}
-				}
-			});
+//			pnScrollOrganizador.addMouseListener(new MouseAdapter() {
+//				@Override
+//				public void mouseClicked(MouseEvent arg0) {
+//					int fila = tablaEventosDelOrganizador.getSelectedRow();
+//					if(organizador.getMisEventos().size()>0){
+//						eventoPulsado = organizador.getMisEventos().get(fila);
+//						if(eventoPulsado.comprobarFinalizado())
+//							getBtEditarEventoOr().setEnabled(true);
+//					}
+//				}
+//			});
 			pnScrollOrganizador.setViewportView(getTablaEventosDelOrganizador());
 		}
 		return pnScrollOrganizador;
@@ -1096,6 +1099,17 @@ public class VentanaPrincipal extends JFrame {
 	private JTable getTablaEventosDelOrganizador() {
 		if (tablaEventosDelOrganizador == null) {
 			tablaEventosDelOrganizador = new JTable();
+			tablaEventosDelOrganizador.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mousePressed(MouseEvent e) {
+					int fila = tablaEventosDelOrganizador.getSelectedRow();
+					if(organizador.getMisEventos().size()>0){
+						eventoPulsado = organizador.getMisEventos().get(fila);
+						if(eventoPulsado.comprobarFinalizado())
+							getBtEditarEventoOr().setEnabled(true);
+					}
+				}
+			});
 		}
 		return tablaEventosDelOrganizador;
 	}
@@ -1171,11 +1185,15 @@ public class VentanaPrincipal extends JFrame {
 						JOptionPane.showMessageDialog(null, "Vuelve a seleccionar el evento.", "Error", JOptionPane.ERROR_MESSAGE);
 						return;
 					}
+					if(eventoPulsado.comprobarFinalizado()){
+						JOptionPane.showMessageDialog(null, "El evento aún no ha finalizado, no se pueden cargar resultados", "Evento no finalizado!", JOptionPane.ERROR_MESSAGE);
+					}
 					boolean salioBien = false;
 
 					JFileChooser chooser = new JFileChooser();
-					FileNameExtensionFilter filter = new FileNameExtensionFilter("JPG & GIF Images", "jpg", "gif");
+					FileNameExtensionFilter filter = new FileNameExtensionFilter(".dat File",new String[]{"dat"}); //Aqui le podemos decir que mas tipos de archivos admite. 
 					chooser.setFileFilter(filter);
+					chooser.addChoosableFileFilter(filter);
 					int returnVal = chooser.showOpenDialog(VentanaPrincipal.this);
 					if (returnVal == JFileChooser.APPROVE_OPTION) {
 						System.out.println("You chose to open this file: " + chooser.getSelectedFile().getName());
@@ -1307,10 +1325,12 @@ public class VentanaPrincipal extends JFrame {
 			btCrearEvento = new JButton("Crear evento");
 			btCrearEvento.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
+					if(!comprobarPlazosIncscripcion()) return;
 					if (faltaAlgoPorRellenar()) {
 						JOptionPane.showMessageDialog(null, "Por favor, rellene todos los campos.");
 						return;
 					}
+					
 					Evento evento = crearEventoOrgnizador();
 					if (evento == null) {
 						cambiarPanelesOrganizador("pnEventosOrganizador");
@@ -1385,6 +1405,8 @@ public class VentanaPrincipal extends JFrame {
 			pnContenidoCreacionEvento.add(getLblDa());
 			pnContenidoCreacionEvento.add(getLbMes());
 			pnContenidoCreacionEvento.add(getLbAño());
+			pnContenidoCreacionEvento.add(getLblNmeroDeEtapas());
+			pnContenidoCreacionEvento.add(getSpNumeroEtapas());
 		}
 		return pnContenidoCreacionEvento;
 	}
@@ -1461,10 +1483,30 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField getTfDistanciaEvento() {
 		if (tfDistanciaEvento == null) {
 			tfDistanciaEvento = new JTextField();
+			tfDistanciaEvento.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					cambiarModeloSpinner();
+				}
+				@Override
+				public void focusGained(FocusEvent e) {
+					cambiarModeloSpinner();
+				}
+			});
 			tfDistanciaEvento.setBounds(162, 114, 50, 20);
 			tfDistanciaEvento.setColumns(10);
 		}
 		return tfDistanciaEvento;
+	}
+	private void cambiarModeloSpinner(){
+		String t = getTfDistanciaEvento().getText();
+		if(t.isEmpty())
+			;
+		else if(Comprobaciones.esNumero(t)){
+			int n = Integer.parseInt(t);
+			modeloSpinnerEtapas = new SpinnerNumberModel(1, 1, n, 1);
+			getSpNumeroEtapas().setModel(modeloSpinnerEtapas);
+		}
 	}
 
 	private JLabel getLblNmeroDePlazas() {
@@ -2364,7 +2406,7 @@ public class VentanaPrincipal extends JFrame {
 			miFechaComienzo = new Date(año - 1900, ConversorFechas.getNumeroMes(mes), dia);
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null,
-					"La fecha no se ha creado correctamente (Puede ser fallo en el cÃƒÂ³digo lÃƒÂ­nea 1896)");
+					"La fecha no se ha creado correctamente (Puede ser fallo en el comienzo del año de la fecha - 1900)");
 			return null;
 		}
 
@@ -2373,17 +2415,33 @@ public class VentanaPrincipal extends JFrame {
 				puedoCrearEvento = true;
 			}
 		}
+		
 		Evento evento = null;
 		if (puedoCrearEvento) {
 			if (!getCbCatDef().isSelected()) {
 				evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas),
-						miFechaComienzo, categorias, plazos, organizador.getId());
+						miFechaComienzo, categorias, plazos, organizador.getId(), (Integer) getSpNumeroEtapas().getValue() );
 			} else {
 				evento = new Evento(nombre, tipo, Integer.parseInt(distancia), Integer.parseInt(plazas),
-						miFechaComienzo, catDef, plazos, organizador.getId());
+						miFechaComienzo, catDef, plazos, organizador.getId(), (Integer) getSpNumeroEtapas().getValue());
 			}
 		}
 		return evento;
+	}
+	
+	
+	private boolean comprobarPlazosIncscripcion(){
+		boolean res = GestorFechasInscripcion.comprobarFechasCorrectas(plazosInscripcionNuevoEvento);
+		if(!res){
+			if(GestorFechasInscripcion.plazoQueFalla1 != null && GestorFechasInscripcion.plazoQueFalla2 != null){
+				PlazoInscripcion p1 = GestorFechasInscripcion.plazoQueFalla1;
+				PlazoInscripcion p2 = GestorFechasInscripcion.plazoQueFalla2;
+				JOptionPane.showMessageDialog(null, "Los plazos que se solapan son los siguientes:\n Plazo 1 = "+p1.toString()+"\nPlazo 2 = "+p2.toString(),"Solapamiento de plazos",JOptionPane.ERROR_MESSAGE);
+				
+			}
+			return false;
+		}
+		return true;
 	}
 
 	private Date buscarUltimaFechaInscripcion() {
@@ -2429,6 +2487,8 @@ public class VentanaPrincipal extends JFrame {
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnEliminarInscribirse;
 	private JPanel pnDFiltros;
+	private JLabel lblNmeroDeEtapas;
+	private JSpinner spNumeroEtapas;
 
 	private JPanel getPnPagar() {
 		if (pnPagar == null) {
@@ -2742,6 +2802,23 @@ public class VentanaPrincipal extends JFrame {
 		
 		return pnDFiltros;
 	}
-
-
+	private JLabel getLblNmeroDeEtapas() {
+		if (lblNmeroDeEtapas == null) {
+			lblNmeroDeEtapas = new JLabel("N\u00FAmero de etapas:");
+			lblNmeroDeEtapas.setHorizontalAlignment(SwingConstants.RIGHT);
+			lblNmeroDeEtapas.setBounds(222, 161, 106, 14);
+		}
+		return lblNmeroDeEtapas;
+	}
+	SpinnerNumberModel modeloSpinnerEtapas;
+	private JSpinner getSpNumeroEtapas() {
+		if (spNumeroEtapas == null) {
+			spNumeroEtapas = new JSpinner();
+			spNumeroEtapas.setToolTipText("Número de etapas del evento. Distacia etapa = distEvento / nEtapas");
+			modeloSpinnerEtapas = new SpinnerNumberModel(1, 1, 15, 1);
+			spNumeroEtapas.setModel(modeloSpinnerEtapas);
+			spNumeroEtapas.setBounds(338, 158, 47, 20);
+		}
+		return spNumeroEtapas;
+	}
 }
