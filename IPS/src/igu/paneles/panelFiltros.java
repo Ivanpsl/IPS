@@ -14,31 +14,42 @@ import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
+import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 
 import logica.Gestor;
 
+import javax.swing.JTextField;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+
 public class panelFiltros extends JPanel {
 	
-	
+	private int maxDistancia=-1;
+	private int minDistancia=-1;
 	private VentanaPrincipal vP;
 	private Gestor g;
 	private ArrayList<String> enComboBox;
 	private JPanel panel;
 	private JLabel lblDistancia;
 	private JPanel pnFiltroDistancia;
-	private JCheckBox chckbxNewCheckBox;
-	private JSpinner spinner;
+	private JCheckBox chDistancia;
 	private JLabel lblNewLabel;
-	private JSpinner spinner_1;
 	private JLabel lblNewLabel_1;
 	private JPanel pnMostrar;
-	private JCheckBox chckbxEventosTerminados;
-	private JCheckBox chckbxPlazoCerrado;
-	private JCheckBox chckbxLlenos;
+	private JCheckBox chEvTerminados;
+	private JCheckBox chPlCerrado;
+	private JCheckBox chplLlenos;
 	private JPanel pnTipo;
 	private JComboBox<String> cmbBox;
+	private JTextField txMinDistancia;
+	private JTextField txMaxDistancia;
 	
 
 
@@ -53,6 +64,63 @@ public class panelFiltros extends JPanel {
 		add(getPanel());
 
 	}
+	public int getMaxDistancia(){
+		String maxSt=txMaxDistancia.getText();
+		if(maxSt.equals("") || maxSt.equals(" ")) return -1;
+		else return Integer.valueOf(maxSt);
+	}
+	public int getMinDistancia(){
+		String minSt=txMinDistancia.getText();
+		if(minSt.equals("")|| minSt.equals(" ")) return -1;
+		else return Integer.valueOf(minSt);
+	}
+	public boolean getFDistancia(){
+		return chDistancia.isSelected();
+	}
+	public boolean getFPlazasLlenas(){
+		return chplLlenos.isSelected();
+	}
+	public boolean getFPlazoCerrado(){
+		return chPlCerrado.isSelected();
+	}
+	public boolean getFTerminados(){
+		return chEvTerminados.isSelected();
+	}
+	public String getFTipo(){
+		return (String) cmbBox.getSelectedItem();
+	}
+	public void reiniciarFiltros(){
+		chDistancia.setSelected(false);
+		chEvTerminados.setSelected(true);
+		chPlCerrado.setSelected(true);
+		chplLlenos.setSelected(true);
+		actualizarEstadoCuadrosTexto(false);
+		maxDistancia=-1;
+		minDistancia=-1;
+		
+	}
+	private boolean comprobacionDeCampos(){
+		if(txMaxDistancia.getText()!=null && !txMaxDistancia.getText().equals("") && chDistancia.isSelected()){
+			if(!txMinDistancia.equals("") && Integer.parseInt(txMaxDistancia.getText())<
+			Integer.parseInt(txMinDistancia.getText())){
+				JOptionPane.showMessageDialog(vP, "La distancia maxima no puede ser menor que la distancia minima.","Error de distancias",JOptionPane.ERROR_MESSAGE);
+				txMaxDistancia.setText("");
+				return false;
+			}
+		}if(txMinDistancia.getText()!=null && !txMinDistancia.equals("") && chDistancia.isSelected() ){
+				if(!txMaxDistancia.getText().equals("")&& Integer.parseInt(txMinDistancia.getText())>Integer.parseInt(txMaxDistancia.getText())){
+					JOptionPane.showMessageDialog(vP, "La distancia minima no puede ser mayor que la maxima.","Error de distancias",JOptionPane.ERROR_MESSAGE);
+					txMinDistancia.setText("");
+					return false;
+				}
+		}if(chDistancia.isSelected()) {
+			minDistancia=getMinDistancia();
+			maxDistancia=getMaxDistancia();
+			vP.actualizarTablaFiltrada();
+		}
+		return true;
+	}
+	
 
 	private JPanel getPanel() {
 		if (panel == null) {
@@ -74,38 +142,45 @@ public class panelFiltros extends JPanel {
 		if (pnFiltroDistancia == null) {
 			pnFiltroDistancia = new JPanel();
 			pnFiltroDistancia.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Distancia: ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
-			pnFiltroDistancia.add(getChckbxNewCheckBox());
+			pnFiltroDistancia.add(getChDistancia());
 			pnFiltroDistancia.add(getLblDistancia());
-			pnFiltroDistancia.add(getSpinner());
+			pnFiltroDistancia.add(getTxMinDistancia());
 			pnFiltroDistancia.add(getLblNewLabel());
-			pnFiltroDistancia.add(getSpinner_1());
+			pnFiltroDistancia.add(getTxMaxDistancia());
 			pnFiltroDistancia.add(getLblNewLabel_1());
 		}
 		return pnFiltroDistancia;
 	}
-	private JCheckBox getChckbxNewCheckBox() {
-		if (chckbxNewCheckBox == null) {
-			chckbxNewCheckBox = new JCheckBox("");
+	private void actualizarEstadoCuadrosTexto(boolean estado){
+		txMaxDistancia.setEnabled(estado);
+		txMinDistancia.setEnabled(estado);
+		if(!estado){
+			txMaxDistancia.setText("");
+			txMinDistancia.setText("");
 		}
-		return chckbxNewCheckBox;
 	}
-	private JSpinner getSpinner() {
-		if (spinner == null) {
-			spinner = new JSpinner();
+	private JCheckBox getChDistancia() {
+		if (chDistancia == null) {
+			chDistancia = new JCheckBox("");
+			chDistancia.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if(chDistancia.isSelected()){
+						actualizarEstadoCuadrosTexto(true);
+						vP.actualizarTablaFiltrada();
+					}else{
+						actualizarEstadoCuadrosTexto(false);
+						vP.actualizarTablaFiltrada();
+					}
+				}
+			});
 		}
-		return spinner;
+		return chDistancia;
 	}
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
 			lblNewLabel = new JLabel("km a: ");
 		}
 		return lblNewLabel;
-	}
-	private JSpinner getSpinner_1() {
-		if (spinner_1 == null) {
-			spinner_1 = new JSpinner();
-		}
-		return spinner_1;
 	}
 	private JLabel getLblNewLabel_1() {
 		if (lblNewLabel_1 == null) {
@@ -117,32 +192,47 @@ public class panelFiltros extends JPanel {
 		if (pnMostrar == null) {
 			pnMostrar = new JPanel();
 			pnMostrar.setBorder(new TitledBorder(null, "Mostrar: ", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnMostrar.add(getChckbxEventosTerminados());
-			pnMostrar.add(getChckbxPlazoCerrado());
-			pnMostrar.add(getChckbxLlenos());
+			pnMostrar.add(getChEvTerminados());
+			pnMostrar.add(getChPlCerrado());
+			pnMostrar.add(getChplLlenos());
 		}
 		return pnMostrar;
 	}
-	private JCheckBox getChckbxEventosTerminados() {
-		if (chckbxEventosTerminados == null) {
-			chckbxEventosTerminados = new JCheckBox("Eventos terminados");
-			chckbxEventosTerminados.setSelected(true);
+	private JCheckBox getChEvTerminados() {
+		if (chEvTerminados == null) {
+			chEvTerminados = new JCheckBox("Eventos terminados");
+			chEvTerminados.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vP.actualizarTablaFiltrada();
+				}
+			});
+			chEvTerminados.setSelected(true);
 		}
-		return chckbxEventosTerminados;
+		return chEvTerminados;
 	}
-	private JCheckBox getChckbxPlazoCerrado() {
-		if (chckbxPlazoCerrado == null) {
-			chckbxPlazoCerrado = new JCheckBox("Plazo cerrado");
-			chckbxPlazoCerrado.setSelected(true);
+	private JCheckBox getChPlCerrado() {
+		if (chPlCerrado == null) {
+			chPlCerrado = new JCheckBox("Plazo cerrado");
+			chPlCerrado.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vP.actualizarTablaFiltrada();
+				}
+			});
+			chPlCerrado.setSelected(true);
 		}
-		return chckbxPlazoCerrado;
+		return chPlCerrado;
 	}
-	private JCheckBox getChckbxLlenos() {
-		if (chckbxLlenos == null) {
-			chckbxLlenos = new JCheckBox("Plazas llenas");
-			chckbxLlenos.setSelected(true);
+	private JCheckBox getChplLlenos() {
+		if (chplLlenos == null) {
+			chplLlenos = new JCheckBox("Plazas llenas");
+			chplLlenos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vP.actualizarTablaFiltrada();
+				}
+			});
+			chplLlenos.setSelected(true);
 		}
-		return chckbxLlenos;
+		return chplLlenos;
 	}
 	private JPanel getPanel_1_1() {
 		if (pnTipo == null) {
@@ -155,14 +245,73 @@ public class panelFiltros extends JPanel {
 	private JComboBox<String> getCmbBox() {
 		if (cmbBox == null) {
 			cmbBox = new JComboBox<String>();
+			cmbBox.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					vP.actualizarTablaFiltrada();
+				}
+			});
 			
 		}
 		return cmbBox;
 	}
 	public void rellenarComboBox(){
-		
+		cmbBox.addItem("TODOS");
 		for(String tipo: g.obtenerTipos())
 			if(!enComboBox.contains(tipo.toUpperCase()))
 				cmbBox.addItem(tipo.toUpperCase());
+	}
+	private JTextField getTxMinDistancia() {
+		if (txMinDistancia == null) {
+			txMinDistancia = new JTextField();
+			txMinDistancia.setEnabled(false);
+			txMinDistancia.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					comprobacionDeCampos();
+				}
+			});
+			txMinDistancia.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c = arg0.getKeyChar();
+					if (!Character.isDigit(c)) {
+						arg0.consume();
+					}
+					
+					if(!txMinDistancia.getText().equals("") && maxDistancia>0 && Integer.valueOf(txMinDistancia.getText())<maxDistancia){
+						
+						vP.actualizarTablaFiltrada();
+					}
+				}
+			});
+			txMinDistancia.setColumns(3);
+		}
+		return txMinDistancia;
+	}
+	private JTextField getTxMaxDistancia() {
+		if (txMaxDistancia == null) {
+			txMaxDistancia = new JTextField();
+			txMaxDistancia.setEnabled(false);
+			txMaxDistancia.addFocusListener(new FocusAdapter() {
+				@Override
+				public void focusLost(FocusEvent arg0) {
+					comprobacionDeCampos();
+				}
+			});
+			txMaxDistancia.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c = arg0.getKeyChar();
+					if (!Character.isDigit(c)) {
+						arg0.consume();
+					}
+					if(!txMaxDistancia.getText().equals("") && minDistancia>0 && Integer.valueOf(txMaxDistancia.getText())>minDistancia){
+						vP.actualizarTablaFiltrada();
+					}
+				}
+			});
+			txMaxDistancia.setColumns(3);
+		}
+		return txMaxDistancia;
 	}
 }

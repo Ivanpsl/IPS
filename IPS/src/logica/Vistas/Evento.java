@@ -17,6 +17,8 @@ public class Evento {
 	private ArrayList<Categoria> categoriasDelEvento;
 	private ArrayList<PlazoInscripcion> plazosDeInscripcion;
 	
+	
+	
 	ArrayList<String> tiposEventosDefecto;
 	
 	
@@ -241,5 +243,9 @@ public class Evento {
 			return finalizado;
 		}
 		return false;
+	}
+	
+	public int getNumeroEtapas(){
+		return 1;
 	}
 }

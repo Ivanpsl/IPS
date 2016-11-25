@@ -215,6 +215,14 @@ public class VentanaPrincipal extends JFrame {
 		}
 		return true;
 	}
+	
+	/**
+	 * Metodo publico usado desde el panel de filtros para reiniciar la tabla 
+	 * y aplicar los cambios del filtrado.
+	 */
+	public void actualizarTablaFiltrada(){
+		mostrarTablaEventosUsuario();
+	}
 
 	private void AnadirInscritoALista() {
 
@@ -540,7 +548,8 @@ public class VentanaPrincipal extends JFrame {
 	 */
 	private void mostrarTablaEventosUsuario() {
 		modeloTabla = new ModeloNoEditable(cabeceraTablaSeleccionEventos, 0);
-		contenidoEventos = g.getEventos();
+		contenidoEventos =g.filtrar(g.getEventos(),pF.getFDistancia()  , pF.getMaxDistancia(), pF.getMinDistancia(), 
+				pF.getFTipo(), pF.getFTerminados(), pF.getFPlazoCerrado(), pF.getFPlazasLlenas());
 		for (Evento ev : contenidoEventos) {
 			String[] fila = new String[6];
 			fila[0] = ev.getNombre();
@@ -908,7 +917,7 @@ public class VentanaPrincipal extends JFrame {
 					int fila = tbEventosSeleccion.getSelectedRow();
 					pulsarEvento(contenidoEventos.get(fila), 1);
 					eventoSeleccionado = contenidoEventos.get(fila);
-					if (!eventoSeleccionado.getFinalizado())
+					if (!eventoSeleccionado.getFinalizado() && eventoSeleccionado.getUltimoPlazo()!=null)
 						precioEvento = contenidoEventos.get(fila).getUltimoPlazo().getPrecio();
 					precioTotal = 0;
 				}
@@ -1072,9 +1081,11 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					int fila = tablaEventosDelOrganizador.getSelectedRow();
-					eventoPulsado = organizador.getMisEventos().get(fila);
-					if(eventoPulsado.comprobarFinalizado())
-						getBtEditarEventoOr().setEnabled(true);
+					if(organizador.getMisEventos().size()>0){
+						eventoPulsado = organizador.getMisEventos().get(fila);
+						if(eventoPulsado.comprobarFinalizado())
+							getBtEditarEventoOr().setEnabled(true);
+					}
 				}
 			});
 			pnScrollOrganizador.setViewportView(getTablaEventosDelOrganizador());

@@ -4,13 +4,20 @@ import java.util.ArrayList;
 
 import logica.Vistas.Evento;
 
+
+/**
+ * Clase que permite filtrar una lista de eventos segun su distancia
+ *
+ */
 public class FiltrarRangosDistancias implements Filtro{
 
 	double inicio=0;
 	double fin=Double.POSITIVE_INFINITY ;
 	public FiltrarRangosDistancias(int inicio, int fin){
-		this.inicio=inicio;
-		this.fin=fin;
+		if(inicio!=-1)
+			this.inicio=inicio;
+		if(fin!=-1)
+			this.fin=fin;
 	}
 	
 	@Override

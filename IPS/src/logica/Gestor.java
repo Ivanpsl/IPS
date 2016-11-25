@@ -21,6 +21,12 @@ import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
 import logica.Vistas.PlazoInscripcion;
+import logica.filtros.FiltrarPlazasLlenas;
+import logica.filtros.FiltrarPlazoCerrado;
+import logica.filtros.FiltrarRangosDistancias;
+import logica.filtros.FiltrarTerminados;
+import logica.filtros.FiltrarTipo;
+import logica.filtros.Filtro;
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
 import usuarios.Organizador;
@@ -337,7 +343,8 @@ public class Gestor {
 //			throw new IllegalArgumentException();
 //		
 		//Si todo esta bien se crea el evento y se añade
-		Evento nuevoEvento= new Evento(getEventos().size(),nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos,fecha_comienzo,idOrganizador);
+		int ultimaId= getEventos().get(getEventos().size()-1).getId();
+		Evento nuevoEvento= new Evento(ultimaId+1,nombre,tipo,distancia, plazasTotales, false, categoriasDelEvento, plazos,fecha_comienzo,idOrganizador);
 		eventos.add(nuevoEvento);
 		bd.añadirEventoABD(nuevoEvento);
 	}
@@ -347,6 +354,7 @@ public class Gestor {
 	 */
 	public void añadirEvento(Evento e){
 		if(!eventos.isEmpty()){
+			
 		e.setId(eventos.get(eventos.size()-1).getId()+1);
 		}else{
 			e.setId(0);
@@ -494,7 +502,7 @@ public class Gestor {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			// TODO Auto-generafted catch block
 			e.printStackTrace();
 		}
 		return atletasFichero;
@@ -525,4 +533,36 @@ public class Gestor {
 			tipos.add(e.getTipo());
 		return tipos;
 	}
+	
+	/**
+	 * Metodo filtrar que usa el Gestor de filtros para aplicar filtros
+	 * @param lista: lista a filtrar
+	 * @param distancia: si es true añade filtro de distancias
+	 * @param maxDistancia: int maxima distancia para el filtro de distancias
+	 * @param minDistancia: int minima distancia para el filtro de distancias
+	 * @param tipo: tipo de eventos que se filtran
+	 * @param terminados: si es true se añade filtro para eventos terminados
+	 * @param plCerrada: si es true se añade filtro para plazos cerrados
+	 * @param plzLlenas: si es true se añade el filtro para filtrar plazas llenas
+	 * @return lista con los eventos ya filtrados.
+	 */
+	public ArrayList<Evento> filtrar(ArrayList<Evento> lista, boolean distancia,
+			int maxDistancia, int minDistancia, String tipo,
+			boolean terminados, boolean plCerrada, boolean plzLlenas){
+		ArrayList<Filtro> filtros = new ArrayList<Filtro>();
+		filtros.add(new FiltrarTipo(tipo));
+		if(distancia)
+			filtros.add(new FiltrarRangosDistancias(minDistancia, maxDistancia));
+		if(!terminados)
+			filtros.add(new FiltrarTerminados());
+		if(!plCerrada)
+			filtros.add(new FiltrarPlazoCerrado());
+		if(!plzLlenas)
+			filtros.add(new FiltrarPlazasLlenas());
+		Filtro[] f = new Filtro[filtros.size()];
+		filtros.toArray(f);
+		return new GestorFiltros().filtrar(lista, f);
+	}
+		
+	
 }

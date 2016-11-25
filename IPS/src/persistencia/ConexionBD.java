@@ -145,7 +145,7 @@ public class ConexionBD {
 			System.err.println("No es posible añadir eventos a ninguna BD." );
 		else{
 			try {
-				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?,?,?)");
+				PreparedStatement st = con.prepareStatement("INSERT INTO EVENTOS VALUES (?,?,?,?,?,?,?,?,?,?,?)");
 				int id= ev.getId();
 				String nombre = ev.getNombre();
 				String tipo= ev.getTipo();
@@ -156,6 +156,7 @@ public class ConexionBD {
 				String plazos = Decodificador.codificarPlazos(ev.getPlazos());
 				Date fechaCompeticion= ev.getFechaCompeticion();
 				int idOrganizador= ev.getIdOrganizador();
+				int numeroEtapas= ev.getNumeroEtapas();
 				if(ev.getFinalizado()) fin =1;
 				else fin=0;
 				
@@ -169,6 +170,7 @@ public class ConexionBD {
 				st.setString(8,plazos );
 				st.setDate(9, (java.sql.Date) fechaCompeticion);
 				st.setInt(10, idOrganizador);
+				st.setInt(11, numeroEtapas);
 				st.executeUpdate();
 				st.close();
 				con.close();
