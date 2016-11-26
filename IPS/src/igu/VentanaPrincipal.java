@@ -81,6 +81,10 @@ import javax.swing.UIManager;
 import javax.swing.BoxLayout;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -199,6 +203,7 @@ public class VentanaPrincipal extends JFrame {
 		pF=new panelFiltros(vP,g);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1134, 581);
+		setJMenuBar(getMenuBar_1());
 		pnPrincipal = new JPanel();
 		pnPrincipal.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(pnPrincipal);
@@ -206,6 +211,19 @@ public class VentanaPrincipal extends JFrame {
 		pnPrincipal.add(getPnInicio(), "pn_inicio");
 		pnPrincipal.add(getPnOrganizador(), "pn_Organizador");
 		pnPrincipal.add(getPnUsuario(), "pn_usuario");
+	}
+	private void recargarAplicacion(){
+		reiniciarDatosPulsados();
+		cambiarCabeceraUsuario(0);
+		borrarDatos();
+		cambiarPanelesPrincipales("inicio");
+		g= new Gestor();
+		g.asignarEventosAOrganizador(organizador);
+		pF=new panelFiltros(vP,g);
+		mostrarTablaEventosOrganizador();
+		//pF.rellenarComboBox();
+		
+		
 	}
 
 	private boolean comprobarDatosInscribirse() {
@@ -2811,6 +2829,11 @@ public class VentanaPrincipal extends JFrame {
 		return lblNmeroDeEtapas;
 	}
 	SpinnerNumberModel modeloSpinnerEtapas;
+	private JMenuBar menuBar;
+	private JMenu mnArchivo;
+	private JMenuItem mtRecargar;
+	private JSeparator separator;
+	private JMenuItem mntmSalir;
 	private JSpinner getSpNumeroEtapas() {
 		if (spNumeroEtapas == null) {
 			spNumeroEtapas = new JSpinner();
@@ -2820,5 +2843,49 @@ public class VentanaPrincipal extends JFrame {
 			spNumeroEtapas.setBounds(338, 158, 47, 20);
 		}
 		return spNumeroEtapas;
+	}
+	private JMenuBar getMenuBar_1() {
+		if (menuBar == null) {
+			menuBar = new JMenuBar();
+			menuBar.add(getMnArchivo());
+		}
+		return menuBar;
+	}
+	private JMenu getMnArchivo() {
+		if (mnArchivo == null) {
+			mnArchivo = new JMenu("Archivo");
+			mnArchivo.add(getMtRecargar());
+			mnArchivo.add(getSeparator());
+			mnArchivo.add(getMntmSalir());
+		}
+		return mnArchivo;
+	}
+	private JMenuItem getMtRecargar() {
+		if (mtRecargar == null) {
+			mtRecargar = new JMenuItem("Recargar");
+			mtRecargar.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					recargarAplicacion();
+				}
+			});
+		}
+		return mtRecargar;
+	}
+	private JSeparator getSeparator() {
+		if (separator == null) {
+			separator = new JSeparator();
+		}
+		return separator;
+	}
+	private JMenuItem getMntmSalir() {
+		if (mntmSalir == null) {
+			mntmSalir = new JMenuItem("Salir");
+			mntmSalir.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					System.exit(0);
+				}
+			});
+		}
+		return mntmSalir;
 	}
 }
