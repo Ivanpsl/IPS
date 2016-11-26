@@ -21,7 +21,7 @@ public class testBD {
 	
 	@Test
 	public void testConecta() {
-		bd.conectar();
+		//bd.conectar();
 	}
 	
 	@Test 

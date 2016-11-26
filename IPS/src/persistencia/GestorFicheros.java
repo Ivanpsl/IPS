@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import logica.Gestor;
 import logica.Vistas.Evento;
-import logica.Vistas.Inscripcion;
 
 public class GestorFicheros {
 

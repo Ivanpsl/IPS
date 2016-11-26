@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
@@ -15,14 +16,10 @@ import javax.swing.border.EmptyBorder;
 import logica.Gestor;
 import logica.GestorClasificaciones;
 import logica.Vistas.Atleta;
-import logica.Vistas.Categoria;
-import logica.Vistas.Clasificacion;
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
 
 import javax.swing.JScrollPane;
-
-import oracle.net.aso.e;
 
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -39,6 +36,10 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.JTextArea;
 
 public class DialogResultadosAtleta extends JDialog {
 
@@ -50,19 +51,27 @@ public class DialogResultadosAtleta extends JDialog {
 	private final JPanel contentPanel = new JPanel();
 	Gestor g;
 	ArrayList<Inscripcion> inscripciones = new ArrayList<Inscripcion>();
+	private ArrayList<Evento> eventos;
 	Atleta atleta;
 	panelCuadroResultadosAtletaEvento cResultados;
 	GestorClasificaciones gC = new GestorClasificaciones();
 	VentanaPrincipal vP;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	
+	private JList<Evento> list;
+	private DefaultListModel<Evento> modeloLista;
+	private JTextField txtNombreEvento;
+	private JTextField txtTipoEvento;
+	private JTextField txtTiempo;
+	private JTextField txtCategoria;
+	private JTextField txtPosAbsoluta;
+	private JTextField txtPosicionCategoria;
+	JTextArea txaParciales;
 	/**
 	 * Create the dialog.
 	 * 
 	 */
 	public DialogResultadosAtleta(Atleta atleta, Gestor g, VentanaPrincipal vP) {
-		setTitle("Gestor eventos: resultados de atleta");
+		setTitle("Gestor eventos: resultados de " + atleta.getNombre() + " ("+atleta.getDNI()  +")");
 		setModal(true);
 		this.atleta=atleta;
 		this.g=g;
@@ -86,7 +95,17 @@ public class DialogResultadosAtleta extends JDialog {
 					JScrollPane scrollPane = new JScrollPane();
 					panel.add(scrollPane, BorderLayout.CENTER);
 					{
-						JList list = new JList();
+						JList<Evento> list = new JList<Evento>();
+						list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+						list.addMouseListener(new MouseAdapter() {
+							@Override
+							public void mouseClicked(MouseEvent arg0) {
+								int seleccionado= list.getSelectedIndex();
+								if(seleccionado>=0){
+									seleccionarEvento(seleccionado);
+								}
+							}
+						});
 						scrollPane.setViewportView(list);
 					}
 				}
@@ -102,42 +121,29 @@ public class DialogResultadosAtleta extends JDialog {
 				pnInformacion.add(pnInformacionEvento, BorderLayout.NORTH);
 				pnInformacionEvento.setLayout(new BorderLayout(0, 0));
 				{
-					JPanel panel = new JPanel();
-					pnInformacionEvento.add(panel);
+					JPanel panelInfoEvento = new JPanel();
+					pnInformacionEvento.add(panelInfoEvento);
 					{
-						JLabel label = new JLabel("New label");
-						panel.add(label);
+						JLabel lblNombre = new JLabel("Nombre: ");
+						panelInfoEvento.add(lblNombre);
 					}
 					{
-						textField = new JTextField();
-						panel.add(textField);
-						textField.setColumns(10);
-					}
-				}
-				{
-					JPanel panel = new JPanel();
-					pnInformacionEvento.add(panel);
-					{
-						JLabel label = new JLabel("New label");
-						panel.add(label);
+						txtNombreEvento = new JTextField();
+						txtNombreEvento.setEnabled(false);
+						txtNombreEvento.setEditable(false);
+						txtNombreEvento.setColumns(10);
+						panelInfoEvento.add(txtNombreEvento);
 					}
 					{
-						textField_1 = new JTextField();
-						textField_1.setColumns(10);
-						panel.add(textField_1);
-					}
-				}
-				{
-					JPanel panel = new JPanel();
-					pnInformacionEvento.add(panel);
-					{
-						JLabel label = new JLabel("New label");
-						panel.add(label);
+						JLabel lblTipo = new JLabel("Tipo:");
+						panelInfoEvento.add(lblTipo);
 					}
 					{
-						textField_2 = new JTextField();
-						textField_2.setColumns(10);
-						panel.add(textField_2);
+						txtTipoEvento = new JTextField();
+						txtTipoEvento.setEnabled(false);
+						txtTipoEvento.setEditable(false);
+						panelInfoEvento.add(txtTipoEvento);
+						txtTipoEvento.setColumns(10);
 					}
 				}
 			}
@@ -145,6 +151,89 @@ public class DialogResultadosAtleta extends JDialog {
 				JPanel pnInformacionResultados = new JPanel();
 				pnInformacionResultados.setBorder(new TitledBorder(null, "Resultados:", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 				pnInformacion.add(pnInformacionResultados);
+				pnInformacionResultados.setLayout(new GridLayout(2, 0, 0, 0));
+				{
+					JPanel panel = new JPanel();
+					pnInformacionResultados.add(panel);
+					panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+					{
+						JPanel panel_1_1 = new JPanel();
+						panel.add(panel_1_1);
+						panel_1_1.setLayout(new GridLayout(2, 1, 0, 0));
+						{
+							JPanel panel_1 = new JPanel();
+							panel_1_1.add(panel_1);
+							FlowLayout fl_panel_1 = new FlowLayout(FlowLayout.CENTER, 5, 5);
+							panel_1.setLayout(fl_panel_1);
+							{
+								JLabel lblTiempo = new JLabel("Tiempo: ");
+								panel_1.add(lblTiempo);
+							}
+							{
+								txtTiempo = new JTextField();
+								panel_1.add(txtTiempo);
+								txtTiempo.setColumns(5);
+							}
+						}
+						{
+							JPanel panel_1_2 = new JPanel();
+							panel_1_1.add(panel_1_2);
+							{
+								JLabel lblNewLabel = new JLabel("Posicion absoluta: ");
+								panel_1_2.add(lblNewLabel);
+							}
+							{
+								txtPosAbsoluta = new JTextField();
+								panel_1_2.add(txtPosAbsoluta);
+								txtPosAbsoluta.setColumns(3);
+							}
+						}
+					}
+					{
+						JPanel panel_1 = new JPanel();
+						panel.add(panel_1);
+						{
+							JPanel panel_2 = new JPanel();
+							panel_1.add(panel_2);
+							{
+								JLabel lblCategoria = new JLabel("Categoria:");
+								panel_2.add(lblCategoria);
+							}
+							{
+								txtCategoria = new JTextField();
+								panel_2.add(txtCategoria);
+								txtCategoria.setColumns(10);
+							}
+						}
+						{
+							JPanel panel_2 = new JPanel();
+							panel_1.add(panel_2);
+							{
+								JLabel lblNewLabel_1 = new JLabel("Posicion en la categoria: ");
+								panel_2.add(lblNewLabel_1);
+							}
+							{
+								txtPosicionCategoria = new JTextField();
+								panel_2.add(txtPosicionCategoria);
+								txtPosicionCategoria.setColumns(3);
+							}
+						}
+					}
+				}
+				{
+					JPanel pnListaParciales = new JPanel();
+					pnListaParciales.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Tiempos por etapa: ", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(0, 0, 0)));
+					pnInformacionResultados.add(pnListaParciales);
+					pnListaParciales.setLayout(new BorderLayout(0, 0));
+					{
+						JScrollPane scrollPane = new JScrollPane();
+						pnListaParciales.add(scrollPane, BorderLayout.CENTER);
+						{
+							txaParciales = new JTextArea();
+							scrollPane.setViewportView(txaParciales);
+						}
+					}
+				}
 			}
 		}
 		{
@@ -162,42 +251,56 @@ public class DialogResultadosAtleta extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
-		rellenarFicha();
 	}
 	
 	public void rellenarFicha(){
 		cargarInscripciones();
-		generarCuadros();
+		
 	}
 	
+
 	private void cargarInscripciones(){
-		//obtenemos eventos en los que participa
-		ArrayList<Evento> eventos = new ArrayList<Evento>();
+		//obtenemos eventos en los que participa e inscripciones
+		eventos = new ArrayList<Evento>();
 		for(Evento e: g.obtenerEventosParticipaPorDNI(atleta.getDNI())){
-			if(e.getFinalizado()) eventos.add(e);
-		};
-		//obtenemos la inscripcion
-		for(Evento ev: eventos)
-			inscripciones.add(g.getInscripcion(atleta.getDNI(), ev));
-	}
-	private Clasificacion obtenerCategoriaPerteneciente(Inscripcion ins){
-			for(Clasificacion c: 
-				g.obtenerEventoPorId(ins.getIdEvento()).getClasificaciones()){
-				if(c.getCategoria()!=null && ins.getCategoria()!=null){
-				if(ins.getCategoria().equals(c.getCategoria()))
-					return c;
-				}
-			}return null;
-	}
-	
-	
-	public void generarCuadros(){
-		Clasificacion pertenece;
-		for(Inscripcion ins: inscripciones){
-			if(obtenerCategoriaPerteneciente(ins)!=null){
-				pertenece=obtenerCategoriaPerteneciente(ins);
-				//pnContenedor.add(new panelCuadroResultadosAtletaEvento(ins, g.obtenerEventoPorId(ins.getIdEvento()),gC.obtenerPosicionAbsoluta(ins, g.obtenerEventoPorId(ins.getIdEvento())) , gC.obtenerPosicion(ins,pertenece)));
+			if(e.getFinalizado()){
+				eventos.add(e);
+				//inscripciones.add(g.getInscripcion(atleta.getDNI(), e));
 			}
-		}
+			añadirEventosLista(eventos);
+		};
+	
+			
 	}
+//	private Clasificacion obtenerCategoriaPerteneciente(Inscripcion ins){
+//			for(Clasificacion c: 
+//				g.obtenerEventoPorId(ins.getIdEvento()).getClasificaciones()){
+//				if(c.getCategoria()!=null && ins.getCategoria()!=null){
+//				if(ins.getCategoria().equals(c.getCategoria()))
+//					return c;
+//				}
+//			}return null;
+//	}
+	
+	private void añadirEventosLista(ArrayList<Evento> eventos){
+		for(Evento ev: eventos){
+			modeloLista.addElement(ev);
+		}
+		list.setModel(modeloLista);
+	}
+	private void seleccionarEvento(int index){
+		Evento eventoSeleccionado= eventos.get(index);
+		Inscripcion ins= g.getInscripcion(atleta.getDNI(), eventoSeleccionado);
+		txtNombreEvento.setText(eventoSeleccionado.getNombre());
+		txtTipoEvento.setText(eventoSeleccionado.getTipo());
+		txtCategoria.setText(ins.getCategoria());
+		txtPosAbsoluta.setText(String.valueOf(eventoSeleccionado.obtenerPosicionAbsoluta(ins)));
+		txtPosicionCategoria.setText("" +eventoSeleccionado.obtenerPosicionCategoria(ins));
+		txtTiempo.setText("" + ins.getTiempoSegundos()+ "s");
+		StringBuilder sB = new StringBuilder();
+		for(int i=0; i< ins.getTiemposPorEtapas().size(); i++)
+			sB.append("Etapa " + i + ": "+ ins.getTiemposPorEtapas().get(i)+ "seg.\n");
+		txaParciales.setText(sB.toString());
+	}
+
 }

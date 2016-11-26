@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.DateTimeException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -30,8 +29,7 @@ import logica.filtros.Filtro;
 import persistencia.ConexionBD;
 import persistencia.GestorFicheros;
 import usuarios.Organizador;
-import utiles.Comprobaciones;
-import utiles.ConversorFechas;
+
 
 public class Gestor {
 	
@@ -89,6 +87,7 @@ public class Gestor {
 		for(Evento e: eventos){
 			if(e.getFinalizado())e.generarClasificacion();
 		}
+	
 	}
 	/**
 	 * Metodo que busca y marca como atleta identificado si es que existe
@@ -503,7 +502,7 @@ public class Gestor {
 			}
 
 		} catch (IOException e) {
-			// TODO Auto-generafted catch block
+		
 			e.printStackTrace();
 		}
 		return atletasFichero;
@@ -564,6 +563,5 @@ public class Gestor {
 		filtros.toArray(f);
 		return new GestorFiltros().filtrar(lista, f);
 	}
-		
-	
+
 }

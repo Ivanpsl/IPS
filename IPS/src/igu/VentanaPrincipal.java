@@ -44,7 +44,6 @@ import logica.Vistas.Atleta;
 import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
 import logica.Vistas.PlazoInscripcion;
-import persistencia.GestorFicheros;
 import usuarios.Organizador;
 import utiles.Comprobaciones;
 import utiles.ConversorFechas;
@@ -74,13 +73,13 @@ import java.awt.event.ItemEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
 
 import javax.swing.JRadioButton;
 import javax.swing.UIManager;
-import javax.swing.BoxLayout;
+
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -161,7 +160,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblNombre;
 	private JTextField tfNombreEvento;
 	private JLabel lblTipo;
-	private JComboBox cbTipoEventos;
+	private JComboBox<String> cbTipoEventos;
 	private JLabel lblDistancia;
 	private JTextField tfDistanciaEvento;
 	private JLabel lblNmeroDePlazas;
@@ -200,7 +199,9 @@ public class VentanaPrincipal extends JFrame {
 		g = new Gestor();
 		organizador = new Organizador("PACO", "XXX", "PACO ORGANIZER", 0);
 		g.asignarEventosAOrganizador(organizador);
+		
 		pF=new panelFiltros(vP,g);
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1134, 581);
 		setJMenuBar(getMenuBar_1());
@@ -848,6 +849,7 @@ public class VentanaPrincipal extends JFrame {
 		if (panel_2 == null) {
 			panel_2 = new JPanel();
 			panel_2.setBorder(null);
+			@SuppressWarnings("unused")
 			FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
 			panel_2.add(getPanel_1());
 			panel_2.add(getPanel_3());
@@ -936,11 +938,13 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void mouseClicked(MouseEvent arg0) {
 					int fila = tbEventosSeleccion.getSelectedRow();
-					pulsarEvento(contenidoEventos.get(fila), 1);
-					eventoSeleccionado = contenidoEventos.get(fila);
-					if (!eventoSeleccionado.getFinalizado() && eventoSeleccionado.getUltimoPlazo()!=null)
-						precioEvento = contenidoEventos.get(fila).getUltimoPlazo().getPrecio();
-					precioTotal = 0;
+					if(fila>=0){
+						pulsarEvento(contenidoEventos.get(fila), 1);
+						eventoSeleccionado = contenidoEventos.get(fila);
+						if (!eventoSeleccionado.getFinalizado() && eventoSeleccionado.getUltimoPlazo()!=null)
+							precioEvento = contenidoEventos.get(fila).getUltimoPlazo().getPrecio();
+						precioTotal = 0;
+					}
 				}
 			});
 		}
@@ -1457,7 +1461,7 @@ public class VentanaPrincipal extends JFrame {
 		return lblTipo;
 	}
 
-	private JComboBox getCbTipoEventos() {
+	private JComboBox<String> getCbTipoEventos() {
 		if (cbTipoEventos == null) {
 			ArrayList<String> tiposEventos = new ArrayList<String>();
 			tiposEventos.add(" ");
@@ -1482,7 +1486,7 @@ public class VentanaPrincipal extends JFrame {
 																		// aÃ±adir
 																		// uno
 																		// propio.
-			cbTipoEventos = new JComboBox();
+			cbTipoEventos = new JComboBox<String>();
 			cbTipoEventos.setEnabled(false);
 			cbTipoEventos.setBounds(298, 76, 118, 20);
 		}
@@ -1567,7 +1571,7 @@ public class VentanaPrincipal extends JFrame {
 	private JLabel lblCategorasDelEvento;
 	private JCheckBox cbCatDef;
 	private JScrollPane scrollPaneCategorias;
-	private JList list;
+	private JList<String> list;
 	private JPanel pn_DNI;
 	private JLabel lblDni;
 	private JTextField txtDNIAtleta;
@@ -1692,7 +1696,7 @@ public class VentanaPrincipal extends JFrame {
 			pnInfoEvPulsadoPlazos.setBorder(new TitledBorder(null, "Plazos de inscripcion: ", TitledBorder.LEADING,
 					TitledBorder.BELOW_TOP, null, null));
 			pnInfoEvPulsadoPlazos.setLayout(new BorderLayout(0, 0));
-			pnInfoEvPulsadoPlazos.add(getTextAreaPlazosInscripcionEventoUsuario());
+			pnInfoEvPulsadoPlazos.add(getScrollPane_3(), BorderLayout.CENTER);
 		}
 		return pnInfoEvPulsadoPlazos;
 	}
@@ -1782,7 +1786,7 @@ public class VentanaPrincipal extends JFrame {
 			pnEventoPulsadoCategoriasAdmitidas.setBorder(new TitledBorder(null, "Categorias admitidas: ",
 					TitledBorder.LEADING, TitledBorder.BELOW_TOP, null, null));
 			pnEventoPulsadoCategoriasAdmitidas.setLayout(new BorderLayout(0, 0));
-			pnEventoPulsadoCategoriasAdmitidas.add(getTextAreaCategoriasAdmitidas());
+			pnEventoPulsadoCategoriasAdmitidas.add(getScrollPane_2(), BorderLayout.CENTER);
 		}
 		return pnEventoPulsadoCategoriasAdmitidas;
 	}
@@ -2834,6 +2838,8 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem mtRecargar;
 	private JSeparator separator;
 	private JMenuItem mntmSalir;
+	private JScrollPane scrollPane_2;
+	private JScrollPane scrollPane_3;
 	private JSpinner getSpNumeroEtapas() {
 		if (spNumeroEtapas == null) {
 			spNumeroEtapas = new JSpinner();
@@ -2887,5 +2893,19 @@ public class VentanaPrincipal extends JFrame {
 			});
 		}
 		return mntmSalir;
+	}
+	private JScrollPane getScrollPane_2() {
+		if (scrollPane_2 == null) {
+			scrollPane_2 = new JScrollPane();
+			scrollPane_2.setViewportView(getTextAreaCategoriasAdmitidas());
+		}
+		return scrollPane_2;
+	}
+	private JScrollPane getScrollPane_3() {
+		if (scrollPane_3 == null) {
+			scrollPane_3 = new JScrollPane();
+			scrollPane_3.setViewportView(getTextAreaPlazosInscripcionEventoUsuario());
+		}
+		return scrollPane_3;
 	}
 }

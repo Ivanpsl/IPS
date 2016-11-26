@@ -13,13 +13,17 @@ import javax.swing.SwingConstants;
 import java.awt.Font;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultListModel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
+
 import java.awt.FlowLayout;
+
 import javax.swing.JButton;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -30,6 +34,7 @@ public class panelCuadroResultadosAtletaEvento extends JPanel {
 	/**
 	 * 
 	 */
+	//private DefaultListModel<Evento> modeloLista;
 	private static final long serialVersionUID = 1L;
 	private JPanel pnNombre;
 	private JPanel panel_1;

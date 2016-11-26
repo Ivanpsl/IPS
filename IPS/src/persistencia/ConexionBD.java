@@ -19,7 +19,7 @@ import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
 import logica.Vistas.PlazoInscripcion;
 
-public class ConexionBD {
+public  class ConexionBD {
 
 	
 	public static String login="uo238031";
@@ -27,7 +27,7 @@ public class ConexionBD {
 	//public static String url = "jdbc:oracle:thin:@156.35.94.99:1521:DESA";
 	public static String url ="jdbc:hsqldb:hsql://localhost/";
 	
-	public Connection conectar(){
+	private Connection conectar(){
 		try {
 			if (DriverManager.getDriver(url) == null){
 				if (url.contains("oracle"))
@@ -235,10 +235,6 @@ public class ConexionBD {
 			}
 		}
 	}
-	
-	
-
-	
 	public void asignarDorsal(Inscripcion inscripcion, int dorsal){
 		Connection con =conectar();
 		if(con==null)
@@ -371,9 +367,6 @@ public class ConexionBD {
 			}
 		}
 	}
-	
-	
-	
 	public void resetearDatosBD(){
 		Connection con =conectar();
 		if(con==null)

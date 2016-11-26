@@ -250,4 +250,10 @@ public class Evento {
 	public int getNumeroEtapas(){
 		return numeroEtapas;
 	}
+	public int obtenerPosicionAbsoluta(Inscripcion ins){
+		return gC.obtenerPosicionAbsoluta(ins, this);	
+	}
+	public int obtenerPosicionCategoria(Inscripcion ins){
+		return gC.obtenerPosicion(ins, this);
+	}
 }

@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 
-import logica.Vistas.Categoria;
 import logica.Vistas.PlazoInscripcion;
 /**
  * Clase que posee métodos static para poder gestionar plazos de Inscripcion

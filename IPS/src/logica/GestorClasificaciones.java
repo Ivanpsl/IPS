@@ -64,8 +64,9 @@ public class GestorClasificaciones {
 	
 	
 	 /**
-	  * Metodo que devuelve la posicion en la clasificacion de un corredor
+	  * Metodo que devuelve la posicion en la clasificacion de un corredor por medio de la clasificacion y de la inscripcion
 	  * @param inscrito
+	  * @param clasificacion
 	  * @return: posicion
 	  */
 	public int obtenerPosicion(Inscripcion inscrito, Clasificacion clasificacion){
@@ -79,6 +80,27 @@ public class GestorClasificaciones {
 		return -2;
 	}
 	
+	/**
+	 * Metodo que devuelve la posicion en la clasificacion de un corredor por medio del evento y la inscripcion 
+	 * @param inscrito
+	 * @param evento
+	 * @return posicion
+	 */
+	public int obtenerPosicion(Inscripcion inscrito,Evento evento){
+		Categoria categoria= null;
+		for(Categoria c: evento.getCategorias()){
+			if(c.estaDentro(inscrito.getAtleta())){
+				categoria=c;
+			}
+		}if(categoria!=null){
+			for(Clasificacion cl : evento.getClasificaciones()){
+				if(cl.getCategoria().equals(categoria.getNombre())){
+					return obtenerPosicion(inscrito, cl);
+				}
+			}
+		}return -1;
+		
+	}
 	/**
 	 * MEtodo que devuelve la posicion absoluta en un evento de un corredor
 	 */

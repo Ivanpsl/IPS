@@ -14,13 +14,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.UIManager;
 
 import java.awt.Color;
 import java.awt.Font;
 
-import javax.swing.JTabbedPane;
+
 
 import logica.Vistas.Categoria;
 import logica.Vistas.Clasificacion;
@@ -28,7 +27,8 @@ import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
 import logica.Vistas.PlazoInscripcion;
 
-import java.awt.Window.Type;
+
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -44,8 +44,12 @@ import javax.swing.JComboBox;
 public class DialogInformacionDeEvento extends JDialog {
 
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String[] cabecera= { "Posicion", "Dorsal", "Nombre", "Tiempo" };
-	private ModeloNoEditable modeloTabla;
+	//private ModeloNoEditable modeloTabla;
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtTipo;
 	private JLabel lblNewLabel_1;
@@ -445,7 +449,7 @@ public class DialogInformacionDeEvento extends JDialog {
 	}
 	private JComboBox<String> getCmBoxCategoria() {
 		if (cmBoxCategoria == null) {
-			cmBoxCategoria = new JComboBox();
+			cmBoxCategoria = new JComboBox<String>();
 			cmBoxCategoria.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					rellenarTabla();

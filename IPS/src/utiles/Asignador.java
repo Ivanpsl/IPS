@@ -1,18 +1,13 @@
 package utiles;
 
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-
 
 
 import logica.Gestor;
 import logica.Vistas.Atleta;
-import logica.Vistas.Categoria;
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
-import logica.Vistas.PlazoInscripcion;
+
 
 public class Asignador {
 

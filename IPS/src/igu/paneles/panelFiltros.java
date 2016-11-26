@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
-import javax.swing.JSpinner;
 import javax.swing.JComboBox;
 
 import logica.Gestor;
@@ -31,6 +30,10 @@ import java.awt.event.ActionEvent;
 
 public class panelFiltros extends JPanel {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int maxDistancia=-1;
 	private int minDistancia=-1;
 	private VentanaPrincipal vP;
