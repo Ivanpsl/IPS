@@ -119,18 +119,24 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 		//Asignar los valores del plazo a los elementos.
 		asignarValores(plazo);
 	}
-	@SuppressWarnings("deprecation")
 	private void asignarValores(PlazoInscripcion p){
 		int precio = (int) p.getPrecio();
 		Date fechaIn = p.getFechaInicio();
 		Date fechaFin = p.getFechaFin();
-		int indexAñosIn = (fechaIn.getYear())-117; 
-		int indexAñosFin = (fechaFin.getYear())-117;
-		getCbDiaIn().setSelectedIndex(fechaIn.getDay()-1);
-		getCbMesIn().setSelectedIndex(fechaIn.getMonth());
+		
+		int[] calIn = ConversorFechas.getFechaEnArray(fechaIn);
+		int [] calFin = ConversorFechas.getFechaEnArray(fechaFin);
+		int diaIn = calIn[0];
+		int diaFin = calFin[0];
+		int mesIn = calIn[1];
+		int mesFin = calFin[1];
+		int indexAñosIn = calIn[2] - 2016; 
+		int indexAñosFin = calFin[2] - 2016;
+		getCbDiaIn().setSelectedIndex(diaIn-1);
+		getCbMesIn().setSelectedIndex(mesIn);
 		getCbAñoIn().setSelectedIndex(indexAñosIn);
-		getCbDiaFin().setSelectedIndex(fechaFin.getDay()-1);
-		getCbMesFin().setSelectedIndex(fechaFin.getMonth());
+		getCbDiaFin().setSelectedIndex(diaFin-1);
+		getCbMesFin().setSelectedIndex(mesFin);
 		getCbAñoFin().setSelectedIndex(indexAñosFin);
 		getSpPrecio().setValue(precio);
 	}
