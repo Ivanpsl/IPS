@@ -117,7 +117,17 @@ public class VentanaEditarCategorias extends JDialog {
 	private void clickTabla() {
 		selectedRow=tableEditarCat.getSelectedRow();
 		if(selectedRow!=-1){
-			
+			txtNombre.setText(String.valueOf(tableEditarCat.getValueAt(selectedRow, 0)));
+			txtEdadMaxima.setText(String.valueOf(tableEditarCat.getValueAt(selectedRow, 3)));
+			txtEdadMinima.setText(String.valueOf(tableEditarCat.getValueAt(selectedRow, 2)));
+			String sexo = String.valueOf(tableEditarCat.getValueAt(selectedRow, 1));
+			if(sexo.equals("masculino")){
+				rdbtnM.setSelected(true);
+				rdbtnF.setSelected(false);
+			}else{
+				rdbtnM.setSelected(false);
+				rdbtnF.setSelected(true);
+			}
 			btnEliminarCategoria.setEnabled(true);
 			btnModificar.setEnabled(true);
 		}else{
@@ -212,6 +222,9 @@ public class VentanaEditarCategorias extends JDialog {
 			}
 			if(respuesta.equals("solapados")){
 				JOptionPane.showMessageDialog(null, "Error, las edades estan solapadas");
+			}
+			if(respuesta.equals("repetido")){
+				JOptionPane.showMessageDialog(null, "Error, nombres repetidos");
 			}
 		}
 		limpiarEtiquetas();
@@ -357,7 +370,7 @@ public class VentanaEditarCategorias extends JDialog {
 					eliminarCategoria();
 				}
 			});
-			btnEliminarCategoria.setBounds(574, 315, 119, 23);
+			btnEliminarCategoria.setBounds(539, 315, 154, 23);
 		}
 		return btnEliminarCategoria;
 	}

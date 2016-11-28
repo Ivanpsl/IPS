@@ -1362,6 +1362,22 @@ public class VentanaPrincipal extends JFrame {
 						cambiarPanelesOrganizador("pnEventosOrganizador");
 						return;
 					}
+					String respuesta = comprobarCategorias(categoriasAlCrearEvento);
+					if(!respuesta.equals("ok")){
+						if(respuesta.equals("ambos")){
+							JOptionPane.showMessageDialog(null, "Error, faltan rangos de edad por contemplar y las edades estan solapadas");
+						}
+						if(respuesta.equals("rango")){
+							JOptionPane.showMessageDialog(null, "Error, no estan todos los rangos de edad contemplados");
+						}
+						if(respuesta.equals("solapados")){
+							JOptionPane.showMessageDialog(null, "Error, las edades estan solapadas");
+						}
+						if(respuesta.equals("repetido")){
+							JOptionPane.showMessageDialog(null, "Error, nombres repetidos");
+						}
+						return;
+					}
 					// JAVIMENSAJE Mirar aqui a ver si el evento tiene todos los
 					// atributos que necesita la bd, si no, que los genere el
 					// gestor.
