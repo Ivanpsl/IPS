@@ -3,11 +3,9 @@ package igu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.text.ParseException;
 import java.util.ArrayList;
 
 import logica.Gestor;
-import logica.GestorClasificaciones;
 import logica.Vistas.Atleta;
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
@@ -16,9 +14,9 @@ public class Main {
 	static Gestor g;
 	static boolean ejecucion = true;
 
-//public static void main(String[] args) throws IOException, ParseException {
-//		g = new Gestor()
-//		}
+//	public static void main(String[] args) throws IOException, ParseException {
+//
+//	}
 
 	private static void mostrarComandosDisponibles() {
 		System.out

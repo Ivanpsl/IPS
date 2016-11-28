@@ -1151,7 +1151,8 @@ public class VentanaPrincipal extends JFrame {
 	private JPanel getPnInfoOrganizador() {
 		if (pnInfoOrganizador == null) {
 			pnInfoOrganizador = new JPanel();
-			pnInfoOrganizador.setLayout(new GridLayout(3, 2, 0, 0));
+			pnInfoOrganizador.setLayout(new BorderLayout(0, 0));
+			pnInfoOrganizador.add(getBtnComprobarPagos(), BorderLayout.EAST);
 		}
 		return pnInfoOrganizador;
 	}
@@ -2519,6 +2520,8 @@ public class VentanaPrincipal extends JFrame {
 	private JRadioButton rdbtnChip;
 	private JRadioButton rdbtnPremium;
 	
+	private JButton btnComprobarPagos;
+	
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnEliminarInscribirse;
 	private JPanel pnDFiltros;
@@ -2585,25 +2588,53 @@ public class VentanaPrincipal extends JFrame {
 						if (comprobarDatosTarjeta()) {
 							g.realizarPagoTarjeta(eventoSeleccionado.getId(), dniInscrito);
 							cambiarPanelesUsuario(0);
-							getTxNumTarjeta().setText("");
-							getTxTituTarjeta().setText("");
+							limpiarCampos();
 						} else
 							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Credito",
 									JOptionPane.ERROR_MESSAGE);
 					} else {
 						if (rdbtnEstandar.isSelected())
-							g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento);
+							g.agregarPendientesBanco(dniInscrito, precioEvento, true);
 						else if (rdbtnChip.isSelected())
-							g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento+5);
+							g.agregarPendientesBanco(dniInscrito, precioEvento+5, true);
 						else
-							g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento+10);
+							g.agregarPendientesBanco(dniInscrito, precioEvento+10, true);
 						cambiarPanelesUsuario(0);
+						limpiarCampos();
 					}
-
 				}
 			});
 		}
 		return btnFinalizarPago;
+	}
+	
+	public void limpiarCampos()
+	{
+		getTxNumTarjeta().setText("");
+		getTxTituTarjeta().setText("");
+		getTxCSV().setText("");
+		getTxFechaCaducidad().setText("");
+		getRdbtnEstandar().setSelected(true);
+		getRdbtnTarjeta().setSelected(true);
+	}
+	
+	private JButton getBtnComprobarPagos() {
+		if (btnComprobarPagos == null) {
+			btnComprobarPagos = new JButton("Comprobar Pagos Bancarios");
+			btnComprobarPagos.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					if (tablaEventosDelOrganizador.getSelectedRow() < 0)
+						JOptionPane.showMessageDialog(null, "Seleccione un evento", "Comprobar Pagos",
+								JOptionPane.ERROR_MESSAGE);
+					else
+					{
+						int row = tablaEventosDelOrganizador.getSelectedRow();
+						g.comprobarPagadosBanco(row);
+					}
+				}
+			});
+		}
+		return btnComprobarPagos;
 	}
 
 	public boolean comprobarDatosTarjeta() {
@@ -2745,7 +2776,7 @@ public class VentanaPrincipal extends JFrame {
 		if (txFechaCaducidad == null) {
 			txFechaCaducidad = new JTextField();
 			txFechaCaducidad.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			txFechaCaducidad.setBounds(412, 44, 106, 23);
+			txFechaCaducidad.setBounds(412, 44, 92, 23);
 			txFechaCaducidad.setColumns(10);
 		}
 		return txFechaCaducidad;
@@ -2754,7 +2785,7 @@ public class VentanaPrincipal extends JFrame {
 		if (txCSV == null) {
 			txCSV = new JTextField();
 			txCSV.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			txCSV.setBounds(332, 96, 86, 23);
+			txCSV.setBounds(332, 96, 56, 23);
 			txCSV.setColumns(10);
 			txCSV.addKeyListener(new KeyAdapter() {
 				@Override

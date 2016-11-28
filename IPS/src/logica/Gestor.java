@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -240,7 +242,7 @@ public class Gestor {
 	public void realizarPagoTarjeta(int idEvento, ArrayList<String> dni)
 	{
 		
-		ArrayList<Inscripcion> inscritos = eventos.get(idEvento).getInscritosEvento();
+		ArrayList<Inscripcion> inscritos = obtenerEventoPorId(idEvento).getInscritosEvento();
 		
 		for (Inscripcion i : inscritos)
     	{
@@ -260,9 +262,11 @@ public class Gestor {
 	 * Método que verifica los DNI del txt para saber que atletas han pagado.
 	 * @throws IOException 
 	 */
-	public void comprobarPagadosBanco(int idEvento, double precioEvento)
+	public void comprobarPagadosBanco(int idEvento)
 	{
 		try {
+			boolean actualizado = false;
+			
 			BufferedReader fichero = new BufferedReader(new FileReader("ficheros/banco.txt"));
 			
 			ArrayList<Inscripcion> inscritos = eventos.get(idEvento).getInscritosEvento();
@@ -285,26 +289,57 @@ public class Gestor {
 		        java.sql.Date fecha = new java.sql.Date(parsed.getTime());
 		        
 		        double dinero = Double.parseDouble(trozos[2]);
-		    	
-		    	for (Inscripcion i : inscritos)
-		    	{
-		    		if (i.getAtleta().getDNI().toUpperCase().equals(dni) 
-		    				&& fecha.before(eventos.get(idEvento).getFechaCompeticion()) && dinero >= precioEvento)
-		    		{
-		    			i.setEstado(2);
-		    			bd.actualizarEstadoPago(i, 2);
-		    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
-		    		}
-		    	}
+		        
+		        BufferedReader ficheroPagos = new BufferedReader(new FileReader("ficheros/pagos.txt"));
+		        
+		        while (ficheroPagos.ready()) {
+		        	
+		        	String linea2 = ficheroPagos.readLine();
+		        	String[] trozos2 = linea2.split(";");
+		        	
+		        	String dniPendiente = trozos2[0];
+		        	double dineroPendiente = Double.parseDouble(trozos2[1]);
+		        	
+		        	if (dni.equals(dniPendiente) && dinero >= dineroPendiente && fecha.before(obtenerEventoPorId(idEvento).getFechaCompeticion()))
+		        		for (Inscripcion i : inscritos)
+		        			if (i.getAtleta().getDNI().toUpperCase().equals(dni))
+		        			{
+				    			i.setEstado(2);
+				    			bd.actualizarEstadoPago(i, 2);
+				    			actualizado = true;
+				    			System.out.println("Se ha actualizado su estado y ahora consta como Pagado.");
+		        			}
+		        }
+		        ficheroPagos.close();
 		    }
 		    fichero.close();
+		    if (!actualizado)
+		    	System.out.println("\nNingún estado de pago ha sido actualizado.");
 		    }
 		    catch (FileNotFoundException fnfe) {
-		    	new FileNotFoundException("Fichero del banco no encontrado");
+		    	new FileNotFoundException("Fichero no encontrado");
 		    }
 		    catch (IOException ioe) {
 		    	new RuntimeException("Error de entrada/salida.");
 		    }
+	}
+	
+	public void agregarPendientesBanco(ArrayList<String> dni, double precioEvento, boolean continuar)
+	{
+		try {
+			PrintWriter fichero = new PrintWriter(new FileWriter("ficheros/pagos.txt", continuar));
+			
+			for (String s : dni)
+				fichero.write("\n"+ s + ";" + precioEvento);
+			
+			fichero.close();
+		}
+		catch (FileNotFoundException fnfe) {
+	    	new FileNotFoundException("Fichero de pagos no encontrado");
+	    }
+	    catch (IOException ioe) {
+	    	new RuntimeException("Error de entrada/salida.");
+	    }
 	}
 
 	
@@ -368,8 +403,8 @@ public class Gestor {
 	 * @param id: id del evento que finaliza
 	 */
 	public void finalizarEvento(int id){
-//		if ( obtenerEventoPorId(id)!=null && !obtenerEventoPorId(id).getFinalizado())
-//			comprobarPagadosBanco(id,obtenerEventoPorId(id).getUltimoPlazo().getPrecio());
+		if (obtenerEventoPorId(id)!=null && !obtenerEventoPorId(id).getFinalizado())
+			comprobarPagadosBanco(id);
 		asignarDorsales(id);
 		gF.obtenerResultadosEvento(obtenerEventoPorId(id),bd);
 		eventos.get(id).setFinalizado();
