@@ -87,6 +87,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
+import org.jvnet.substance.SubstanceLookAndFeel;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -182,6 +183,7 @@ public class VentanaPrincipal extends JFrame {
 			public void run() {
 				try {
 					VentanaPrincipal frame = new VentanaPrincipal();
+					SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.MistAquaSkin");
 					frame.setLocationRelativeTo(null);
 					frame.setResizable(false);
 					frame.setVisible(true);
@@ -1129,7 +1131,7 @@ public class VentanaPrincipal extends JFrame {
 				@Override
 				public void mousePressed(MouseEvent e) {
 					int fila = tablaEventosDelOrganizador.getSelectedRow();
-					if (organizador.getMisEventos().size() > 0) {
+					if (organizador.getMisEventos().size() > 0 && fila >= 0) {
 						eventoPulsado = organizador.getMisEventos().get(fila);
 						if (eventoPulsado.comprobarFinalizado())
 							getBtEditarEventoOr().setEnabled(true);
@@ -2612,7 +2614,7 @@ public class VentanaPrincipal extends JFrame {
 		if (rdbtnTransferencia == null) {
 			rdbtnTransferencia = new JRadioButton("Transferencia");
 			rdbtnTransferencia.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			rdbtnTransferencia.setBounds(6, 228, 109, 23);
+			rdbtnTransferencia.setBounds(6, 228, 128, 23);
 			btGroupPagos.add(rdbtnTransferencia);
 		}
 		return rdbtnTransferencia;
@@ -2666,8 +2668,7 @@ public class VentanaPrincipal extends JFrame {
 						JOptionPane.showMessageDialog(null, "Seleccione un evento", "Comprobar Pagos",
 								JOptionPane.ERROR_MESSAGE);
 					else {
-						int row = tablaEventosDelOrganizador.getSelectedRow();
-						g.comprobarPagadosBanco(row);
+						g.comprobarPagadosBanco(eventoPulsado.getId());
 					}
 				}
 			});
