@@ -12,15 +12,11 @@ import javax.swing.SwingConstants;
 
 import java.awt.Font;
 
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
 import javax.swing.JTextField;
 import javax.swing.border.TitledBorder;
 
 import logica.Vistas.Evento;
 import logica.Vistas.Inscripcion;
-
-import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 

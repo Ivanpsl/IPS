@@ -87,7 +87,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
-import org.jvnet.substance.SubstanceLookAndFeel;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -1665,7 +1664,8 @@ public class VentanaPrincipal extends JFrame {
 	/**
 	 * LO QUE DEBERIA SER
 	 */
-	private void crearEvetno() {
+	@SuppressWarnings("unused")
+	private void crearEvento() {
 		String nombre = getTfNombreEvento().getText();
 		String tipo = getCbTipoEventos().getSelectedItem().toString();
 		String Stdistancia = getTfDistanciaEvento().getText();
@@ -2266,6 +2266,7 @@ public class VentanaPrincipal extends JFrame {
 		return pnEventoSeleccionado;
 	}
 
+	@SuppressWarnings("unused")
 	private JLabel getLblPlazosDeInscripcin() {
 		if (lblPlazosDeInscripcin == null) {
 			lblPlazosDeInscripcin = new JLabel("Plazos de inscripci\u00F3n");
@@ -2301,7 +2302,7 @@ public class VentanaPrincipal extends JFrame {
 		if (listFechasInscrip == null) {
 			plazosInscripcionNuevoEvento = new ArrayList<PlazoInscripcion>();
 
-			listFechasInscrip = new JList();
+			listFechasInscrip = new JList<String>();
 			listFechasInscrip.setModel(modeloListaFechasInscripcion);
 
 		}
@@ -2360,10 +2361,9 @@ public class VentanaPrincipal extends JFrame {
 		return lblFechaComienzoEvento;
 	}
 
-	private JComboBox getCbDia() {
+	private JComboBox<Integer> getCbDia() {
 		if (cbDia == null) {
-			cbDia = new JComboBox();
-
+			cbDia = new JComboBox<Integer>();
 			Integer[] dias = new Integer[31];
 			for (int i = 0; i < dias.length; i++) {
 				dias[i] = i + 1;
@@ -2375,9 +2375,9 @@ public class VentanaPrincipal extends JFrame {
 		return cbDia;
 	}
 
-	private JComboBox getCbMes() {
+	private JComboBox<String> getCbMes() {
 		if (cbMes == null) {
-			cbMes = new JComboBox();
+			cbMes = new JComboBox<String>();
 			String[] meses = ConversorFechas.getMesestoString();
 			DefaultComboBoxModel<String> modelo = new DefaultComboBoxModel<String>(meses);
 			cbMes.setModel(modelo);
@@ -2386,14 +2386,12 @@ public class VentanaPrincipal extends JFrame {
 		return cbMes;
 	}
 
-	private JComboBox getCbAño() {
+	private JComboBox<Integer> getCbAño() {
 		if (cbAño == null) {
-			cbAño = new JComboBox();
+			cbAño = new JComboBox<Integer>();
 			Integer[] años = new Integer[10];
 			for (int i = 0; i < años.length; i++) {
-				años[i] = 2000 + i + 16; // Que la fecha empiece este aÃƒÂ±o
-											// 2016
-
+				años[i] = 2000 + i + 16; // Que la fecha empiece este año 2016
 			}
 			DefaultComboBoxModel<Integer> modelo = new DefaultComboBoxModel<Integer>(años);
 			cbAño.setModel(modelo);
@@ -2668,7 +2666,6 @@ public class VentanaPrincipal extends JFrame {
 						JOptionPane.showMessageDialog(null, "Seleccione un evento", "Comprobar Pagos",
 								JOptionPane.ERROR_MESSAGE);
 					else {
-						System.out.println(eventoPulsado.getId());
 						g.comprobarPagadosBanco(eventoPulsado.getId());
 					}
 				}

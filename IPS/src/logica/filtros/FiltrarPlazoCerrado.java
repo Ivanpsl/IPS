@@ -9,7 +9,7 @@ public class FiltrarPlazoCerrado implements Filtro{
 	@Override
 	public ArrayList<Evento> filtrar(ArrayList<Evento> eventos) {
 		ArrayList<Evento> filtrado = new ArrayList<Evento>();
-		for(Evento e: filtrado){
+		for(Evento e: eventos){
 			if(e.getUltimoPlazo()!=null) 
 				filtrado.add(e);
 		}
