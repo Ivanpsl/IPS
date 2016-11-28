@@ -37,7 +37,6 @@ public class Evento {
 	Date fechaComienzo;
 	int numeroEtapas;
 
-	//De momento se considera una unica fecha de cada tipo. 
 	
 	public Evento(int id, String name, String type, 
 			double distancia, int plazasTotales, boolean finalizado,ArrayList<Categoria> categoriasDelEvento,
@@ -127,7 +126,8 @@ public class Evento {
 		return sB.toString();
 	}
 	public boolean getFinalizado(){
-		return finalizado;
+		return comprobarFinalizado();
+		
 	}
 	public String getNombre() {
 		return this.nombre;
@@ -196,7 +196,7 @@ public class Evento {
 		ArrayList<PlazoInscripcion> arrayFinal = new ArrayList<PlazoInscripcion>();
 		if(plazosDeInscripcion!=null && plazosDeInscripcion.size()>0){
 			for(PlazoInscripcion plazo: plazosDeInscripcion){
-				if(fechaActual.before(plazo.getFechaFin())){
+				if(fechaActual.after(plazo.getFechaFin())){
 					cambio=true;
 				}else arrayFinal.add(plazo);
 			}

@@ -49,6 +49,8 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 	private JButton btnCrearPlazo;
 	private JButton btnCancelar;
 	
+	
+	
 	//Modelos combo
 	DefaultComboBoxModel<Integer> modeloDiasA;
 	DefaultComboBoxModel<Integer> modeloDiasB;
@@ -283,6 +285,10 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 					fechaInicio = ConversorFechas.crearFecha(getCbDiaIn().getSelectedItem().toString(), getCbMesIn().getSelectedItem().toString(), getCbAñoIn().getSelectedItem().toString());
 					fechaFin = ConversorFechas.crearFecha(getCbDiaFin().getSelectedItem().toString(), getCbMesFin().getSelectedItem().toString(), getCbAñoFin().getSelectedItem().toString());
 					
+					if(plazoAnterior != null){
+						//vp.plazosInscripcionNuevoEvento.remove(plazoAnterior);
+						vp.borrarDelModeloListFechaIns(plazoAnterior);
+					}
 					if(fechasCorrectas()){
 						PlazoInscripcion plazo = new PlazoInscripcion(fechaInicio, fechaFin, (int) getSpPrecio().getValue());
 						vp.añadirPlazo(plazo);
