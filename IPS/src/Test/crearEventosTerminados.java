@@ -16,10 +16,11 @@ public class crearEventosTerminados {
 	static ConexionBD bd;
 	static Gestor g;
 	
-	static int numEvento = 0; //Si sumas esto el evento cambia de nombre y de id;
+	static int numEvento = 1; //Si sumas esto el evento cambia de nombre y de id;
 	public static void main(String[] args) {
 		bd = new ConexionBD();
 		g = new Gestor();
+		crearEventos();
 	}
 	
 	private static void crearEventos(){
@@ -31,8 +32,9 @@ public class crearEventosTerminados {
 		PlazoInscripcion p1 = new PlazoInscripcion(f1, f2, 69);
 		ArrayList<PlazoInscripcion> listPla = new ArrayList<PlazoInscripcion>();
 		listPla.add(p1);
-		Evento e = new Evento(669 + numEvento, "Evento trucado"+numEvento, "truco", 69, 69, false, GestorCategorias.getCategoriasDefecto(), listPla, f3, 699);
-		bd.añadirEventoABD(e);
+//		Evento e = new Evento("Evento trucado"+numEvento, "truco", 69, 69, false, GestorCategorias.getCategoriasDefecto(), listPla, f3, 699, 3);
+		Evento e = new Evento("Evento trucado"+numEvento, "truco", 69, 69, f3, GestorCategorias.getCategoriasDefecto(), listPla, 699, 3);
+		//		bd.añadirEventoABD(e);
 		//Ya tenemo el evento. Ahora a crear inscripciones
 		cal.set(1995, 3, 2);
 		Date cumples = new Date(cal.getTimeInMillis());
@@ -59,7 +61,7 @@ public class crearEventosTerminados {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+		bd.añadirEventoABD(e);
 		System.out.println("Datos del evento: \n"+e.toString());
 	}
 
