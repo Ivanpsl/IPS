@@ -613,5 +613,9 @@ public class Gestor {
 		filtros.toArray(f);
 		return new GestorFiltros().filtrar(lista, f);
 	}
-
+	
+	//Test
+	public void setEventoSelccionado(Evento e){
+		this.eventoSeleccionado = e;
+	}
 }
