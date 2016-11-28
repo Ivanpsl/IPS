@@ -27,6 +27,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -84,6 +85,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
+import javax.swing.event.ChangeListener;
+import javax.swing.event.ChangeEvent;
 
 public class VentanaPrincipal extends JFrame {
 
@@ -2493,6 +2496,7 @@ public class VentanaPrincipal extends JFrame {
 	private JTextField txtEs;
 	private JLabel lbInfor;
 	private final ButtonGroup btGroupPagos = new ButtonGroup();
+	private final ButtonGroup btGroupCrono = new ButtonGroup();
 
 	ArrayList<String> dniInscrito;
 	Evento eventoSeleccionado;
@@ -2506,6 +2510,15 @@ public class VentanaPrincipal extends JFrame {
 	private JButton btnCargarFichero;
 	private JRadioButton rdbtnMasculino;
 	private JRadioButton rdbtnFemenino;
+	private JLabel lbFechaCaducidad;
+	private JTextField txFechaCaducidad;
+	private JTextField txCSV;
+	private JLabel lbCSV;
+	private JLabel lbCronometraje;
+	private JRadioButton rdbtnEstandar;
+	private JRadioButton rdbtnChip;
+	private JRadioButton rdbtnPremium;
+	
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private JButton btnEliminarInscribirse;
 	private JPanel pnDFiltros;
@@ -2524,6 +2537,10 @@ public class VentanaPrincipal extends JFrame {
 			pnPagar.add(getPnTransferencia());
 			pnPagar.add(getLbPrecioTotal());
 			pnPagar.add(getTxPrecioTotal());
+			pnPagar.add(getLbCronometraje());
+			pnPagar.add(getRdbtnEstandar());
+			pnPagar.add(getRdbtnChip());
+			pnPagar.add(getRdbtnPremium());
 		}
 		return pnPagar;
 	}
@@ -2561,7 +2578,7 @@ public class VentanaPrincipal extends JFrame {
 	private JButton getBtnFinalizarPago() {
 		if (btnFinalizarPago == null) {
 			btnFinalizarPago = new JButton("Finalizar Pago");
-			btnFinalizarPago.setBounds(800, 323, 128, 23);
+			btnFinalizarPago.setBounds(952, 382, 128, 23);
 			btnFinalizarPago.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
 					if (rdbtnTarjeta.isSelected()) {
@@ -2574,7 +2591,12 @@ public class VentanaPrincipal extends JFrame {
 							JOptionPane.showMessageDialog(null, "Datos incorrectos", "Tarjeta Credito",
 									JOptionPane.ERROR_MESSAGE);
 					} else {
-						g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento);
+						if (rdbtnEstandar.isSelected())
+							g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento);
+						else if (rdbtnChip.isSelected())
+							g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento+5);
+						else
+							g.comprobarPagadosBanco(eventoSeleccionado.getId(), precioEvento+10);
 						cambiarPanelesUsuario(0);
 					}
 
@@ -2585,8 +2607,18 @@ public class VentanaPrincipal extends JFrame {
 	}
 
 	public boolean comprobarDatosTarjeta() {
-		if (getTxNumTarjeta().getText().isEmpty() || getTxTituTarjeta().getText().isEmpty())
+		
+		Date fechaActual = new Date(Calendar.getInstance().getTime().getTime());
+		
+		try {
+			java.util.Date fechaTarjeta = new SimpleDateFormat("dd/MM/yyy").parse(getTxFechaCaducidad().getText());
+			if (getTxNumTarjeta().getText().isEmpty() || getTxTituTarjeta().getText().isEmpty() 
+					|| fechaTarjeta.before(fechaActual) || getTxCSV().getText().isEmpty())
+				return false;
+		}
+		catch (Exception e){
 			return false;
+		}
 		return true;
 	}
 
@@ -2595,12 +2627,16 @@ public class VentanaPrincipal extends JFrame {
 			pnTarjeta = new JPanel();
 			pnTarjeta.setBorder(
 					new TitledBorder(null, "Datos Tarjeta", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnTarjeta.setBounds(163, 62, 448, 145);
+			pnTarjeta.setBounds(163, 62, 528, 145);
 			pnTarjeta.setLayout(null);
 			pnTarjeta.add(getLbNumeroTarjeta());
 			pnTarjeta.add(getTxNumTarjeta());
 			pnTarjeta.add(getLbTitularTarjeta());
 			pnTarjeta.add(getTxTituTarjeta());
+			pnTarjeta.add(getLbFechaCaducidad());
+			pnTarjeta.add(getTxFechaCaducidad());
+			pnTarjeta.add(getTxCSV());
+			pnTarjeta.add(getLbCSV());
 		}
 		return pnTarjeta;
 	}
@@ -2627,7 +2663,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			txNumTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			txNumTarjeta.setBounds(76, 44, 288, 23);
+			txNumTarjeta.setBounds(76, 44, 185, 23);
 			txNumTarjeta.setColumns(10);
 		}
 		return txNumTarjeta;
@@ -2656,7 +2692,7 @@ public class VentanaPrincipal extends JFrame {
 				}
 			});
 			txTituTarjeta.setFont(new Font("Tahoma", Font.PLAIN, 14));
-			txTituTarjeta.setBounds(76, 96, 288, 23);
+			txTituTarjeta.setBounds(76, 96, 185, 23);
 			txTituTarjeta.setColumns(10);
 		}
 		return txTituTarjeta;
@@ -2667,7 +2703,7 @@ public class VentanaPrincipal extends JFrame {
 			pnTransferencia = new JPanel();
 			pnTransferencia.setBorder(
 					new TitledBorder(null, "Datos del Banco", TitledBorder.LEADING, TitledBorder.TOP, null, null));
-			pnTransferencia.setBounds(163, 219, 448, 103);
+			pnTransferencia.setBounds(163, 219, 528, 103);
 			pnTransferencia.setLayout(null);
 			pnTransferencia.add(getLbNumeroBanco());
 			pnTransferencia.add(getTxtEs());
@@ -2695,6 +2731,104 @@ public class VentanaPrincipal extends JFrame {
 			txtEs.setColumns(10);
 		}
 		return txtEs;
+	}
+	
+	private JLabel getLbFechaCaducidad() {
+		if (lbFechaCaducidad == null) {
+			lbFechaCaducidad = new JLabel("Fecha (dd/MM/yy):");
+			lbFechaCaducidad.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lbFechaCaducidad.setBounds(284, 44, 158, 23);
+		}
+		return lbFechaCaducidad;
+	}
+	private JTextField getTxFechaCaducidad() {
+		if (txFechaCaducidad == null) {
+			txFechaCaducidad = new JTextField();
+			txFechaCaducidad.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txFechaCaducidad.setBounds(412, 44, 106, 23);
+			txFechaCaducidad.setColumns(10);
+		}
+		return txFechaCaducidad;
+	}
+	private JTextField getTxCSV() {
+		if (txCSV == null) {
+			txCSV = new JTextField();
+			txCSV.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			txCSV.setBounds(332, 96, 86, 23);
+			txCSV.setColumns(10);
+			txCSV.addKeyListener(new KeyAdapter() {
+				@Override
+				public void keyTyped(KeyEvent arg0) {
+					char c = arg0.getKeyChar();
+					if (!Character.isDigit(c)) {
+						arg0.consume();
+					}
+				}
+			});
+		}
+		return txCSV;
+	}
+	private JLabel getLbCSV() {
+		if (lbCSV == null) {
+			lbCSV = new JLabel("CSV:");
+			lbCSV.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			lbCSV.setBounds(284, 96, 46, 20);
+		}
+		return lbCSV;
+	}
+	private JLabel getLbCronometraje() {
+		if (lbCronometraje == null) {
+			lbCronometraje = new JLabel("Opciones de cronometraje:");
+			lbCronometraje.setFont(new Font("Tahoma", Font.BOLD, 16));
+			lbCronometraje.setBounds(733, 22, 283, 29);
+		}
+		return lbCronometraje;
+	}
+	private JRadioButton getRdbtnEstandar() {
+		if (rdbtnEstandar == null) {
+			rdbtnEstandar = new JRadioButton("Est\u00E1ndar (Medici\u00F3n manual) - 0\u20AC");
+			rdbtnEstandar.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					if (rdbtnEstandar.isSelected())
+						getTxPrecioTotal().setText(precioTotal + "€");
+				}
+			});
+			rdbtnEstandar.setSelected(true);
+			rdbtnEstandar.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			rdbtnEstandar.setBounds(733, 63, 283, 45);
+			btGroupCrono.add(rdbtnEstandar);
+		}
+		return rdbtnEstandar;
+	}
+	private JRadioButton getRdbtnChip() {
+		if (rdbtnChip == null) {
+			rdbtnChip = new JRadioButton("Chip (Registro autom\u00E1tico en meta) - 5\u20AC");
+			rdbtnChip.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					if (rdbtnChip.isSelected())
+						getTxPrecioTotal().setText(precioTotal + 5*dniInscrito.size() + "€");
+				}
+			});
+			rdbtnChip.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			rdbtnChip.setBounds(733, 111, 283, 45);
+			btGroupCrono.add(rdbtnChip);
+		}
+		return rdbtnChip;
+	}
+	private JRadioButton getRdbtnPremium() {
+		if (rdbtnPremium == null) {
+			rdbtnPremium = new JRadioButton("Premium (Reloj localizador) - 10\u20AC");
+			rdbtnPremium.addChangeListener(new ChangeListener() {
+				public void stateChanged(ChangeEvent arg0) {
+					if (rdbtnPremium.isSelected())
+						getTxPrecioTotal().setText(precioTotal + 10*dniInscrito.size() + "€");
+				}
+			});
+			rdbtnPremium.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			rdbtnPremium.setBounds(733, 162, 283, 45);
+			btGroupCrono.add(rdbtnPremium);
+		}
+		return rdbtnPremium;
 	}
 
 	private JLabel getLbInfor() {
@@ -2753,7 +2887,7 @@ public class VentanaPrincipal extends JFrame {
 		if (lbPrecioTotal == null) {
 			lbPrecioTotal = new JLabel("Precio Total:");
 			lbPrecioTotal.setFont(new Font("Tahoma", Font.PLAIN, 16));
-			lbPrecioTotal.setBounds(800, 62, 109, 29);
+			lbPrecioTotal.setBounds(952, 259, 109, 29);
 		}
 		return lbPrecioTotal;
 	}
@@ -2763,7 +2897,7 @@ public class VentanaPrincipal extends JFrame {
 			txPrecioTotal = new JTextField();
 			txPrecioTotal.setHorizontalAlignment(SwingConstants.CENTER);
 			txPrecioTotal.setEditable(false);
-			txPrecioTotal.setBounds(800, 104, 109, 37);
+			txPrecioTotal.setBounds(952, 303, 109, 37);
 			txPrecioTotal.setColumns(10);
 		}
 		return txPrecioTotal;
@@ -2840,6 +2974,7 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem mntmSalir;
 	private JScrollPane scrollPane_2;
 	private JScrollPane scrollPane_3;
+	
 	private JSpinner getSpNumeroEtapas() {
 		if (spNumeroEtapas == null) {
 			spNumeroEtapas = new JSpinner();

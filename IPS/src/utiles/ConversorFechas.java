@@ -87,6 +87,7 @@ public class ConversorFechas {
 		Date fecha = new Date(Calendar.getInstance().getTime().getTime());
 		return fecha;
 	}
+	
 	public static Date crearFecha(String dia, String numMes, String año){
 		int diaI = Integer.parseInt(dia);
 		int mes = 0;
