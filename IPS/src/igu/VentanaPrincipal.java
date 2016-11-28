@@ -183,7 +183,7 @@ public class VentanaPrincipal extends JFrame {
 			public void run() {
 				try {
 					VentanaPrincipal frame = new VentanaPrincipal();
-					SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.MistAquaSkin");
+					//SubstanceLookAndFeel.setSkin("org.jvnet.substance.skin.MistAquaSkin");
 					frame.setLocationRelativeTo(null);
 					frame.setResizable(false);
 					frame.setVisible(true);
@@ -2668,6 +2668,7 @@ public class VentanaPrincipal extends JFrame {
 						JOptionPane.showMessageDialog(null, "Seleccione un evento", "Comprobar Pagos",
 								JOptionPane.ERROR_MESSAGE);
 					else {
+						System.out.println(eventoPulsado.getId());
 						g.comprobarPagadosBanco(eventoPulsado.getId());
 					}
 				}
