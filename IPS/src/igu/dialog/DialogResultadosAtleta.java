@@ -339,7 +339,7 @@ public class DialogResultadosAtleta extends JDialog {
 //			if(ins.getTiemposPorEtapas().size()-1==i){
 //				sB.append("Total: " + ins.getTiemposPorEtapas().get(i) + "seg.\n");
 //			}else 
-			sB.append("Etapa " + i+1 + ": "+ ins.getTiemposPorEtapas().get(i)+ "seg.\n");
+			sB.append("Etapa " + (i+1) + ": "+ ins.getTiemposPorEtapas().get(i)+ "seg.\n");
 		}
 		txaParciales.setText(sB.toString());
 	}
