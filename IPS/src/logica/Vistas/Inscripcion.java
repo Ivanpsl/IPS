@@ -46,7 +46,7 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		this.fechaInscripcion = fechaInscrip;
 		this.estado = PREINSCRITO;
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
-		this.tiempo_segundos=10000;
+		this.tiempo_segundos=-1;
 		this.dorsal=-1;
 		calcularCategoria();
 		

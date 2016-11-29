@@ -1219,24 +1219,15 @@ public class VentanaPrincipal extends JFrame {
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-					if (eventoPulsado.comprobarFinalizado()) {
-						JOptionPane.showMessageDialog(null,
-								"El evento aún no ha finalizado, no se pueden cargar resultados",
-								"Evento no finalizado!", JOptionPane.ERROR_MESSAGE);
-					}
+//					if (eventoPulsado.comprobarFinalizado()) {
+//						JOptionPane.showMessageDialog(null,
+//								"El evento aún no ha finalizado, no se pueden cargar resultados",
+//								"Evento no finalizado!", JOptionPane.ERROR_MESSAGE);
+//					}
 					boolean salioBien = false;
 
 					JFileChooser chooser = new JFileChooser();
-					FileNameExtensionFilter filter = new FileNameExtensionFilter(".dat File", new String[] { "dat" }); // Aqui
-																														// le
-																														// podemos
-																														// decir
-																														// que
-																														// mas
-																														// tipos
-																														// de
-																														// archivos
-																														// admite.
+					FileNameExtensionFilter filter = new FileNameExtensionFilter(".dat File", new String[] { "dat" });
 					chooser.setFileFilter(filter);
 					chooser.addChoosableFileFilter(filter);
 					int returnVal = chooser.showOpenDialog(VentanaPrincipal.this);

@@ -180,6 +180,7 @@ public class Evento {
 			if(p.getDorsal()==dorsal){
 				p.setTiempoSegundos(tiempos.get(tiempos.size()-1));
 				p.setTiemposPorEtapas(tiempos);
+				System.out.println(tiempos.toString());
 				bd.asignarTiempo(p, tiempos);
 				encontrado=true;
 			}

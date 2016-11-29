@@ -83,7 +83,7 @@ public class Decodificador {
 		StringBuilder sB = new StringBuilder();
 		for(Integer resultado : resultados)
 			sB.append(resultado+"@");
-		return null;
+		return sB.toString();
 	}
 	
 	

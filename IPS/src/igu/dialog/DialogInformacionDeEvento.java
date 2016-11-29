@@ -204,11 +204,11 @@ public class DialogInformacionDeEvento extends JDialog {
 					for(Inscripcion ins: ev.getInscritosEvento())
 						if(ins.getCategoria().equals(cmBoxCategoria.getSelectedItem()) || 
 								cmBoxCategoria.getSelectedItem().toString().toUpperCase().equals("ABSOLUTA")){
-							if(ins.getResultado()>0) inscritosQueFinalizaron.add(ins);
+							if(ins.getResultado()>0 && ins.getDorsal() > -1) inscritosQueFinalizaron.add(ins);
 							else inscritosQueNoFinalizaron.add(ins);
 						}
 				
-				for (int i=1; i<inscritosQueFinalizaron.size();i++ ) {
+				for (int i=0; i<inscritosQueFinalizaron.size();i++ ) {
 					String[] fila = new String[4];
 					fila[0] = ""+i;
 					fila[1] = ""+inscritosQueFinalizaron.get(i).getDorsal();

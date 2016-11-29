@@ -268,7 +268,9 @@ public  class ConexionBD {
 				
 				PreparedStatement st;
 				st = con.prepareStatement("UPDATE INSCRIPCION SET INS_RESULTADOS_SEG=? WHERE AT_DNI=?");
-				st.setString(1,Decodificador.codificarResultados(tiempos));
+				String s = Decodificador.codificarResultados(tiempos);
+				System.out.println("Tiempos decodificados: " + s + " Dorsal: " + inscripcion.getDorsal());
+				st.setString(1,s);
 				st.setString(2, inscripcion.getAtleta().getDNI());
 				int res = st.executeUpdate();
 				System.out.println("\n[BD] " + res + " Tablas han sido actualizadas: \t");
