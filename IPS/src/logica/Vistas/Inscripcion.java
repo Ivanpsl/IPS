@@ -159,6 +159,12 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	public String getCategoria(){
 		return categoriaStr;
 	}
+	public Categoria getCategoriaObj(){
+		return categoria;
+	}
+	public void setCategoriaObj(Categoria c){
+		categoria=c;
+	}
 	public String toString()
 	{
 		String dorsal;

@@ -41,10 +41,12 @@ public class GestorClasificaciones {
 			for(Inscripcion corredor: ins){
 				if(cat.estaDentro(corredor.getAtleta()) || cat.getNombre().equals(corredor.getCategoria())){
 					aux.add(corredor);
+					corredor.setCategoriaObj(cat);
 				}
 			}
 			ordenar(aux);
 			Clasificacion clas= new Clasificacion(cat.getNombre(), aux);
+			
 			clasificaciones.add(clas);
 		}
 		return clasificaciones;
@@ -91,7 +93,7 @@ public class GestorClasificaciones {
 	public int obtenerPosicion(Inscripcion inscrito,Evento evento){
 		Categoria categoria= null;
 		for(Categoria c: evento.getCategorias()){
-			if(c.estaDentro(inscrito.getAtleta())){
+			if(c.estaDentro(inscrito.getAtleta())&& categoria==null){
 				categoria=c;
 			}
 		}if(categoria!=null){

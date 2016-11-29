@@ -194,13 +194,19 @@ public class DialogInformacionDeEvento extends JDialog {
 	
 		for(Clasificacion cl : ev.getClasificaciones()){
 			ModeloNoEditable modeloTabla = new ModeloNoEditable(cabecera, 0);
-				if(cmBoxCategoria.getSelectedItem().equals(cl.getCategoria())){
+				if(cmBoxCategoria.getSelectedItem().toString().toUpperCase().equals(cl.getCategoria().toUpperCase())){
 					ArrayList<Inscripcion> inscritosQueFinalizaron=new ArrayList<Inscripcion>();
 					ArrayList<Inscripcion> inscritosQueNoFinalizaron = new ArrayList<Inscripcion>();
-					for(Inscripcion ins: cl.getCorredores()){
-						if(ins.getResultado()>0 && ins.getDorsal()>-1) inscritosQueFinalizaron.add(ins);
-						else inscritosQueNoFinalizaron.add(ins);
-					}
+//					for(Inscripcion ins: cl.getCorredores()){
+//						if(ins.getResultado()>0 && ins.getDorsal()>-1) inscritosQueFinalizaron.add(ins);
+//						else inscritosQueNoFinalizaron.add(ins);
+//					}
+					for(Inscripcion ins: ev.getInscritosEvento())
+						if(ins.getCategoria().equals(cmBoxCategoria.getSelectedItem()) || 
+								cmBoxCategoria.getSelectedItem().toString().toUpperCase().equals("ABSOLUTA")){
+							if(ins.getResultado()>0 && ins.getDorsal()>-1) inscritosQueFinalizaron.add(ins);
+							else inscritosQueNoFinalizaron.add(ins);
+						}
 				
 				for (int i=1; i<inscritosQueFinalizaron.size();i++ ) {
 					String[] fila = new String[4];

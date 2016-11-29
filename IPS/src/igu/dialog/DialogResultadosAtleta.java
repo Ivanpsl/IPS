@@ -77,6 +77,7 @@ public class DialogResultadosAtleta extends JDialog {
 	public DialogResultadosAtleta(Atleta atleta, Gestor g, VentanaPrincipal vP) {
 		setTitle("Gestor eventos: resultados de " + atleta.getNombre() + " (DNI: "+atleta.getDNI()  +")");
 		setModal(true);
+		setLocationRelativeTo(vP);
 		this.atleta=atleta;
 		this.g=g;
 		this.vP=vP;
@@ -325,8 +326,13 @@ public class DialogResultadosAtleta extends JDialog {
 		txtNombreEvento.setText(eventoSeleccionado.getNombre());
 		txtTipoEvento.setText(eventoSeleccionado.getTipo());
 		txtCategoria.setText(ins.getCategoria());
-		txtPosAbsoluta.setText(String.valueOf(eventoSeleccionado.obtenerPosicionAbsoluta(ins)));
-		txtPosicionCategoria.setText("" +eventoSeleccionado.obtenerPosicionCategoria(ins));
+		int posAb=eventoSeleccionado.obtenerPosicionAbsoluta(ins);
+		if(posAb>0)
+			txtPosAbsoluta.setText(""+posAb);
+		
+		int posCat= eventoSeleccionado.obtenerPosicionCategoria(ins);
+		if(posCat>0)
+			txtPosicionCategoria.setText("" +posCat);
 		txtTiempo.setText("" + ins.getTiempoSegundos()+ "s");
 		StringBuilder sB = new StringBuilder();
 		for(int i=0; i< ins.getTiemposPorEtapas().size(); i++)
