@@ -415,7 +415,7 @@ public class Gestor {
 		if (obtenerEventoPorId(id) != null && !obtenerEventoPorId(id).getFinalizado())
 			comprobarPagadosBanco(id);
 		asignarDorsales(id);
-		gF.obtenerResultadosEvento(obtenerEventoPorId(id), bd);
+		//gF.obtenerResultadosEvento(obtenerEventoPorId(id), bd);
 		eventos.get(id).setFinalizado();
 		bd.marcarComoFinalizado(obtenerEventoPorId(id));
 	}

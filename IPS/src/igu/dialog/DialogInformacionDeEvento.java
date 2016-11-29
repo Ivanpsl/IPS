@@ -204,7 +204,7 @@ public class DialogInformacionDeEvento extends JDialog {
 					for(Inscripcion ins: ev.getInscritosEvento())
 						if(ins.getCategoria().equals(cmBoxCategoria.getSelectedItem()) || 
 								cmBoxCategoria.getSelectedItem().toString().toUpperCase().equals("ABSOLUTA")){
-							if(ins.getResultado()>0 && ins.getDorsal()>-1) inscritosQueFinalizaron.add(ins);
+							if(ins.getResultado()>0) inscritosQueFinalizaron.add(ins);
 							else inscritosQueNoFinalizaron.add(ins);
 						}
 				

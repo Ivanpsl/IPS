@@ -1288,6 +1288,7 @@ public class VentanaPrincipal extends JFrame {
 						try {
 							g.cargarTiemposDesdeFichero(eventoPulsado, f);
 							salioBien = true;
+							
 						} catch (Exception e1) {
 							JOptionPane.showMessageDialog(null,
 									"Ha cascado algo en la lectura del fichero, revisalo y vuelve a cargarlo. Gracias.\n Debe cumplir el siguiente formato: \nidEvento;dorsal;tEtapa1@tEtapa2@tEtapa3.....");

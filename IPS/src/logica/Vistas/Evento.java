@@ -80,6 +80,9 @@ public class Evento {
 		this.numeroEtapas = nEtapas;
 		//Tipos de eventos
 		//cargarTiposEventosPorDefecto(tiposEventosDefecto);
+		Date fecha = new Date(Calendar.getInstance().getTime().getTime());
+		if(fechaComienzo.getTime() < fecha.getTime())
+			this.finalizado = true;
 	}
 	
 	/**
@@ -175,7 +178,7 @@ public class Evento {
 		boolean encontrado=false;
 		for(Inscripcion p : inscripciones){
 			if(p.getDorsal()==dorsal){
-				p.setTiempoSegundos(tiempos.get(tiempos.get(tiempos.size()-1)));
+				p.setTiempoSegundos(tiempos.get(tiempos.size()-1));
 				p.setTiemposPorEtapas(tiempos);
 				bd.asignarTiempo(p, tiempos);
 				encontrado=true;
