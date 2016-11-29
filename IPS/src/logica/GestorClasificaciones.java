@@ -36,8 +36,8 @@ public class GestorClasificaciones {
 		//por cada categoria generamos una clasificacion
 		ArrayList<Inscripcion> aux = new ArrayList<Inscripcion>();
 		for(Categoria cat : categorias){
-			aux.clear();
-		
+			//aux.clear();
+			aux = new ArrayList<Inscripcion>();
 			for(Inscripcion corredor: ins){
 				if(cat.estaDentro(corredor.getAtleta()) || cat.getNombre().equals(corredor.getCategoria())){
 					aux.add(corredor);
