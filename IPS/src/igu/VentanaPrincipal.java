@@ -679,11 +679,11 @@ public class VentanaPrincipal extends JFrame {
 
 	private void cargarCabeceraAtleta() {
 		Atleta at = g.getAtletaIdentificado();
-		txtDNIAtleta.setText(at.getDNI());
+		txtDNIAtleta.setText( at.getDNI());
 		txtNombreAtleta.setText(at.getNombre());
 		txtFechaNacimiento.setText(at.getFechaNacimiento());
 		pnAtletaResumen
-				.setBorder(new TitledBorder(null, at.getDNI(), TitledBorder.LEADING, TitledBorder.TOP, null, null));
+				.setBorder(new TitledBorder(null,at.getNombre() + " ("+ at.getDNI() +")", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 
 	}
 

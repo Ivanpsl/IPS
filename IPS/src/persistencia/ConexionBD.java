@@ -123,8 +123,10 @@ public  class ConexionBD {
 					if(Asignador.asignarAtleta(g, inscripcion, dni))
 						System.out.println("Inscripcion asignada a atleta correctamente." 
 								+ "  ---> " + inscripcion.toString());
-					if(Asignador.asignarAEvento(g, inscripcion, id))
+					if(Asignador.asignarAEvento(g, inscripcion, id)){
 						System.out.println("Inscripcion asignada a evento correctamente.");//   -----> " + inscripcion.toString());
+						inscripcion.calcularCategoria();
+					}
 				}
 				rs3.close();
 				st.close();

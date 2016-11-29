@@ -47,6 +47,7 @@ public class Asignador {
 		for (Evento ev : g.getEventos()) {
 			if (id == ev.getId()) {
 				ev.añadirInscrito(ins);
+				ins.setEvento(ev);
 				return true;
 			}
 		}

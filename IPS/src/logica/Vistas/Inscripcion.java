@@ -111,7 +111,6 @@ public class Inscripcion implements Comparable<Inscripcion> {
 		this.fechaLimite = ConversorFechas.sumarRestarDiasFecha(fechaInscripcion, 2);
 		this.tiempo_segundos=segundos;
 		this.categoriaStr=categoria;
-		//calcularCategoria();
 	}
 	
 	
@@ -208,5 +207,8 @@ public class Inscripcion implements Comparable<Inscripcion> {
 	 */
 	public void añadirTiempoDeEtapa(int seg){
 		this.tiemposPorEtapas.add(seg);
+	}
+	public void setEvento(Evento ev){
+		evento=ev;
 	}
 }

@@ -11,6 +11,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.ListModel;
 import javax.swing.border.EmptyBorder;
 
 import logica.Gestor;
@@ -36,10 +37,13 @@ import java.awt.Color;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import javax.swing.ListSelectionModel;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 public class DialogResultadosAtleta extends JDialog {
 
@@ -57,8 +61,8 @@ public class DialogResultadosAtleta extends JDialog {
 	GestorClasificaciones gC = new GestorClasificaciones();
 	VentanaPrincipal vP;
 	
-	private JList<Evento> list;
-	private DefaultListModel<Evento> modeloLista;
+	private JList<String> list;
+	private ListModel<String> modeloLista;
 	private JTextField txtNombreEvento;
 	private JTextField txtTipoEvento;
 	private JTextField txtTiempo;
@@ -71,7 +75,7 @@ public class DialogResultadosAtleta extends JDialog {
 	 * 
 	 */
 	public DialogResultadosAtleta(Atleta atleta, Gestor g, VentanaPrincipal vP) {
-		setTitle("Gestor eventos: resultados de " + atleta.getNombre() + " ("+atleta.getDNI()  +")");
+		setTitle("Gestor eventos: resultados de " + atleta.getNombre() + " (DNI: "+atleta.getDNI()  +")");
 		setModal(true);
 		this.atleta=atleta;
 		this.g=g;
@@ -95,7 +99,7 @@ public class DialogResultadosAtleta extends JDialog {
 					JScrollPane scrollPane = new JScrollPane();
 					panel.add(scrollPane, BorderLayout.CENTER);
 					{
-						JList<Evento> list = new JList<Evento>();
+						list = new JList<String>();
 						list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 						list.addMouseListener(new MouseAdapter() {
 							@Override
@@ -129,7 +133,8 @@ public class DialogResultadosAtleta extends JDialog {
 					}
 					{
 						txtNombreEvento = new JTextField();
-						txtNombreEvento.setEnabled(false);
+						txtNombreEvento.setFocusable(false);
+						txtNombreEvento.setBorder(null);
 						txtNombreEvento.setEditable(false);
 						txtNombreEvento.setColumns(10);
 						panelInfoEvento.add(txtNombreEvento);
@@ -140,7 +145,8 @@ public class DialogResultadosAtleta extends JDialog {
 					}
 					{
 						txtTipoEvento = new JTextField();
-						txtTipoEvento.setEnabled(false);
+						txtTipoEvento.setFocusable(false);
+						txtTipoEvento.setBorder(null);
 						txtTipoEvento.setEditable(false);
 						panelInfoEvento.add(txtTipoEvento);
 						txtTipoEvento.setColumns(10);
@@ -167,10 +173,14 @@ public class DialogResultadosAtleta extends JDialog {
 							panel_1.setLayout(fl_panel_1);
 							{
 								JLabel lblTiempo = new JLabel("Tiempo: ");
+								lblTiempo.setHorizontalAlignment(SwingConstants.CENTER);
 								panel_1.add(lblTiempo);
 							}
 							{
 								txtTiempo = new JTextField();
+								txtTiempo.setFocusable(false);
+								txtTiempo.setBorder(null);
+								txtTiempo.setEditable(false);
 								panel_1.add(txtTiempo);
 								txtTiempo.setColumns(5);
 							}
@@ -180,10 +190,14 @@ public class DialogResultadosAtleta extends JDialog {
 							panel_1_1.add(panel_1_2);
 							{
 								JLabel lblNewLabel = new JLabel("Posicion absoluta: ");
+								lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
 								panel_1_2.add(lblNewLabel);
 							}
 							{
 								txtPosAbsoluta = new JTextField();
+								txtPosAbsoluta.setFocusable(false);
+								txtPosAbsoluta.setBorder(null);
+								txtPosAbsoluta.setEditable(false);
 								panel_1_2.add(txtPosAbsoluta);
 								txtPosAbsoluta.setColumns(3);
 							}
@@ -192,28 +206,38 @@ public class DialogResultadosAtleta extends JDialog {
 					{
 						JPanel panel_1 = new JPanel();
 						panel.add(panel_1);
+						panel_1.setLayout(new GridLayout(0, 1, 0, 0));
 						{
 							JPanel panel_2 = new JPanel();
 							panel_1.add(panel_2);
 							{
 								JLabel lblCategoria = new JLabel("Categoria:");
+								lblCategoria.setHorizontalAlignment(SwingConstants.CENTER);
 								panel_2.add(lblCategoria);
 							}
 							{
 								txtCategoria = new JTextField();
+								txtCategoria.setFocusable(false);
+								txtCategoria.setBorder(null);
+								txtCategoria.setEditable(false);
 								panel_2.add(txtCategoria);
 								txtCategoria.setColumns(10);
 							}
 						}
 						{
 							JPanel panel_2 = new JPanel();
+							FlowLayout flowLayout = (FlowLayout) panel_2.getLayout();
 							panel_1.add(panel_2);
 							{
 								JLabel lblNewLabel_1 = new JLabel("Posicion en la categoria: ");
+								lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 								panel_2.add(lblNewLabel_1);
 							}
 							{
 								txtPosicionCategoria = new JTextField();
+								txtPosicionCategoria.setFocusable(false);
+								txtPosicionCategoria.setBorder(null);
+								txtPosicionCategoria.setEditable(false);
 								panel_2.add(txtPosicionCategoria);
 								txtPosicionCategoria.setColumns(3);
 							}
@@ -230,6 +254,11 @@ public class DialogResultadosAtleta extends JDialog {
 						pnListaParciales.add(scrollPane, BorderLayout.CENTER);
 						{
 							txaParciales = new JTextArea();
+							txaParciales.setColumns(5);
+							txaParciales.setEditable(false);
+							txaParciales.setLineWrap(true);
+							txaParciales.setRows(3);
+							txaParciales.setWrapStyleWord(true);
 							scrollPane.setViewportView(txaParciales);
 						}
 					}
@@ -251,6 +280,7 @@ public class DialogResultadosAtleta extends JDialog {
 				buttonPane.add(cancelButton);
 			}
 		}
+		rellenarFicha();
 	}
 	
 	public void rellenarFicha(){
@@ -283,8 +313,9 @@ public class DialogResultadosAtleta extends JDialog {
 //	}
 	
 	private void añadirEventosLista(ArrayList<Evento> eventos){
+		modeloLista = new DefaultListModel<String>();
 		for(Evento ev: eventos){
-			modeloLista.addElement(ev);
+			((DefaultListModel<String>) modeloLista).addElement(" " +ev.getNombre()+ " ");
 		}
 		list.setModel(modeloLista);
 	}

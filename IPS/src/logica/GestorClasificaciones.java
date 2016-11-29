@@ -37,13 +37,15 @@ public class GestorClasificaciones {
 		ArrayList<Inscripcion> aux = new ArrayList<Inscripcion>();
 		for(Categoria cat : categorias){
 			aux.clear();
+		
 			for(Inscripcion corredor: ins){
-				if(cat.estaDentro(corredor.getAtleta())){
+				if(cat.estaDentro(corredor.getAtleta()) || cat.getNombre().equals(corredor.getCategoria())){
 					aux.add(corredor);
 				}
 			}
 			ordenar(aux);
-			clasificaciones.add(new Clasificacion(cat.getNombre(), aux));
+			Clasificacion clas= new Clasificacion(cat.getNombre(), aux);
+			clasificaciones.add(clas);
 		}
 		return clasificaciones;
 	}
