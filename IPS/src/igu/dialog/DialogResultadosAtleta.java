@@ -335,8 +335,11 @@ public class DialogResultadosAtleta extends JDialog {
 			txtPosicionCategoria.setText("" +posCat);
 		txtTiempo.setText("" + ins.getTiempoSegundos()+ "s");
 		StringBuilder sB = new StringBuilder();
-		for(int i=0; i< ins.getTiemposPorEtapas().size(); i++)
-			sB.append("Etapa " + i + ": "+ ins.getTiemposPorEtapas().get(i)+ "seg.\n");
+		for(int i=0; i< ins.getTiemposPorEtapas().size(); i++){
+			if(ins.getTiemposPorEtapas().size()-1==i){
+				sB.append("Total: " + ins.getTiemposPorEtapas().get(i) + "seg.\n");
+			}else sB.append("Etapa " + i + ": "+ ins.getTiemposPorEtapas().get(i)+ "seg.\n");
+		}
 		txaParciales.setText(sB.toString());
 	}
 
