@@ -296,6 +296,10 @@ public class VentanaCreaFechaInscripcion extends JDialog {
 						vp.borrarDelModeloListFechaIns(plazoAnterior);
 					}
 					if(fechasCorrectas()){
+						if((Integer) getSpPrecio().getValue() <= 0){
+							JOptionPane.showMessageDialog(null, "El precio debe ser mayor que 0","Error en el precio!", JOptionPane.ERROR_MESSAGE);
+							return;
+						}
 						PlazoInscripcion plazo = new PlazoInscripcion(fechaInicio, fechaFin, (int) getSpPrecio().getValue());
 						vp.añadirPlazo(plazo);
 						dispose();
